@@ -1,11 +1,18 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include <QPainter>
+#include <QPointF>
+#include "wireframe.h"
+#include "plane.h"
 
 typedef struct 
 {
-    QPainter &painter;
+    Plane *plane;
 } draw_params_t;
+
+err_code_e handleDraw(const draw_params_t &params, wireframe_t &wireframe);
+void addPointsToCanvas(Plane *plane, size_t count, pointArray_t points);
+void addEdgesToCanvas(Plane *plane, size_t count, edgeArray_t edges);
+QPointF projectPoint(pointCoord_t &point);
 
 #endif /* DRAW_H */

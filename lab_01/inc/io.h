@@ -15,6 +15,7 @@ typedef struct
 } io_params_t;
 
 err_code_e handleReadFromFile(const io_params_t &params, wireframe_t &wireframe);
+
 err_code_e readDataFromFile(const char *filename, wireframe_t &wireframe);
 // err_code_e saveDataToFile(const io_params_t &params, wireframe_t &wireframe);
 

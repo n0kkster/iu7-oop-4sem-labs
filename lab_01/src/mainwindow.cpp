@@ -15,6 +15,7 @@ void MainWindow::onLoadBtnClicked()
         return;
     
     handleAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
+    handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
 }
 
 MainWindow::~MainWindow()

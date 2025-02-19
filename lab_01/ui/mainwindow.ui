@@ -450,7 +450,7 @@
    <string>ЛР1 ООП. Диваев ИУ7-42</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="Plane" name="graphicsView">
+   <widget class="Plane" name="planeWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -963,7 +963,7 @@
    </widget>
    <zorder>frame_2</zorder>
    <zorder>frame</zorder>
-   <zorder>graphicsView</zorder>
+   <zorder>planeWidget</zorder>
    <zorder>frame_3</zorder>
    <zorder>frame_4</zorder>
   </widget>

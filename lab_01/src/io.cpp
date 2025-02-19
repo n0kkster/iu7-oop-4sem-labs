@@ -8,8 +8,9 @@ err_code_e handleReadFromFile(const io_params_t &params, /* VAR */ wireframe_t &
     qDebug() << "reading from file:" << params.filename;
 
     rc = readDataFromFile(params.filename, temp);
-
-    wireframe = temp;
+    if (rc != ERROR_SUCCESS) {}
+    else
+        wireframe = temp;
     
     return rc;
 }
@@ -19,16 +20,18 @@ err_code_e readDataFromFile(const char *filename, /* OUT */ wireframe_t &wirefra
     err_code_e rc = ERROR_SUCCESS;
     FILE *file;
 
-    file = fopen(filename, "r");    
+    file = fopen(filename, "r");
     rc = readNumFromFile(file, wireframe.points_count);
-    if (rc == ERROR_SUCCESS)
+    if (rc != ERROR_SUCCESS) {}
+    else
     {
-        qDebug() << "points count:" << wireframe.points_count;
         rc = readPointsFromFile(file, wireframe.points_count, wireframe.points);
-        if (rc == ERROR_SUCCESS)
+        if (rc != ERROR_SUCCESS) {}
+        else
         {
             rc = readNumFromFile(file, wireframe.edges_count);
-            if (rc == ERROR_SUCCESS)
+            if (rc != ERROR_SUCCESS) {}
+            else
                 rc = readEdgesFromFile(file, wireframe.edges_count, wireframe.edges);
         }
     }
@@ -50,12 +53,8 @@ err_code_e readEdgesFromFile(FILE *file, size_t count, /* OUT */ edgeArray_t &ed
         rc = ERROR_ALLOCATING_MEM;
     else
     {
-        for (size_t i = 0; i < count; i++)
-        {
+        for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
             rc = readEdgeFromFile(file, edges[i]);
-            if (rc != ERROR_SUCCESS)
-                break;
-        }
     }        
 
     return rc;
@@ -70,8 +69,6 @@ err_code_e readEdgeFromFile(FILE *file, /* OUT */ edge_t &t)
 
     if (fscanf(file, "%zu%zu", &t.id1, &t.id2) != 2)
         rc = ERROR_NOT_A_NUMBER;
-    else
-        qDebug() << "read edge:" << t.id1 << t.id2;
 
     return rc;
 }
@@ -88,12 +85,10 @@ err_code_e readPointsFromFile(FILE *file, size_t count, /* OUT */ pointArray_t &
         rc = ERROR_ALLOCATING_MEM;
     else
     {
-        for (size_t i = 0; i < count; i++)
+        for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
         {
-            rc = readPointFromFile(file, points[i].coord);
-            if (rc != ERROR_SUCCESS)
-                break;
             points[i].id = i;
+            rc = readPointFromFile(file, points[i].coord);
         }
     }        
 
@@ -108,10 +103,7 @@ err_code_e readPointFromFile(FILE *file, /* OUT */ pointCoord_t &p)
     err_code_e rc = ERROR_SUCCESS;
 
     if (fscanf(file, "%lf%lf%lf", &p.x, &p.y, &p.z) != 3)
-        rc = ERROR_NOT_A_NUMBER;
-    else
-        qDebug() << "read point:" << p.x << p.y << p.z;
-    
+        rc = ERROR_NOT_A_NUMBER;    
 
     return rc;
 }
