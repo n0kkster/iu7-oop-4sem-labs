@@ -10,8 +10,6 @@ wireframe_t initWireframe()
     wireframe.edges = nullptr;
     wireframe.points = nullptr;
 
-    qDebug() << "called init";
-
     return wireframe;
 }
 

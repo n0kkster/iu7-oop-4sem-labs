@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->loadFrameBtn, &QPushButton::clicked, this, &MainWindow::onLoadBtnClicked);
+    connect(ui->saveFrameBtn, &QPushButton::clicked, this, &MainWindow::onSaveBtnClicked);
     connect(ui->applyShiftBtn, &QPushButton::clicked, this, &MainWindow::onShiftBtnClicked);
     connect(ui->applyScaleBtn, &QPushButton::clicked, this, &MainWindow::onScaleBtnClicked);
     connect(ui->applyRotateBtn, &QPushButton::clicked, this, &MainWindow::onRotateBtnClicked);
@@ -13,12 +14,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::onLoadBtnClicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Выбрать файл", "", "*.txt");
+    QString filename = QFileDialog::getOpenFileName(this, "Выбрать файл", "./models", "*.txt");
     if (filename.isNull())
         return;
 
     handleAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
     handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
+}
+
+void MainWindow::onSaveBtnClicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "./models", "*.txt");
+    if (filename.isNull())
+        return;
+
+    handleAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
 }
 
 void MainWindow::onShiftBtnClicked()

@@ -28,6 +28,7 @@ private slots:
     void onShiftBtnClicked();
     void onScaleBtnClicked();
     void onRotateBtnClicked();
+    void onSaveBtnClicked();
 
 private:
     Ui::MainWindow *ui;

@@ -5,8 +5,6 @@ err_code_e handleReadFromFile(const io_params_t &params, /* VAR */ wireframe_t &
     err_code_e rc;
     wireframe_t temp;
 
-    qDebug() << "reading from file:" << params.filename;
-
     rc = readDataFromFile(params.filename, temp);
     if (rc != ERROR_SUCCESS) {}
     else
@@ -119,4 +117,65 @@ err_code_e readNumFromFile(FILE *file, /* OUT */ size_t &num)
         rc = ERROR_NOT_A_NUMBER;
     
     return rc;
+}
+
+err_code_e handleWriteToFile(const io_params_t &params, const wireframe_t &wireframe)
+{
+    err_code_e rc = ERROR_SUCCESS;
+    FILE *file = fopen(params.filename, "w");
+
+    rc = writePointsToFile(file, wireframe.points_count, wireframe.points);
+    if (rc != ERROR_SUCCESS) {}
+    else
+        rc = writeEdgesToFile(file, wireframe.edges_count, wireframe.edges);
+    
+    fclose(file);
+    
+    return rc;
+}
+
+err_code_e writePointsToFile(FILE *file, const size_t count, const pointArray_t &points)
+{
+    if (!file)
+        return ERROR_OPENING_FILE;
+
+    err_code_e rc = ERROR_SUCCESS;
+
+    fprintf(file, "%zu\n", count);
+    for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
+        rc = writePointToFile(file, points[i].coord);
+
+    return rc;
+}
+
+err_code_e writePointToFile(FILE *file, const pointCoord_t &point)
+{
+    if (!file)
+        return ERROR_OPENING_FILE;
+    
+    fprintf(file, "%lf %lf %lf\n", point.x, point.y, point.z);
+    return ERROR_SUCCESS;
+}
+
+err_code_e writeEdgesToFile(FILE *file, const size_t count, const edgeArray_t &edges)
+{
+    if (!file)
+        return ERROR_OPENING_FILE;
+
+    err_code_e rc = ERROR_SUCCESS;
+
+    fprintf(file, "%zu\n", count);
+    for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
+        rc = writeEdgeToFile(file, edges[i]);
+
+    return rc;
+}
+
+err_code_e writeEdgeToFile(FILE *file, const edge_t &edge)
+{
+    if (!file)
+        return ERROR_OPENING_FILE;
+    
+    fprintf(file, "%zu %zu\n", edge.id1, edge.id2);
+    return ERROR_SUCCESS;
 }
