@@ -1,6 +1,6 @@
 #include "draw.h"
 
-err_code_e handleDraw(const draw_params_t &params, wireframe_t &wireframe)
+void handleDraw(const draw_params_t &params, wireframe_t &wireframe)
 {
     Plane *plane = params.plane;
     plane->clearPoints();

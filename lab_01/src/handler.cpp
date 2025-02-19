@@ -11,8 +11,20 @@ err_code_e handleAction(const action_params_t &action)
             rc = handleReadFromFile(action.io_params, wireframe);
             break;
         case DRAW:
-            rc = handleDraw(action.draw_params, wireframe);
+            handleDraw(action.draw_params, wireframe);
+            break;
+        case SHIFT:
+            handleShiftWireframe(action.morph_params, wireframe);
+            break;
+        case SCALE:
+            handleScaleWireframe(action.morph_params, wireframe);
+            break;
+        case ROTATE:
+            handleRotateWireframe(action.morph_params, wireframe);
+            break;
         default:
             break;
     }
+
+    return rc;
 }
