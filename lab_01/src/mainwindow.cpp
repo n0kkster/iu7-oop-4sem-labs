@@ -15,20 +15,42 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::onLoadBtnClicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Выбрать файл", "./models", "*.txt");
-    if (filename.isNull())
-        return;
+    err_code_e rc;
 
-    handleAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
-    handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
+    if (filename.isNull())
+        handleError(this, ERROR_OPENING_FILE);
+    else
+    {
+        rc = handleAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
+        if (rc != ERROR_SUCCESS)
+        {
+            handleError(this, rc);
+            handleAction({.action = FREE});
+        }
+        else
+        {
+            rc = handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
+            if (rc == ERROR_SUCCESS) {}
+            else
+                handleError(this, rc);
+        }
+    }
 }
 
 void MainWindow::onSaveBtnClicked()
 {
     QString filename = QFileDialog::getSaveFileName(this, "Сохранить файл", "./models", "*.txt");
-    if (filename.isNull())
-        return;
+    err_code_e rc;
 
-    handleAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
+    if (filename.isNull())
+        handleError(this, ERROR_OPENING_FILE);
+    else
+    {
+        rc = handleAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
+        if (rc == ERROR_SUCCESS) {}
+        else
+            handleError(this, rc);
+    }
 }
 
 void MainWindow::onShiftBtnClicked()
@@ -37,6 +59,7 @@ void MainWindow::onShiftBtnClicked()
     bool ok;
     action_params_t action_params;
     morph_params_t morph_params;
+    err_code_e rc;
 
     dx = ui->dxOffsetInput->text().toDouble(&ok);
     if (!ok)
@@ -62,12 +85,18 @@ void MainWindow::onShiftBtnClicked()
     morph_params.shift_params = {dx, dy, dz};
     action_params.action = SHIFT;
     action_params.morph_params = morph_params;
-    handleAction(action_params);
-
-    action_params.action = DRAW;
-    action_params.draw_params.plane = ui->planeWidget;
-    
-    handleAction(action_params);
+    rc = handleAction(action_params);
+    if (rc != ERROR_SUCCESS)
+        handleError(this, rc);
+    else
+    {
+        action_params.action = DRAW;
+        action_params.draw_params.plane = ui->planeWidget;
+        rc = handleAction(action_params);
+        if (rc == ERROR_SUCCESS) {}
+        else
+            handleError(this, rc);
+    }    
 }
 
 void MainWindow::onScaleBtnClicked()
@@ -77,6 +106,7 @@ void MainWindow::onScaleBtnClicked()
     bool ok;
     action_params_t action_params;
     morph_params_t morph_params;
+    err_code_e rc;
 
     cx = ui->centerXScale->text().toDouble(&ok);
     if (!ok)
@@ -123,13 +153,19 @@ void MainWindow::onScaleBtnClicked()
     morph_params.scale_params = {cx, cy, cz, kx, ky, kz};
     action_params.action = SCALE;
     action_params.morph_params = morph_params;
-    handleAction(action_params);
-
-    action_params.action = DRAW;
-    action_params.draw_params.plane = ui->planeWidget;
-    
-    handleAction(action_params);
-
+    rc = handleAction(action_params);
+    if (rc != ERROR_SUCCESS)
+        handleError(this, rc);
+    else
+    {
+        action_params.action = DRAW;
+        action_params.draw_params.plane = ui->planeWidget;
+        
+        rc = handleAction(action_params);
+        if (rc == ERROR_SUCCESS) {}
+        else
+            handleError(this, rc);
+    }
 }
 
 void MainWindow::onRotateBtnClicked()
@@ -139,6 +175,7 @@ void MainWindow::onRotateBtnClicked()
     bool ok;
     action_params_t action_params;
     morph_params_t morph_params;
+    err_code_e rc;
 
     cx = ui->centerXRotate->text().toDouble(&ok);
     if (!ok)
@@ -185,12 +222,19 @@ void MainWindow::onRotateBtnClicked()
     morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
     action_params.action = ROTATE;
     action_params.morph_params = morph_params;
-    handleAction(action_params);
-
-    action_params.action = DRAW;
-    action_params.draw_params.plane = ui->planeWidget;
-    
-    handleAction(action_params);
+    rc = handleAction(action_params);
+    if (rc != ERROR_SUCCESS)
+        handleError(this, rc);
+    else
+    {
+        action_params.action = DRAW;
+        action_params.draw_params.plane = ui->planeWidget;
+        
+        rc = handleAction(action_params);
+        if (rc == ERROR_SUCCESS) {}
+        else
+            handleError(this, rc);
+    }
 }
 
 MainWindow::~MainWindow()

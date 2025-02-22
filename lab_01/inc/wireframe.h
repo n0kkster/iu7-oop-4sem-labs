@@ -32,5 +32,6 @@ typedef struct
 } wireframe_t;
 
 wireframe_t initWireframe(void);
+void freeWireframe(wireframe_t &wireframe);
 
 #endif /* WIREFRAME_H */

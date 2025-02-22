@@ -10,9 +10,9 @@ typedef struct
     Plane *plane;
 } draw_params_t;
 
-void handleDraw(const draw_params_t &params, wireframe_t &wireframe);
-void addPointsToCanvas(Plane *plane, size_t count, pointArray_t points);
-void addEdgesToCanvas(Plane *plane, size_t count, edgeArray_t edges);
-QPointF projectPoint(pointCoord_t &point);
+void handleDraw(const draw_params_t &params, const wireframe_t &wireframe);
+void addPointsToCanvas(Plane *plane, const size_t count, const pointArray_t points);
+void addEdgesToCanvas(Plane *plane, const size_t count, const edgeArray_t edges);
+QPointF projectPoint(const pointCoord_t &point);
 
 #endif /* DRAW_H */

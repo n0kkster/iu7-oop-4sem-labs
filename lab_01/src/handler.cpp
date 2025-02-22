@@ -25,6 +25,8 @@ err_code_e handleAction(const action_params_t &action)
         case ROTATE:
             handleRotateWireframe(action.morph_params, wireframe);
             break;
+        case FREE:
+            freeWireframe(wireframe);
         default:
             break;
     }

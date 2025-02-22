@@ -15,6 +15,8 @@ wireframe_t initWireframe()
 
 void freeWireframe(wireframe_t &wireframe)
 {
+    wireframe.edges_count = 0;
+    wireframe.points_count = 0;
     free(wireframe.edges);
     free(wireframe.points);
 }

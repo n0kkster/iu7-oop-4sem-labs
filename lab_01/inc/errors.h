@@ -1,6 +1,9 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
+#include <QWidget>
+#include <QMessageBox>
+
 typedef enum
 {
     ERROR_SUCCESS,
@@ -12,5 +15,7 @@ typedef enum
     ERROR_EMPTY_STRING,
     ERROR_NOT_A_NUMBER
 } err_code_e;
+
+void handleError(QWidget *parent, err_code_e rc);
 
 #endif /* ERRORS_H */
