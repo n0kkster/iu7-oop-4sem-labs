@@ -239,5 +239,6 @@ void MainWindow::onRotateBtnClicked()
 
 MainWindow::~MainWindow()
 {
+    handleAction({.action = FREE});
     delete ui;
 }
