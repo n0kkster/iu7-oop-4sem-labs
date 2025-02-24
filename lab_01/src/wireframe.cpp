@@ -18,12 +18,12 @@ void copyWireframe(wireframe_t &dst, const wireframe_t &src)
     dst = src;
 }
 
-void freePoints(pointArray_t points)
+static void freePoints(pointArray_t points)
 {
     free(points);
 }
 
-void freeEdges(edgeArray_t edges)
+static void freeEdges(edgeArray_t edges)
 {
     free(edges);
 }

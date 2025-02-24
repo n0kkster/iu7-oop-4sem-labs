@@ -34,14 +34,7 @@ typedef struct
 } morph_params_t;
 
 void handleShiftWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
-void applyWireframeShift(const shift_params_t &params, size_t count, /* VAR */ pointArray_t &points);
-void applyPointShift(const shift_params_t &params, /* VAR */ pointCoord_t &point);
 void handleScaleWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
-void applyWireframeScale(const scale_params_t &params, size_t count, /* VAR */ pointArray_t &points);
-void applyPointScale(const scale_params_t &params, /* VAR */ pointCoord_t &point);
 void handleRotateWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
-void applyWireframeRotation(const rotation_params_t &params, size_t count, /* VAR */ pointArray_t &points);
-void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t &point);
-double degToRad(double degrees);
 
 #endif /* MORPH_H */

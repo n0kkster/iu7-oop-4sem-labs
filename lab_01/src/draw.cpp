@@ -1,17 +1,20 @@
 #include "draw.h"
 
-void handleDraw(const draw_params_t &params, const wireframe_t &wireframe)
+static QPointF projectPoint(const pointCoord_t &point)
 {
-    Plane *plane = params.plane;
-    plane->clearPoints();
-    plane->clearEdges();
-
-    addPointsToCanvas(plane, wireframe.points_count, wireframe.points);
-    addEdgesToCanvas(plane, wireframe.edges_count, wireframe.edges);
-    plane->viewport()->update();
+    QPointF projected;
+    projected.setX(point.x/*  - point.z * cos(55 * M_PI / 180.0) */);
+    projected.setY(point.y/*  - point.z * sin(15 * M_PI / 180.0) */);
+    return projected;
 }
 
-void addPointsToCanvas(Plane *plane, size_t count, const pointArray_t points)
+static void addEdgesToCanvas(Plane *plane, size_t count, const edgeArray_t edges)
+{
+    for (size_t i = 0; i < count; i++)
+        plane->addEdge(edges[i]);
+}
+
+static void addPointsToCanvas(Plane *plane, size_t count, const pointArray_t points)
 {
     QPointF point;
     for (size_t i = 0; i < count; i++)
@@ -21,16 +24,13 @@ void addPointsToCanvas(Plane *plane, size_t count, const pointArray_t points)
     }
 }
 
-void addEdgesToCanvas(Plane *plane, size_t count, const edgeArray_t edges)
+void handleDraw(const draw_params_t &params, const wireframe_t &wireframe)
 {
-    for (size_t i = 0; i < count; i++)
-        plane->addEdge(edges[i]);
-}
+    Plane *plane = params.plane;
+    plane->clearPoints();
+    plane->clearEdges();
 
-QPointF projectPoint(const pointCoord_t &point)
-{
-    QPointF projected;
-    projected.setX(point.x/*  - point.z * cos(55 * M_PI / 180.0) */);
-    projected.setY(point.y/*  - point.z * sin(15 * M_PI / 180.0) */);
-    return projected;
+    addPointsToCanvas(plane, wireframe.points_count, wireframe.points);
+    addEdgesToCanvas(plane, wireframe.edges_count, wireframe.edges);
+    plane->viewport()->update();
 }

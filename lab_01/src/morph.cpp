@@ -1,21 +1,35 @@
 #include "morph.h"
 
-void handleShiftWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe)
+static void applyPointShift(const shift_params_t &params, /* VAR */ pointCoord_t &point)
 {
-    applyWireframeShift(params.shift_params, wireframe.points_count, wireframe.points);
+    point.x += params.dx;
+    point.y += params.dy;
+    point.z += params.dz;
 }
 
-void applyWireframeShift(const shift_params_t &params, size_t count, /* VAR */ pointArray_t &points)
+static void applyWireframeShift(const shift_params_t &params, size_t count, /* VAR */ pointArray_t &points)
 {
     for (size_t i = 0; i < count; i++)
         applyPointShift(params, points[i].coord);
 }
 
-void applyPointShift(const shift_params_t &params, /* VAR */ pointCoord_t &point)
+void handleShiftWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe)
 {
-    point.x += params.dx;
-    point.y += params.dy;
-    point.z += params.dz;
+    applyWireframeShift(params.shift_params, wireframe.points_count, wireframe.points);
+}
+
+static void applyPointScale(const scale_params_t &params, /* VAR */ pointCoord_t &point)
+{
+    point.x = (point.x - params.cx) * params.kx + params.cx;
+    point.y = (point.y - params.cy) * params.ky + params.cy;
+    point.z = (point.z - params.cz) * params.kz + params.cz;
+}
+
+
+static void applyWireframeScale(const scale_params_t &params, size_t count, /* VAR */ pointArray_t &points)
+{
+    for (size_t i = 0; i < count; i++)
+        applyPointScale(params, points[i].coord);
 }
 
 void handleScaleWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe)
@@ -23,31 +37,12 @@ void handleScaleWireframe(const morph_params_t &params, /* VAR */ wireframe_t &w
     applyWireframeScale(params.scale_params, wireframe.points_count, wireframe.points);
 }
 
-void applyWireframeScale(const scale_params_t &params, size_t count, /* VAR */ pointArray_t &points)
+static double degToRad(double degrees)
 {
-    for (size_t i = 0; i < count; i++)
-        applyPointScale(params, points[i].coord);
+    return degrees * M_PI / 180;
 }
 
-void applyPointScale(const scale_params_t &params, /* VAR */ pointCoord_t &point)
-{
-    point.x = (point.x - params.cx) * params.kx + params.cx;
-    point.y = (point.y - params.cy) * params.ky + params.cy;
-    point.z = (point.z - params.cz) * params.kz + params.cz;
-}
-
-void handleRotateWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe)
-{
-    applyWireframeRotation(params.rotation_params, wireframe.points_count, wireframe.points);
-}
-
-void applyWireframeRotation(const rotation_params_t &params, size_t count, /* VAR */ pointArray_t &points)
-{
-    for (size_t i = 0; i < count; i++)
-        applyPointRotation(params, points[i].coord);
-}
-
-void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t &point)
+static void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t &point)
 {
     double angleX = degToRad(params.angleX);
     double angleY = degToRad(params.angleY);
@@ -75,7 +70,13 @@ void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t 
     applyPointShift({params.cx, params.cy, params.cz}, point);
 }
 
-double degToRad(double degrees)
+static void applyWireframeRotation(const rotation_params_t &params, size_t count, /* VAR */ pointArray_t &points)
 {
-    return degrees * M_PI / 180;
+    for (size_t i = 0; i < count; i++)
+        applyPointRotation(params, points[i].coord);
+}
+
+void handleRotateWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe)
+{
+    applyWireframeRotation(params.rotation_params, wireframe.points_count, wireframe.points);
 }
