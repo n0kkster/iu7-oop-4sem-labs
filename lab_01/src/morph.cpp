@@ -53,9 +53,7 @@ void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t 
     double angleY = degToRad(params.angleY);
     double angleZ = degToRad(params.angleZ);
 
-    point.x -= params.cx;
-    point.y -= params.cy;
-    point.z -= params.cz;
+    applyPointShift({-params.cx, -params.cy, -params.cz}, point);
 
     double tx = point.x, ty = point.y, tz = point.z;
 
@@ -74,9 +72,7 @@ void applyPointRotation(const rotation_params_t &params, /* VAR */ pointCoord_t 
     point.x = tx * cos(angleZ) - ty * sin(angleZ);
     point.y = tx * sin(angleZ) + ty * cos(angleZ);
 
-    point.x += params.cx;
-    point.y += params.cy;
-    point.z += params.cz;
+    applyPointShift({params.cx, params.cy, params.cz}, point);
 }
 
 double degToRad(double degrees)

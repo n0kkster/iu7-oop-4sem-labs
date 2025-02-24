@@ -11,7 +11,7 @@ void handleDraw(const draw_params_t &params, const wireframe_t &wireframe)
     plane->viewport()->update();
 }
 
-void addPointsToCanvas(Plane *plane, const size_t count, const pointArray_t points)
+void addPointsToCanvas(Plane *plane, size_t count, const pointArray_t points)
 {
     QPointF point;
     for (size_t i = 0; i < count; i++)
@@ -21,7 +21,7 @@ void addPointsToCanvas(Plane *plane, const size_t count, const pointArray_t poin
     }
 }
 
-void addEdgesToCanvas(Plane *plane, const size_t count, const edgeArray_t edges)
+void addEdgesToCanvas(Plane *plane, size_t count, const edgeArray_t edges)
 {
     for (size_t i = 0; i < count; i++)
         plane->addEdge(edges[i]);

@@ -15,23 +15,21 @@ class Plane : public QGraphicsView
 {
     Q_OBJECT
 
+private:
+    QPointF realCoordToScreenCoord(QPointF point);
+
+    QVector<QPointF> points;
+    QVector<edge_t> edges;
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 public:
     explicit Plane(QWidget *parent = nullptr);
     void clearPoints();
     void clearEdges();
     void addPoint(QPointF point);
     void addEdge(edge_t edge);
-
-private:
-
-    QPointF realCoordToScreenCoord(QPointF point);
-
-    QVector<QPointF> points;
-    QVector<edge_t> edges;
-
-
-protected:
-    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // PLANE_H

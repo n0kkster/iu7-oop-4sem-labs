@@ -8,7 +8,10 @@ err_code_e handleReadFromFile(const io_params_t &params, /* VAR */ wireframe_t &
     rc = readDataFromFile(params.filename, temp);
     if (rc != ERROR_SUCCESS) {}
     else
-        wireframe = temp;
+    {
+        freeWireframe(wireframe);
+        copyWireframe(wireframe, temp);
+    }
     
     return rc;
 }
@@ -134,10 +137,13 @@ err_code_e handleWriteToFile(const io_params_t &params, const wireframe_t &wiref
     return rc;
 }
 
-err_code_e writePointsToFile(FILE *file, const size_t count, const pointArray_t &points)
+err_code_e writePointsToFile(FILE *file, size_t count, const pointArray_t &points)
 {
-    if (!file)
+    if (file == nullptr)
         return ERROR_OPENING_FILE;
+
+    if (points == nullptr)
+        return ERROR_INVALID_PTR;
 
     err_code_e rc = ERROR_SUCCESS;
 
@@ -150,17 +156,20 @@ err_code_e writePointsToFile(FILE *file, const size_t count, const pointArray_t 
 
 err_code_e writePointToFile(FILE *file, const pointCoord_t &point)
 {
-    if (!file)
+    if (file == nullptr)
         return ERROR_OPENING_FILE;
     
     fprintf(file, "%lf %lf %lf\n", point.x, point.y, point.z);
     return ERROR_SUCCESS;
 }
 
-err_code_e writeEdgesToFile(FILE *file, const size_t count, const edgeArray_t &edges)
+err_code_e writeEdgesToFile(FILE *file, size_t count, const edgeArray_t &edges)
 {
-    if (!file)
+    if (file == nullptr)
         return ERROR_OPENING_FILE;
+
+    if (edges == nullptr)
+        return ERROR_INVALID_PTR;
 
     err_code_e rc = ERROR_SUCCESS;
 
@@ -173,7 +182,7 @@ err_code_e writeEdgesToFile(FILE *file, const size_t count, const edgeArray_t &e
 
 err_code_e writeEdgeToFile(FILE *file, const edge_t &edge)
 {
-    if (!file)
+    if (file == nullptr)
         return ERROR_OPENING_FILE;
     
     fprintf(file, "%zu %zu\n", edge.id1, edge.id2);

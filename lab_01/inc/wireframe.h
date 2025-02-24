@@ -33,5 +33,6 @@ typedef struct
 
 wireframe_t initWireframe(void);
 void freeWireframe(wireframe_t &wireframe);
+void copyWireframe(wireframe_t &dst, const wireframe_t &src);
 
 #endif /* WIREFRAME_H */
