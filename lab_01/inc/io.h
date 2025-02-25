@@ -1,8 +1,6 @@
 #ifndef IO_H
 #define IO_H
 
-#include <QDebug>
-
 #include <cstdio>
 #include "wireframe.h"
 #include "errors.h"

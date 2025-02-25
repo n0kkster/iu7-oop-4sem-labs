@@ -1,5 +1,5 @@
 #include "wireframe.h"
-#include <QDebug>
+#include "errors.h"
 
 wireframe_t initWireframe()
 {

@@ -1,4 +1,6 @@
 #include "handler.h"
+#include "wireframe.h"
+#include "errors.h"
 
 err_code_e handleAction(const action_params_t &action)
 {

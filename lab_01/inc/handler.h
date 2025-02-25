@@ -1,9 +1,6 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include "wireframe.h"
-#include "errors.h"
-
 #include "io.h"
 #include "draw.h"
 #include "morph.h"

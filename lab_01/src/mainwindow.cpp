@@ -1,4 +1,7 @@
 #include "mainwindow.h"
+#include "out/ui_mainwindow.h"
+#include "handler.h"
+#include "wireframe.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)

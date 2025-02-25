@@ -5,9 +5,6 @@
 #include <QDebug>
 #include <QFileDialog>
 
-#include "out/ui_mainwindow.h"
-#include "handler.h"
-#include "wireframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
