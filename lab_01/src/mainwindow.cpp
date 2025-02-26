@@ -28,7 +28,7 @@ void MainWindow::onLoadBtnClicked()
         if (rc != ERROR_SUCCESS)
         {
             handleError(this, rc);
-            handleAction({.action = FREE});
+            handleAction({.action = FREE, .null_params = nullptr});
         }
         else
         {
@@ -242,6 +242,6 @@ void MainWindow::onRotateBtnClicked()
 
 MainWindow::~MainWindow()
 {
-    handleAction({.action = FREE});
+    handleAction({.action = FREE, .null_params = nullptr});
     delete ui;
 }

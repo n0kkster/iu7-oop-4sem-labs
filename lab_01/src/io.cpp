@@ -5,6 +5,7 @@ static err_code_e readEdgeFromFile(FILE *file, /* OUT */ edge_t &t)
     if (file == nullptr)
         return ERROR_OPENING_FILE;
 
+
     err_code_e rc = ERROR_SUCCESS;
 
     if (fscanf(file, "%zu%zu", &t.id1, &t.id2) != 2)
@@ -13,10 +14,13 @@ static err_code_e readEdgeFromFile(FILE *file, /* OUT */ edge_t &t)
     return rc;
 }
 
-static err_code_e readEdgesFromFile(FILE *file, size_t count, /* OUT */ edgeArray_t &edges)
+static err_code_e readEdgesFromFile(FILE *file, long count, /* OUT */ edgeArray_t &edges)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
+
+    if (count <= 0)
+        return ERROR_INVALID_EDGES_COUNT;
 
     err_code_e rc = ERROR_SUCCESS;
 
@@ -25,7 +29,7 @@ static err_code_e readEdgesFromFile(FILE *file, size_t count, /* OUT */ edgeArra
         rc = ERROR_ALLOCATING_MEM;
     else
     {
-        for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
+        for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
             rc = readEdgeFromFile(file, edges[i]);
     }        
 
@@ -46,10 +50,13 @@ static err_code_e readPointFromFile(FILE *file, /* OUT */ pointCoord_t &p)
 }
 
 
-static err_code_e readPointsFromFile(FILE *file, size_t count, /* OUT */ pointArray_t &points)
+static err_code_e readPointsFromFile(FILE *file, long count, /* OUT */ pointArray_t &points)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
+
+    if (count <= 0)
+        return ERROR_INVALID_POINTS_COUNT;
 
     err_code_e rc = ERROR_SUCCESS;
 
@@ -58,7 +65,7 @@ static err_code_e readPointsFromFile(FILE *file, size_t count, /* OUT */ pointAr
         rc = ERROR_ALLOCATING_MEM;
     else
     {
-        for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
+        for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
         {
             points[i].id = i;
             rc = readPointFromFile(file, points[i].coord);
@@ -68,14 +75,14 @@ static err_code_e readPointsFromFile(FILE *file, size_t count, /* OUT */ pointAr
     return rc;
 }
 
-static err_code_e readNumFromFile(FILE *file, /* OUT */ size_t &num)
+static err_code_e readNumFromFile(FILE *file, /* OUT */ long &num)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
 
     err_code_e rc = ERROR_SUCCESS;
 
-    if (fscanf(file, "%zu", &num) != 1)
+    if (fscanf(file, "%ld", &num) != 1)
         rc = ERROR_NOT_A_NUMBER;
     
     return rc;
@@ -96,8 +103,7 @@ static err_code_e readDataFromFile(const char *filename, /* OUT */ wireframe_t &
         else
         {
             rc = readNumFromFile(file, wireframe.edges_count);
-            if (rc != ERROR_SUCCESS) {}
-            else
+            if (rc == ERROR_SUCCESS) 
                 rc = readEdgesFromFile(file, wireframe.edges_count, wireframe.edges);
         }
     }
@@ -181,12 +187,10 @@ err_code_e handleWriteToFile(const io_params_t &params, const wireframe_t &wiref
     FILE *file = fopen(params.filename, "w");
 
     rc = writePointsToFile(file, wireframe.points_count, wireframe.points);
-    if (rc != ERROR_SUCCESS) {}
-    else
+    if (rc == ERROR_SUCCESS)
         rc = writeEdgesToFile(file, wireframe.edges_count, wireframe.edges);
     
     fclose(file);
     
     return rc;
 }
-    

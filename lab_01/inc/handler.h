@@ -24,6 +24,7 @@ typedef struct
         io_params_t io_params;
         draw_params_t draw_params;
         morph_params_t morph_params;
+        nullptr_t null_params;
     };
 } action_params_t;
 

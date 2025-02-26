@@ -25,6 +25,12 @@ void handleError(QWidget *parent, err_code_e rc)
         case ERROR_NOT_A_NUMBER:
             QMessageBox::critical(parent, "Ошибка", "Ошибка парсинга числа из строки!");
             break;
+        case ERROR_INVALID_POINTS_COUNT:
+            QMessageBox::critical(parent, "Ошибка", "Некорректное количество точек!");
+            break;
+        case ERROR_INVALID_EDGES_COUNT:
+            QMessageBox::critical(parent, "Ошибка", "Некорректное количество ребер!");
+            break;
         default:
             break;
     }

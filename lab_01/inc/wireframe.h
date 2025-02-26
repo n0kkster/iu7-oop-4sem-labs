@@ -26,8 +26,8 @@ typedef struct
 {
     pointArray_t points;
     edgeArray_t edges;
-    size_t points_count;
-    size_t edges_count;
+    long points_count;
+    long edges_count;
 } wireframe_t;
 
 wireframe_t initWireframe(void);
