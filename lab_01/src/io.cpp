@@ -5,7 +5,6 @@ static err_code_e readEdgeFromFile(/* OUT */ edge_t &t, FILE *file)
     if (file == nullptr)
         return ERROR_OPENING_FILE;
 
-
     err_code_e rc = ERROR_SUCCESS;
 
     if (fscanf(file, "%zu%zu", &t.id1, &t.id2) != 2)
@@ -48,7 +47,6 @@ static err_code_e readPointFromFile(/* OUT */ pointCoord_t &p, FILE *file)
 
     return rc;
 }
-
 
 static err_code_e readPointsFromFile(/* OUT */ pointArray_t &points, FILE *file, long count)
 {
