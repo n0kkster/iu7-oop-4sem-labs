@@ -1,6 +1,6 @@
 #include "io.h"
 
-static err_code_e readEdgeFromFile(FILE *file, /* OUT */ edge_t &t)
+static err_code_e readEdgeFromFile(/* OUT */ edge_t &t, FILE *file)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -14,7 +14,7 @@ static err_code_e readEdgeFromFile(FILE *file, /* OUT */ edge_t &t)
     return rc;
 }
 
-static err_code_e readEdgesFromFile(FILE *file, long count, /* OUT */ edgeArray_t &edges)
+static err_code_e readEdgesFromFile(/* OUT */ edgeArray_t &edges, FILE *file, long count)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -30,13 +30,13 @@ static err_code_e readEdgesFromFile(FILE *file, long count, /* OUT */ edgeArray_
     else
     {
         for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
-            rc = readEdgeFromFile(file, edges[i]);
+            rc = readEdgeFromFile(edges[i], file);
     }        
 
     return rc;
 }
 
-static err_code_e readPointFromFile(FILE *file, /* OUT */ pointCoord_t &p)
+static err_code_e readPointFromFile(/* OUT */ pointCoord_t &p, FILE *file)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -50,7 +50,7 @@ static err_code_e readPointFromFile(FILE *file, /* OUT */ pointCoord_t &p)
 }
 
 
-static err_code_e readPointsFromFile(FILE *file, long count, /* OUT */ pointArray_t &points)
+static err_code_e readPointsFromFile(/* OUT */ pointArray_t &points, FILE *file, long count)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -68,14 +68,14 @@ static err_code_e readPointsFromFile(FILE *file, long count, /* OUT */ pointArra
         for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
         {
             points[i].id = i;
-            rc = readPointFromFile(file, points[i].coord);
+            rc = readPointFromFile(points[i].coord, file);
         }
     }        
 
     return rc;
 }
 
-static err_code_e readNumFromFile(FILE *file, /* OUT */ long &num)
+static err_code_e readNumFromFile(/* OUT */ long &num, FILE *file)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -88,23 +88,23 @@ static err_code_e readNumFromFile(FILE *file, /* OUT */ long &num)
     return rc;
 }
 
-static err_code_e readDataFromFile(const char *filename, /* OUT */ wireframe_t &wireframe)
+static err_code_e readDataFromFile(/* OUT */ wireframe_t &wireframe, const char *filename)
 {
     err_code_e rc = ERROR_SUCCESS;
     FILE *file;
 
     file = fopen(filename, "r");
-    rc = readNumFromFile(file, wireframe.points_count);
+    rc = readNumFromFile(wireframe.points_count, file);
     if (rc != ERROR_SUCCESS) {}
     else
     {
-        rc = readPointsFromFile(file, wireframe.points_count, wireframe.points);
+        rc = readPointsFromFile(wireframe.points, file, wireframe.points_count);
         if (rc != ERROR_SUCCESS) {}
         else
         {
-            rc = readNumFromFile(file, wireframe.edges_count);
+            rc = readNumFromFile(wireframe.edges_count, file);
             if (rc == ERROR_SUCCESS) 
-                rc = readEdgesFromFile(file, wireframe.edges_count, wireframe.edges);
+                rc = readEdgesFromFile(wireframe.edges, file, wireframe.edges_count);
         }
     }
 
@@ -113,12 +113,12 @@ static err_code_e readDataFromFile(const char *filename, /* OUT */ wireframe_t &
     return rc;
 }
 
-err_code_e handleReadFromFile(const io_params_t &params, /* VAR */ wireframe_t &wireframe)
+err_code_e handleReadFromFile(/* VAR */ wireframe_t &wireframe, const io_params_t &params)
 {
     err_code_e rc;
     wireframe_t temp;
 
-    rc = readDataFromFile(params.filename, temp);
+    rc = readDataFromFile(temp, params.filename);
     if (rc != ERROR_SUCCESS) {}
     else
     {

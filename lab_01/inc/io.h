@@ -12,7 +12,7 @@ typedef struct
     const char *filename;
 } io_params_t;
 
-err_code_e handleReadFromFile(const io_params_t &params, wireframe_t &wireframe);
+err_code_e handleReadFromFile(/* VAR */ wireframe_t &wireframe, const io_params_t &params);
 err_code_e handleWriteToFile(const io_params_t &params, const wireframe_t &wireframe);
 
 #endif /* IO_H */

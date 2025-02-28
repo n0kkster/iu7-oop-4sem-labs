@@ -13,7 +13,7 @@ wireframe_t initWireframe()
     return wireframe;
 }
 
-void copyWireframe(wireframe_t &dst, const wireframe_t &src)
+void copyWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 {
     dst = src;
 }

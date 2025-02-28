@@ -10,7 +10,7 @@ err_code_e handleAction(const action_params_t &action)
     switch (action.action)
     {
         case LOAD:
-            rc = handleReadFromFile(action.io_params, wireframe);
+            rc = handleReadFromFile(wireframe, action.io_params);
             break;
         case SAVE:
             rc = handleWriteToFile(action.io_params, wireframe);
@@ -19,13 +19,13 @@ err_code_e handleAction(const action_params_t &action)
             handleDraw(action.draw_params, wireframe);
             break;
         case SHIFT:
-            handleShiftWireframe(action.morph_params, wireframe);
+            handleShiftWireframe(wireframe, action.morph_params);
             break;
         case SCALE:
-            handleScaleWireframe(action.morph_params, wireframe);
+            handleScaleWireframe(wireframe, action.morph_params);
             break;
         case ROTATE:
-            handleRotateWireframe(action.morph_params, wireframe);
+            handleRotateWireframe(wireframe, action.morph_params);
             break;
         case FREE:
             freeWireframe(wireframe);

@@ -33,8 +33,8 @@ typedef struct
     
 } morph_params_t;
 
-void handleShiftWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
-void handleScaleWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
-void handleRotateWireframe(const morph_params_t &params, /* VAR */ wireframe_t &wireframe);
+void handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+void handleScaleWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+void handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
 
 #endif /* MORPH_H */
