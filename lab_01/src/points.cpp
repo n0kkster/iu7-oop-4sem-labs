@@ -1,6 +1,6 @@
 #include "points.h"
 
-static err_code_e readAmountOfPoints(/* OUT */ long &pointsCount, FILE *file)
+static err_code_e readAmountOfPoints(/* OUT */ ssize_t &pointsCount, FILE *file)
 {
     if (file == nullptr)
         return ERROR_INVALID_PTR;
@@ -26,7 +26,7 @@ static err_code_e readPoint(/* OUT */ point_t &p, FILE *file)
     return rc;
 }
 
-static err_code_e readPointsArray(/* OUT */ pPoints_t points, FILE *file, const long pointsCount)
+static err_code_e readPointsArray(/* OUT */ pPoints_t points, FILE *file, const ssize_t pointsCount)
 {
     if (file == nullptr || points == nullptr)
         return ERROR_INVALID_PTR;
@@ -35,7 +35,7 @@ static err_code_e readPointsArray(/* OUT */ pPoints_t points, FILE *file, const 
         return ERROR_INVALID_POINTS_COUNT;
 
     err_code_e rc = ERROR_SUCCESS;
-    for (long i = 0; rc == ERROR_SUCCESS && i < pointsCount; i++)
+    for (ssize_t i = 0; rc == ERROR_SUCCESS && i < pointsCount; i++)
         rc = readPoint(points[i], file);
 
     return rc;
@@ -72,7 +72,7 @@ static err_code_e writePoint(FILE *file, const point_t &point)
     if (file == nullptr)
         return ERROR_INVALID_PTR;
     
-    fprintf(file, "%lf%lf%lf\n", point.x, point.y, point.z);
+    fprintf(file, "%lf %lf %lf\n", point.x, point.y, point.z);
     return ERROR_SUCCESS;
 }
 
@@ -87,7 +87,7 @@ err_code_e writePoints(FILE *file, const pointArray_t &points)
     err_code_e rc = ERROR_SUCCESS;
 
     fprintf(file, "%zu\n", points.count);
-    for (size_t i = 0; rc == ERROR_SUCCESS && i < points.count; i++)
+    for (ssize_t i = 0; rc == ERROR_SUCCESS && i < points.count; i++)
         rc = writePoint(file, points.points[i]);
 
     return rc;

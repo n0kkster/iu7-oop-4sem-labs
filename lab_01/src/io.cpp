@@ -4,6 +4,9 @@
 
 static err_code_e readData(/* OUT */ wireframe_t &wireframe, const char *filename)
 {
+    if (filename == nullptr)
+        return ERROR_INVALID_PTR;
+
     err_code_e rc = ERROR_SUCCESS;
     FILE *file = fopen(filename, "r");
 
@@ -11,12 +14,12 @@ static err_code_e readData(/* OUT */ wireframe_t &wireframe, const char *filenam
         rc = ERROR_OPENING_FILE;
     else
     {
-        rc = readEdges(wireframe.edges, file);
+        rc = readPoints(wireframe.points, file);
         if (rc == ERROR_SUCCESS)
         {
-            rc = readPoints(wireframe.points, file);
+            rc = readEdges(wireframe.edges, file);
             if (rc != ERROR_SUCCESS)
-                freeEdges(wireframe.edges);
+                freePoints(wireframe.points);
         }
     }
 
@@ -31,7 +34,7 @@ err_code_e handleRead(/* VAR */ wireframe_t &wireframe, const io_params_t &param
     err_code_e rc = readData(temp, params.filename);
     if (rc == ERROR_SUCCESS)
     {
-        // rc = checkWireframe(temp);
+        rc = checkWireframe(temp);
         if (rc == ERROR_SUCCESS)
         {
             freeWireframe(wireframe);

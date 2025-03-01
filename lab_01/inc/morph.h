@@ -7,19 +7,34 @@
 
 typedef struct
 {
+    double cx, cy, cz;
+} origin_t;
+
+typedef struct
+{
+    double kx, ky, kz;
+} scale_t;
+
+typedef struct
+{
+    double angleX, angleY, angleZ;
+} angle_t;
+
+typedef struct
+{
     double dx, dy, dz;
 } shift_params_t;
 
 typedef struct
 {
-    double cx, cy, cz;
-    double kx, ky, kz;
+    origin_t origin;
+    scale_t scale;
 } scale_params_t;
 
 typedef struct
 {
-    double cx, cy, cz;
-    double angleX, angleY, angleZ;
+    origin_t origin;
+    angle_t angle;
 } rotation_params_t;
 
 typedef struct

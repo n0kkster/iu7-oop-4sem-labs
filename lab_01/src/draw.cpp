@@ -10,14 +10,14 @@ static QPointF projectPoint(const point_t &point)
 
 static void addEdgesToCanvas(Plane *plane, const edgeArray_t &edges)
 {
-    for (size_t i = 0; i < edges.count; i++)
+    for (ssize_t i = 0; i < edges.count; i++)
         plane->addEdge(edges.edges[i]);
 }
 
 static void addPointsToCanvas(Plane *plane, const pointArray_t &points)
 {
     QPointF point;
-    for (size_t i = 0; i < points.count; i++)
+    for (ssize_t i = 0; i < points.count; i++)
     {
         point = projectPoint(points.points[i]);
         plane->addPoint(point);

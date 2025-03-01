@@ -1,6 +1,6 @@
 #include "edges.h"
 
-static err_code_e readAmountOfEdges(/* OUT */ long &edgesCount, FILE *file)
+static err_code_e readAmountOfEdges(/* OUT */ ssize_t &edgesCount, FILE *file)
 {
     if (file == nullptr)
         return ERROR_INVALID_PTR;
@@ -23,13 +23,13 @@ static err_code_e readEdge(/* OUT */ edge_t &t, FILE *file)
 
     err_code_e rc = ERROR_SUCCESS;
 
-    if (fscanf(file, "%zu%zu", &t.id1, &t.id2) != 2)
+    if (fscanf(file, "%zd%zd", &t.id1, &t.id2) != 2)
         rc = ERROR_NOT_A_NUMBER;
 
     return rc;
 }
 
-static err_code_e readEdgesArray(/* OUT */ pEdges_t edges, FILE *file, const long edgesCount)
+static err_code_e readEdgesArray(/* OUT */ pEdges_t edges, FILE *file, const ssize_t edgesCount)
 {
     if (file == nullptr || edges == nullptr)
         return ERROR_INVALID_PTR;
@@ -38,7 +38,7 @@ static err_code_e readEdgesArray(/* OUT */ pEdges_t edges, FILE *file, const lon
         return ERROR_INVALID_EDGES_COUNT;
 
     err_code_e rc = ERROR_SUCCESS;
-    for (long i = 0; rc == ERROR_SUCCESS && i < edgesCount; i++)
+    for (ssize_t i = 0; rc == ERROR_SUCCESS && i < edgesCount; i++)
         rc = readEdge(edges[i], file);
 
     return rc;
@@ -89,7 +89,7 @@ err_code_e writeEdges(FILE *file, const edgeArray_t &edges)
     err_code_e rc = ERROR_SUCCESS;
 
     fprintf(file, "%zu\n", edges.count);
-    for (size_t i = 0; rc == ERROR_SUCCESS && i < edges.count; i++)
+    for (ssize_t i = 0; rc == ERROR_SUCCESS && i < edges.count; i++)
         rc = writeEdge(file, edges.edges[i]);
 
     return rc;

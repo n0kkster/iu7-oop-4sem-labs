@@ -219,6 +219,28 @@ void MainWindow::onRotateBtnClicked()
         return;
     }
 
+    // QThread *thread = QThread::create([cx, cy, cz, angleX, angleY, angleZ, this]{
+    //     while(1)
+    //     {
+    //         usleep(35 * 1000);
+    //         morph_params_t morph_params;
+    //         action_params_t action_params;
+
+    //         morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
+    //         action_params.action = ROTATE;
+    //         action_params.morph_params = morph_params;
+
+    //         if (handleAction(action_params) != ERROR_SUCCESS)
+    //             break;
+    //         else
+    //         {
+    //             if (handleAction({.action = DRAW, .draw_params = {.plane = this->ui->planeWidget}}) != ERROR_SUCCESS)
+    //                 break;
+    //         }
+    //     }
+    // });
+    // thread->start();
+
     morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
     action_params.action = ROTATE;
     action_params.morph_params = morph_params;
