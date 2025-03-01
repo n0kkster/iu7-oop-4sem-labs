@@ -10,8 +10,8 @@ void Plane::paintEvent(QPaintEvent *event)
     QGraphicsView::paintEvent(event);
     QPainter painter(viewport());
 
-    for (const auto &p : points)
-        painter.drawPoint(realCoordToScreenCoord(p));
+    // for (const auto &p : points)
+        // painter.drawPoint(realCoordToScreenCoord(p));
     
     for (const auto &e : edges)
         painter.drawLine(realCoordToScreenCoord(points[e.id1]), realCoordToScreenCoord(points[e.id2]));
@@ -30,6 +30,11 @@ void Plane::clearPoints()
 void Plane::clearEdges()
 {
     edges.clear();
+}
+
+void Plane::update()
+{
+    viewport()->update();
 }
 
 void Plane::addPoint(QPointF point)

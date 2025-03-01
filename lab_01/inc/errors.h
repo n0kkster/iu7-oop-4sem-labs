@@ -15,7 +15,8 @@ typedef enum
     ERROR_EMPTY_STRING,
     ERROR_NOT_A_NUMBER,
     ERROR_INVALID_POINTS_COUNT,
-    ERROR_INVALID_EDGES_COUNT
+    ERROR_INVALID_EDGES_COUNT,
+    ERROR_INVALID_EDGE
 } err_code_e;
 
 void handleError(QWidget *parent, err_code_e rc);

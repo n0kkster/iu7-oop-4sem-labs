@@ -30,6 +30,7 @@ public:
     void clearEdges();
     void addPoint(QPointF point);
     void addEdge(edge_t edge);
+    void update();
 };
 
 #endif // PLANE_H

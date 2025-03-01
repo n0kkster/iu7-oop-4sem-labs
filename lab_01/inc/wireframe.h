@@ -3,29 +3,25 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include "errors.h"
 
 typedef struct
 {
     double x, y, z;
-} pointCoord_t;
-
-typedef struct
-{
-    size_t id;
-    pointCoord_t coord;
 } point_t;
-typedef point_t* pointArray_t;
+
+typedef point_t* pPointArray_t;
 
 typedef struct
 {
     size_t id1, id2;
 } edge_t;
-typedef edge_t* edgeArray_t;
+typedef edge_t* pEdgeArray_t;
 
 typedef struct
 {
-    pointArray_t points;
-    edgeArray_t edges;
+    pPointArray_t points;
+    pEdgeArray_t edges;
     long points_count;
     long edges_count;
 } wireframe_t;
@@ -33,5 +29,6 @@ typedef struct
 wireframe_t initWireframe(void);
 void freeWireframe(wireframe_t &wireframe);
 void copyWireframe(wireframe_t &dst, const wireframe_t &src);
+err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount);
 
 #endif /* WIREFRAME_H */

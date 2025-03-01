@@ -13,7 +13,7 @@ static err_code_e readEdgeFromFile(/* OUT */ edge_t &t, FILE *file)
     return rc;
 }
 
-static err_code_e readEdgesFromFile(/* OUT */ edgeArray_t &edges, FILE *file, long count)
+static err_code_e readEdgesFromFile(/* OUT */ pEdgeArray_t &edges, FILE *file, const long count)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -23,19 +23,19 @@ static err_code_e readEdgesFromFile(/* OUT */ edgeArray_t &edges, FILE *file, lo
 
     err_code_e rc = ERROR_SUCCESS;
 
-    edges = (edgeArray_t)malloc(count * sizeof(edge_t));
+    edges = (pEdgeArray_t)malloc(count * sizeof(edge_t));
     if (edges == nullptr)
         rc = ERROR_ALLOCATING_MEM;
     else
     {
         for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
             rc = readEdgeFromFile(edges[i], file);
-    }        
+    }
 
     return rc;
 }
 
-static err_code_e readPointFromFile(/* OUT */ pointCoord_t &p, FILE *file)
+static err_code_e readPointFromFile(/* OUT */ point_t &p, FILE *file)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -48,7 +48,7 @@ static err_code_e readPointFromFile(/* OUT */ pointCoord_t &p, FILE *file)
     return rc;
 }
 
-static err_code_e readPointsFromFile(/* OUT */ pointArray_t &points, FILE *file, long count)
+static err_code_e readPointsFromFile(/* OUT */ pPointArray_t &points, FILE *file, const long count)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -58,16 +58,13 @@ static err_code_e readPointsFromFile(/* OUT */ pointArray_t &points, FILE *file,
 
     err_code_e rc = ERROR_SUCCESS;
 
-    points = (pointArray_t)malloc(count * sizeof(point_t));
+    points = (pPointArray_t)malloc(count * sizeof(point_t));
     if (points == nullptr)
         rc = ERROR_ALLOCATING_MEM;
     else
     {
         for (long i = 0; i < count && rc == ERROR_SUCCESS; i++)
-        {
-            points[i].id = i;
-            rc = readPointFromFile(points[i].coord, file);
-        }
+            rc = readPointFromFile(points[i], file);
     }        
 
     return rc;
@@ -88,11 +85,8 @@ static err_code_e readNumFromFile(/* OUT */ long &num, FILE *file)
 
 static err_code_e readDataFromFile(/* OUT */ wireframe_t &wireframe, const char *filename)
 {
-    err_code_e rc = ERROR_SUCCESS;
-    FILE *file;
-
-    file = fopen(filename, "r");
-    rc = readNumFromFile(wireframe.points_count, file);
+    FILE *file = fopen(filename, "r");
+    err_code_e rc = readNumFromFile(wireframe.points_count, file);
     if (rc != ERROR_SUCCESS) {}
     else
     {
@@ -113,10 +107,9 @@ static err_code_e readDataFromFile(/* OUT */ wireframe_t &wireframe, const char 
 
 err_code_e handleReadFromFile(/* VAR */ wireframe_t &wireframe, const io_params_t &params)
 {
-    err_code_e rc;
     wireframe_t temp;
 
-    rc = readDataFromFile(temp, params.filename);
+    err_code_e rc = readDataFromFile(temp, params.filename);
     if (rc != ERROR_SUCCESS) {}
     else
     {
@@ -127,16 +120,16 @@ err_code_e handleReadFromFile(/* VAR */ wireframe_t &wireframe, const io_params_
     return rc;
 }
 
-static err_code_e writePointToFile(FILE *file, const pointCoord_t &point)
+static err_code_e writePointToFile(FILE *file, const point_t &point)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
     
-    fprintf(file, "%lf %lf %lf\n", point.x, point.y, point.z);
+    fprintf(file, "%lf%lf%lf\n", point.x, point.y, point.z);
     return ERROR_SUCCESS;
 }
 
-static err_code_e writePointsToFile(FILE *file, size_t count, const pointArray_t &points)
+static err_code_e writePointsToFile(FILE *file, const size_t count, const pPointArray_t &points)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -148,7 +141,7 @@ static err_code_e writePointsToFile(FILE *file, size_t count, const pointArray_t
 
     fprintf(file, "%zu\n", count);
     for (size_t i = 0; i < count && rc == ERROR_SUCCESS; i++)
-        rc = writePointToFile(file, points[i].coord);
+        rc = writePointToFile(file, points[i]);
 
     return rc;
 }
@@ -162,7 +155,7 @@ static err_code_e writeEdgeToFile(FILE *file, const edge_t &edge)
     return ERROR_SUCCESS;
 }
 
-static err_code_e writeEdgesToFile(FILE *file, size_t count, const edgeArray_t &edges)
+static err_code_e writeEdgesToFile(FILE *file, const size_t count, const pEdgeArray_t &edges)
 {
     if (file == nullptr)
         return ERROR_OPENING_FILE;
@@ -181,10 +174,9 @@ static err_code_e writeEdgesToFile(FILE *file, size_t count, const edgeArray_t &
 
 err_code_e handleWriteToFile(const io_params_t &params, const wireframe_t &wireframe)
 {
-    err_code_e rc = ERROR_SUCCESS;
     FILE *file = fopen(params.filename, "w");
 
-    rc = writePointsToFile(file, wireframe.points_count, wireframe.points);
+    err_code_e rc = writePointsToFile(file, wireframe.points_count, wireframe.points);
     if (rc == ERROR_SUCCESS)
         rc = writeEdgesToFile(file, wireframe.edges_count, wireframe.edges);
     
