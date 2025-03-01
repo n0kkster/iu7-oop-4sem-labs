@@ -8,18 +8,18 @@ static QPointF projectPoint(const point_t &point)
     return projected;
 }
 
-static void addEdgesToCanvas(Plane *plane, const size_t count, const pEdgeArray_t edges)
+static void addEdgesToCanvas(Plane *plane, const edgeArray_t &edges)
 {
-    for (size_t i = 0; i < count; i++)
-        plane->addEdge(edges[i]);
+    for (size_t i = 0; i < edges.count; i++)
+        plane->addEdge(edges.edges[i]);
 }
 
-static void addPointsToCanvas(Plane *plane, const size_t count, const pPointArray_t points)
+static void addPointsToCanvas(Plane *plane, const pointArray_t &points)
 {
     QPointF point;
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < points.count; i++)
     {
-        point = projectPoint(points[i]);
+        point = projectPoint(points.points[i]);
         plane->addPoint(point);
     }
 }
@@ -30,7 +30,7 @@ void handleDraw(const draw_params_t &params, const wireframe_t &wireframe)
     plane->clearPoints();
     plane->clearEdges();
 
-    addPointsToCanvas(plane, wireframe.points_count, wireframe.points);
-    addEdgesToCanvas(plane, wireframe.edges_count, wireframe.edges);
+    addPointsToCanvas(plane, wireframe.points);
+    addEdgesToCanvas(plane, wireframe.edges);
     plane->update();
 }

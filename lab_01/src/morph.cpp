@@ -12,15 +12,15 @@ static void applyPointShift(/* VAR */ point_t &point, const shift_params_t &para
     point.z += params.dz;
 }
 
-static void applyWireframeShift(/* VAR */ pPointArray_t &points, const size_t count, const shift_params_t &params)
+static void applyWireframeShift(/* VAR */ pointArray_t &points, const shift_params_t &params)
 {
-    for (size_t i = 0; i < count; i++)
-        applyPointShift(points[i], params);
+    for (size_t i = 0; i < points.count; i++)
+        applyPointShift(points.points[i], params);
 }
 
 void handleShiftWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
-    applyWireframeShift(wireframe.points, wireframe.points_count, params.shift_params);
+    applyWireframeShift(wireframe.points, params.shift_params);
 }
 
 static void applyPointScale(/* VAR */ point_t &point, const scale_params_t &params)
@@ -31,15 +31,15 @@ static void applyPointScale(/* VAR */ point_t &point, const scale_params_t &para
 }
 
 
-static void applyWireframeScale(/* VAR */ pPointArray_t &points, const size_t count, const scale_params_t &params)
+static void applyWireframeScale(/* VAR */ pointArray_t &points, const scale_params_t &params)
 {
-    for (size_t i = 0; i < count; i++)
-        applyPointScale(points[i], params);
+    for (size_t i = 0; i < points.count; i++)
+        applyPointScale(points.points[i], params);
 }
 
 void handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
-    applyWireframeScale(wireframe.points, wireframe.points_count, params.scale_params);
+    applyWireframeScale(wireframe.points, params.scale_params);
 }
 
 static void applyPointRotation(/* VAR */ point_t &point, const rotation_params_t &params)
@@ -70,13 +70,13 @@ static void applyPointRotation(/* VAR */ point_t &point, const rotation_params_t
     applyPointShift(point, {params.cx, params.cy, params.cz});
 }
 
-static void applyWireframeRotation(/* VAR */ pPointArray_t &points, const size_t count, const rotation_params_t &params)
+static void applyWireframeRotation(/* VAR */ pointArray_t &points, const rotation_params_t &params)
 {
-    for (size_t i = 0; i < count; i++)
-        applyPointRotation(points[i], params);
+    for (size_t i = 0; i < points.count; i++)
+        applyPointRotation(points.points[i], params);
 }
 
 void handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
-    applyWireframeRotation(wireframe.points, wireframe.points_count, params.rotation_params);
+    applyWireframeRotation(wireframe.points, params.rotation_params);
 }

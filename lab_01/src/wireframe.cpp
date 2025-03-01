@@ -1,59 +1,72 @@
 #include "wireframe.h"
 #include "errors.h"
 
+static err_code_e initEdges(edgeArray_t &edges)
+{
+    edges.edges = nullptr;
+    edges.count = 0;
+    return ERROR_SUCCESS;
+}
+
+static err_code_e initPoints(pointArray_t &points)
+{
+    points.points = nullptr;
+    points.count = 0;
+    return ERROR_SUCCESS;
+}
+
+
 wireframe_t initWireframe()
 {
     wireframe_t wireframe;
     
-    wireframe.edges_count = 0;
-    wireframe.points_count = 0;
-    wireframe.edges = nullptr;
-    wireframe.points = nullptr;
+    initPoints(wireframe.points);
+    initEdges(wireframe.edges);
 
     return wireframe;
 }
 
-static err_code_e checkEdge(const edge_t &edge, const long pointsCount)
-{
-    err_code_e rc = ERROR_SUCCESS;
-    if (edge.id1 > pointsCount || edge.id2 > pointsCount)
-        rc = ERROR_INVALID_EDGE;
-    return rc;
-}
+// static err_code_e checkEdge(const edge_t &edge, const long pointsCount)
+// {
+//     err_code_e rc = ERROR_SUCCESS;
+//     if (edge.id1 > pointsCount || edge.id2 > pointsCount)
+//         rc = ERROR_INVALID_EDGE;
+//     return rc;
+// }
 
-static err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount)
-{
-    err_code_e rc = ERROR_SUCCESS;
-    for (long i = 0; i < edgesCount && rc == ERROR_SUCCESS; i++)
-        rc = checkEdge(edges[i], pointsCount);
-    return rc;
-}
+// static err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount)
+// {
+//     err_code_e rc = ERROR_SUCCESS;
+//     for (long i = 0; i < edgesCount && rc == ERROR_SUCCESS; i++)
+//         rc = checkEdge(edges[i], pointsCount);
+//     return rc;
+// }
 
-err_code_e checkWireframe(const wireframe_t &wireframe)
-{
-    err_code_e rc = checkEdges(wireframe.edges, wireframe.edges_count, wireframe.points_count);
-    return rc;
-}
+// err_code_e checkWireframe(const wireframe_t &wireframe)
+// {
+//     err_code_e rc = checkEdges(wireframe.edges, wireframe.edges_count, wireframe.points_count);
+//     return rc;
+// }
 
-void copyWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
+void moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 {
     dst = src;
 }
 
-static void freePoints(const pPointArray_t points)
+void freePoints(pointArray_t &points)
 {
-    free(points);
+    free(points.points);
+    points.count = 0;
 }
 
-static void freeEdges(const pEdgeArray_t edges)
+void freeEdges(edgeArray_t &edges)
 {
-    free(edges);
+    free(edges.edges);
+    edges.count = 0;
 }
 
 void freeWireframe(/* VAR */ wireframe_t &wireframe)
 {
-    wireframe.edges_count = 0;
-    wireframe.points_count = 0;
     freeEdges(wireframe.edges);
     freePoints(wireframe.points);
 }

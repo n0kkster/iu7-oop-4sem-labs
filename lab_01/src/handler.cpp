@@ -10,10 +10,10 @@ err_code_e handleAction(const action_params_t &action)
     switch (action.action)
     {
         case LOAD:
-            rc = handleReadFromFile(wireframe, action.io_params);
+            rc = handleRead(wireframe, action.io_params);
             break;
         case SAVE:
-            rc = handleWriteToFile(action.io_params, wireframe);
+            rc = handleWrite(action.io_params, wireframe);
             break;
         case DRAW:
             handleDraw(action.draw_params, wireframe);
