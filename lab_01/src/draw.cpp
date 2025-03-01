@@ -3,8 +3,8 @@
 static QPointF projectPoint(const point_t &point)
 {
     QPointF projected;
-    projected.setX(point.x/*  - point.z * cos(55 * M_PI / 180.0) */);
-    projected.setY(point.y/*  - point.z * sin(15 * M_PI / 180.0) */);
+    projected.setX(point.x);
+    projected.setY(point.y);
     return projected;
 }
 

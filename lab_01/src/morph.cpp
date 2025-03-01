@@ -1,5 +1,10 @@
 #include "morph.h"
 
+static double degToRad(double degrees)
+{
+    return degrees * M_PI / 180;
+}
+
 static void applyPointShift(/* VAR */ point_t &point, const shift_params_t &params)
 {
     point.x += params.dx;
@@ -35,11 +40,6 @@ static void applyWireframeScale(/* VAR */ pPointArray_t &points, const size_t co
 void handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
     applyWireframeScale(wireframe.points, wireframe.points_count, params.scale_params);
-}
-
-static double degToRad(double degrees)
-{
-    return degrees * M_PI / 180;
 }
 
 static void applyPointRotation(/* VAR */ point_t &point, const rotation_params_t &params)
