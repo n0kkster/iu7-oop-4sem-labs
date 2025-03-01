@@ -29,6 +29,6 @@ typedef struct
 wireframe_t initWireframe(void);
 void freeWireframe(wireframe_t &wireframe);
 void copyWireframe(wireframe_t &dst, const wireframe_t &src);
-err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount);
+err_code_e checkWireframe(const wireframe_t &wireframe);
 
 #endif /* WIREFRAME_H */

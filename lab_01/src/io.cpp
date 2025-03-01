@@ -87,20 +87,20 @@ static err_code_e readDataFromFile(/* OUT */ wireframe_t &wireframe, const char 
 {
     FILE *file = fopen(filename, "r");
     err_code_e rc = readNumFromFile(wireframe.points_count, file);
-    if (rc != ERROR_SUCCESS) {}
-    else
+    if (rc == ERROR_SUCCESS) 
     {
         rc = readPointsFromFile(wireframe.points, file, wireframe.points_count);
-        if (rc != ERROR_SUCCESS) {}
-        else
+        if (rc == ERROR_SUCCESS)
         {
             rc = readNumFromFile(wireframe.edges_count, file);
             if (rc == ERROR_SUCCESS) 
                 rc = readEdgesFromFile(wireframe.edges, file, wireframe.edges_count);
         }
     }
-
     fclose(file);
+
+    if (rc == ERROR_SUCCESS)
+        rc = checkWireframe(wireframe);
 
     return rc;
 }
@@ -110,8 +110,7 @@ err_code_e handleReadFromFile(/* VAR */ wireframe_t &wireframe, const io_params_
     wireframe_t temp;
 
     err_code_e rc = readDataFromFile(temp, params.filename);
-    if (rc != ERROR_SUCCESS) {}
-    else
+    if (rc == ERROR_SUCCESS)
     {
         freeWireframe(wireframe);
         copyWireframe(wireframe, temp);

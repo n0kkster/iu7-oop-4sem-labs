@@ -31,6 +31,9 @@ void handleError(QWidget *parent, err_code_e rc)
         case ERROR_INVALID_EDGES_COUNT:
             QMessageBox::critical(parent, "Ошибка", "Некорректное количество ребер!");
             break;
+        case ERROR_INVALID_EDGE:
+            QMessageBox::critical(parent, "Ошибка", "Модель содержит некорректные ребра!");
+            break;
         default:
             break;
     }

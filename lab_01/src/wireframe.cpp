@@ -21,11 +21,17 @@ static err_code_e checkEdge(const edge_t &edge, const long pointsCount)
     return rc;
 }
 
-err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount)
+static err_code_e checkEdges(const pEdgeArray_t edges, const long edgesCount, const long pointsCount)
 {
     err_code_e rc = ERROR_SUCCESS;
     for (long i = 0; i < edgesCount && rc == ERROR_SUCCESS; i++)
         rc = checkEdge(edges[i], pointsCount);
+    return rc;
+}
+
+err_code_e checkWireframe(const wireframe_t &wireframe)
+{
+    err_code_e rc = checkEdges(wireframe.edges, wireframe.edges_count, wireframe.points_count);
     return rc;
 }
 

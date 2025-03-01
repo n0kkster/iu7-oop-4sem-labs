@@ -33,8 +33,7 @@ void MainWindow::onLoadBtnClicked()
         else
         {
             rc = handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
-            if (rc == ERROR_SUCCESS) {}
-            else
+            if (rc != ERROR_SUCCESS)
                 handleError(this, rc);
         }
     }
@@ -50,8 +49,7 @@ void MainWindow::onSaveBtnClicked()
     else
     {
         rc = handleAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
-        if (rc == ERROR_SUCCESS) {}
-        else
+        if (rc != ERROR_SUCCESS)
             handleError(this, rc);
     }
 }
@@ -96,8 +94,7 @@ void MainWindow::onShiftBtnClicked()
         action_params.action = DRAW;
         action_params.draw_params.plane = ui->planeWidget;
         rc = handleAction(action_params);
-        if (rc == ERROR_SUCCESS) {}
-        else
+        if (rc != ERROR_SUCCESS)
             handleError(this, rc);
     }    
 }
@@ -165,8 +162,7 @@ void MainWindow::onScaleBtnClicked()
         action_params.draw_params.plane = ui->planeWidget;
         
         rc = handleAction(action_params);
-        if (rc == ERROR_SUCCESS) {}
-        else
+        if (rc != ERROR_SUCCESS)
             handleError(this, rc);
     }
 }
@@ -223,30 +219,6 @@ void MainWindow::onRotateBtnClicked()
         return;
     }
 
-    // QThread *thread = QThread::create([cx, cy, cz, angleX, angleY, angleZ, this]{
-    //     while(1)
-    //     {
-    //         usleep(50 * 1000);
-    //         morph_params_t morph_params;
-    //         action_params_t action_params;
-
-    //         morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
-    //         action_params.action = ROTATE;
-    //         action_params.morph_params = morph_params;
-
-    //         // qDebug() << cx << cy << cz << angleX << angleY << angleZ;
-    //         if (handleAction(action_params) != ERROR_SUCCESS)
-    //             break;
-    //         else
-    //         {
-    //             if (handleAction({.action = DRAW, .draw_params = {.plane = this->ui->planeWidget}}) != ERROR_SUCCESS)
-    //                 break;
-    //         }
-    //     }
-    // });
-    // thread->start();
-
-
     morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
     action_params.action = ROTATE;
     action_params.morph_params = morph_params;
@@ -259,8 +231,7 @@ void MainWindow::onRotateBtnClicked()
         action_params.draw_params.plane = ui->planeWidget;
 
         rc = handleAction(action_params);
-        if (rc == ERROR_SUCCESS) {}
-        else
+        if (rc != ERROR_SUCCESS)
             handleError(this, rc);
     }
 }
