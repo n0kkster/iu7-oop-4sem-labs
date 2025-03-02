@@ -1,10 +1,5 @@
 #include "morph.h"
 
-static double degToRad(double degrees)
-{
-    return degrees * M_PI / 180;
-}
-
 static void applyPointShift(/* VAR */ point_t &point, const shift_params_t &params)
 {
     point.x += params.dx;
@@ -48,6 +43,7 @@ void handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t
     applyWireframeScale(wireframe.points, params.scale_params);
 }
 
+// TODO: разибить на 3 функции
 static void rotatePoint(/* VAR */ point_t &point, const angle_t &angle)
 {
     double tx = point.x, ty = point.y, tz = point.z;

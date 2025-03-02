@@ -150,7 +150,7 @@ void MainWindow::onScaleBtnClicked()
         return;
     }
 
-    morph_params.scale_params = {cx, cy, cz, kx, ky, kz};
+    morph_params.scale_params = {{cx, cy, cz}, {kx, ky, kz}};
     action_params.action = SCALE;
     action_params.morph_params = morph_params;
     rc = handleAction(action_params);
@@ -219,6 +219,10 @@ void MainWindow::onRotateBtnClicked()
         return;
     }
 
+    angleX = qDegreesToRadians(angleX);
+    angleY = qDegreesToRadians(angleY);
+    angleZ = qDegreesToRadians(angleZ);
+
     // QThread *thread = QThread::create([cx, cy, cz, angleX, angleY, angleZ, this]{
     //     while(1)
     //     {
@@ -241,7 +245,7 @@ void MainWindow::onRotateBtnClicked()
     // });
     // thread->start();
 
-    morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
+    morph_params.rotation_params = {{cx, cy, cz}, {angleX, angleY, angleZ}};
     action_params.action = ROTATE;
     action_params.morph_params = morph_params;
     rc = handleAction(action_params);
