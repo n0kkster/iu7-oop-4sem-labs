@@ -28,7 +28,7 @@ wireframe_t initWireframe()
 static err_code_e checkEdge(const edge_t &edge, const ssize_t pointsCount)
 {
     err_code_e rc = ERROR_SUCCESS;
-    if (edge.id1 > pointsCount || edge.id2 > pointsCount)
+    if (edge.id1 >= pointsCount || edge.id2 >= pointsCount)
         rc = ERROR_INVALID_EDGE;
     return rc;
 }

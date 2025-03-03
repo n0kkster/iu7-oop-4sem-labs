@@ -13,9 +13,10 @@ static void applyWireframeShift(/* VAR */ pointArray_t &points, const shift_para
         applyPointShift(points.points[i], params);
 }
 
-void handleShiftWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleShiftWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
     applyWireframeShift(wireframe.points, params.shift_params);
+    return ERROR_SUCCESS;
 }
 
 static void scalePoint(/* VAR */ point_t &point, const scale_t &scale)
@@ -38,9 +39,10 @@ static void applyWireframeScale(/* VAR */ pointArray_t &points, const scale_para
         applyPointScale(points.points[i], params.origin, params.scale);
 }
 
-void handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
     applyWireframeScale(wireframe.points, params.scale_params);
+    return ERROR_SUCCESS;
 }
 
 // TODO: разибить на 3 функции
@@ -78,7 +80,8 @@ static void applyWireframeRotation(/* VAR */ pointArray_t &points, const rotatio
         applyPointRotation(points.points[i], params.origin, params.angle);
 }
 
-void handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params)
 {
     applyWireframeRotation(wireframe.points, params.rotation_params);
+    return ERROR_SUCCESS;
 }

@@ -2,7 +2,10 @@
 
 // Конструктор
 // ==================================================
-Plane::Plane(QWidget *parent) : QGraphicsView(parent) {}
+Plane::Plane(QWidget *parent) : QGraphicsView(parent) 
+{
+    handleAction(projection, {.action = INIT, .null_params = nullptr});
+}
 // ==================================================
 
 void Plane::paintEvent(QPaintEvent *event)
@@ -10,39 +13,19 @@ void Plane::paintEvent(QPaintEvent *event)
     QGraphicsView::paintEvent(event);
     QPainter painter(viewport());
 
-    // for (const auto &p : points)
-        // painter.drawPoint(realCoordToScreenCoord(p));
-    
-    for (const auto &e : edges)
-        painter.drawLine(realCoordToScreenCoord(points[e.id1]), realCoordToScreenCoord(points[e.id2]));
+
+    for (ssize_t i = 0; i < projection.edges.count; i++)
+        painter.drawLine(realCoordToScreenCoord(projection.edges.edges[i].start), realCoordToScreenCoord(projection.edges.edges[i].end));
 }
 
-QPointF Plane::realCoordToScreenCoord(QPointF point)
+err_code_e Plane::doAction(const action_params_t &action)
 {
-    return {point.x() + viewport()->size().width() / 2, -point.y() + viewport()->size().height() / 2};
-}
-
-void Plane::clearPoints()
-{
-    points.clear();
-}
-
-void Plane::clearEdges()
-{
-    edges.clear();
-}
-
-void Plane::update()
-{
+    err_code_e rc = handleAction(projection, action);
     viewport()->update();
+    return rc;
 }
 
-void Plane::addPoint(QPointF point)
+QPointF Plane::realCoordToScreenCoord(point2D_t point)
 {
-    points.append(point);
-}
-
-void Plane::addEdge(edge_t edge)
-{
-    edges.append(edge);
+    return {point.x + viewport()->size().width() / 2, -point.y + viewport()->size().height() / 2};
 }

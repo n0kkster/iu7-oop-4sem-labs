@@ -29,7 +29,7 @@ static err_code_e readEdge(/* OUT */ edge_t &t, FILE *file)
     return rc;
 }
 
-static err_code_e readEdgesArray(/* OUT */ pEdges_t edges, FILE *file, const ssize_t edgesCount)
+static err_code_e readEdgesArray(/* OUT */ pEdge3D_t edges, FILE *file, const ssize_t edgesCount)
 {
     if (file == nullptr || edges == nullptr)
         return ERROR_INVALID_PTR;
@@ -53,7 +53,7 @@ err_code_e readEdges(/* OUT */ edgeArray_t &edges, FILE *file)
 
     if (rc == ERROR_SUCCESS)
     {
-        edges.edges = (pEdges_t)malloc(edges.count * sizeof(edge_t));
+        edges.edges = (pEdge3D_t)malloc(edges.count * sizeof(edge_t));
         if (edges.edges == nullptr)
             rc = ERROR_ALLOCATING_MEM;
         else

@@ -24,17 +24,11 @@ void MainWindow::onLoadBtnClicked()
         handleError(this, ERROR_OPENING_FILE);
     else
     {
-        rc = handleAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
+        rc = ui->planeWidget->doAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
         if (rc != ERROR_SUCCESS)
         {
             handleError(this, rc);
-            handleAction({.action = FREE, .null_params = nullptr});
-        }
-        else
-        {
-            rc = handleAction({.action = DRAW, .draw_params = {ui->planeWidget}});
-            if (rc != ERROR_SUCCESS)
-                handleError(this, rc);
+            ui->planeWidget->doAction({.action = FREE, .null_params = nullptr});
         }
     }
 }
@@ -48,7 +42,7 @@ void MainWindow::onSaveBtnClicked()
         handleError(this, ERROR_OPENING_FILE);
     else
     {
-        rc = handleAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
+        rc = ui->planeWidget->doAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
         if (rc != ERROR_SUCCESS)
             handleError(this, rc);
     }
@@ -83,20 +77,15 @@ void MainWindow::onShiftBtnClicked()
         return;
     }
 
+    morph_params.type = MOVE;
     morph_params.shift_params = {dx, dy, dz};
-    action_params.action = SHIFT;
+    
     action_params.morph_params = morph_params;
-    rc = handleAction(action_params);
+    action_params.action = MORPH;
+
+    rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
         handleError(this, rc);
-    else
-    {
-        action_params.action = DRAW;
-        action_params.draw_params.plane = ui->planeWidget;
-        rc = handleAction(action_params);
-        if (rc != ERROR_SUCCESS)
-            handleError(this, rc);
-    }    
 }
 
 void MainWindow::onScaleBtnClicked()
@@ -150,24 +139,17 @@ void MainWindow::onScaleBtnClicked()
         return;
     }
 
+    morph_params.type = SCALE;
     morph_params.scale_params = {{cx, cy, cz}, {kx, ky, kz}};
-    action_params.action = SCALE;
+
     action_params.morph_params = morph_params;
-    rc = handleAction(action_params);
+    action_params.action = MORPH;
+    
+    rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
         handleError(this, rc);
-    else
-    {
-        action_params.action = DRAW;
-        action_params.draw_params.plane = ui->planeWidget;
-        
-        rc = handleAction(action_params);
-        if (rc != ERROR_SUCCESS)
-            handleError(this, rc);
-    }
 }
-#include <unistd.h>
-#include <QThread>
+
 void MainWindow::onRotateBtnClicked()
 {
     double cx, cy, cz;
@@ -231,39 +213,29 @@ void MainWindow::onRotateBtnClicked()
     //         action_params_t action_params;
 
     //         morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
-    //         action_params.action = ROTATE;
+    //         morph_params.type = ROTATE;
+    //         action_params.action = MORPH;
     //         action_params.morph_params = morph_params;
 
-    //         if (handleAction(action_params) != ERROR_SUCCESS)
+    //         if (ui->planeWidget->doAction(action_params) != ERROR_SUCCESS)
     //             break;
-    //         else
-    //         {
-    //             if (handleAction({.action = DRAW, .draw_params = {.plane = this->ui->planeWidget}}) != ERROR_SUCCESS)
-    //                 break;
-    //         }
     //     }
     // });
     // thread->start();
 
+    morph_params.type = ROTATE;
     morph_params.rotation_params = {{cx, cy, cz}, {angleX, angleY, angleZ}};
-    action_params.action = ROTATE;
+
     action_params.morph_params = morph_params;
-    rc = handleAction(action_params);
+    action_params.action = MORPH;
+    
+    rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
         handleError(this, rc);
-    else
-    {
-        action_params.action = DRAW;
-        action_params.draw_params.plane = ui->planeWidget;
-
-        rc = handleAction(action_params);
-        if (rc != ERROR_SUCCESS)
-            handleError(this, rc);
-    }
 }
 
 MainWindow::~MainWindow()
 {
-    handleAction({.action = FREE, .null_params = nullptr});
+    ui->planeWidget->doAction({.action = FREE, .null_params = nullptr});
     delete ui;
 }

@@ -21,11 +21,11 @@ typedef struct
 {
     ssize_t id1, id2;
 } edge_t;
-typedef edge_t* pEdges_t;
+typedef edge_t* pEdge3D_t;
 
 typedef struct
 {
-    pEdges_t edges;
+    pEdge3D_t edges;
     ssize_t count;
 } edgeArray_t;
 

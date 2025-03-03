@@ -9,28 +9,24 @@
 #include <QPen>
 #include <QMessageBox>
 
-#include "wireframe.h"
+#include "projection.h"
+#include "errors.h"
+#include "handler.h"
 
 class Plane : public QGraphicsView
 {
     Q_OBJECT
 
 private:
-    QPointF realCoordToScreenCoord(QPointF point);
-
-    QVector<QPointF> points;
-    QVector<edge_t> edges;
+    QPointF realCoordToScreenCoord(point2D_t point);
+    projection_t projection;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
 
 public:
     explicit Plane(QWidget *parent = nullptr);
-    void clearPoints();
-    void clearEdges();
-    void addPoint(QPointF point);
-    void addEdge(edge_t edge);
-    void update();
+    err_code_e doAction(const action_params_t &action);
 };
 
-#endif // PLANE_H
+#endif /* PLANE_H */

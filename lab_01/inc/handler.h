@@ -2,17 +2,15 @@
 #define HANDLER_H
 
 #include "io.h"
-#include "draw.h"
+#include "projection.h"
 #include "morph.h"
 
 typedef enum
 {
+    INIT,
     LOAD,
     SAVE,
-    SHIFT,
-    SCALE,
-    ROTATE,
-    DRAW,
+    MORPH,
     FREE
 } action_e;
 
@@ -22,12 +20,11 @@ typedef struct
     union
     {
         io_params_t io_params;
-        draw_params_t draw_params;
         morph_params_t morph_params;
         nullptr_t null_params;
     };
 } action_params_t;
 
-err_code_e handleAction(const action_params_t &action);
+err_code_e handleAction(/* VAR */ projection_t &projection, const action_params_t &action);
 
 #endif /* HANDLER_H */

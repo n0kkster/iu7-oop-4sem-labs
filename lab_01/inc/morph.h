@@ -37,8 +37,16 @@ typedef struct
     angle_t angle;
 } rotation_params_t;
 
+typedef enum
+{
+    MOVE,
+    SCALE,
+    ROTATE
+} morph_type_e;
+
 typedef struct
 {
+    morph_type_e type;
     union
     {
         shift_params_t shift_params;
@@ -48,8 +56,8 @@ typedef struct
     
 } morph_params_t;
 
-void handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
-void handleScaleWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
-void handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+err_code_e handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+err_code_e handleScaleWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
 
 #endif /* MORPH_H */

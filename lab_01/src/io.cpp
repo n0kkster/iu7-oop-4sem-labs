@@ -35,7 +35,9 @@ err_code_e handleRead(/* VAR */ wireframe_t &wireframe, const io_params_t &param
     if (rc == ERROR_SUCCESS)
     {
         rc = checkWireframe(temp);
-        if (rc == ERROR_SUCCESS)
+        if (rc != ERROR_SUCCESS)
+            freeWireframe(temp);
+        else
         {
             freeWireframe(wireframe);
             moveWireframe(wireframe, temp);
