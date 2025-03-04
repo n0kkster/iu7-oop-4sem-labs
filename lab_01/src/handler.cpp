@@ -35,9 +35,7 @@ err_code_e handleAction(/* VAR */ projection_t &projection, const action_params_
             rc = initProjection(projection);
             break;
         case LOAD:
-            rc = handleRead(wireframe, action.io_params);
-            if (rc == ERROR_SUCCESS)
-                rc = createProjection(projection, wireframe);
+            rc = handleRead(wireframe, projection, action.io_params);
             break;
         case SAVE:
             rc = handleWrite(action.io_params, wireframe);

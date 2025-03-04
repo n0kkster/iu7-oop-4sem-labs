@@ -49,6 +49,7 @@ err_code_e checkWireframe(const wireframe_t &wireframe)
 
 err_code_e moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 {
+    freeWireframe(dst);
     dst = src;
     return ERROR_SUCCESS;
 }

@@ -1,7 +1,6 @@
 #ifndef MORPH_H
 #define MORPH_H
 
-#include <QDebug>
 #include <math.h>
 #include "wireframe.h"
 

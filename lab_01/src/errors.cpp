@@ -1,38 +1,39 @@
+#include <QMessageBox>
 #include "errors.h"
 
-void handleError(QWidget *parent, err_code_e rc)
+void handleError(err_code_e rc)
 {
     switch (rc)
     {
         case ERROR_READING_FILE:
-            QMessageBox::critical(parent, "Ошибка", "Ошибка чтения файла!");
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка чтения файла!");
             break;
         case ERROR_ALLOCATING_MEM:
-            QMessageBox::critical(parent, "Ошибка", "Ошибка выделения памяти!");
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка выделения памяти!");
             break;
         case ERROR_INVALID_PTR:
-            QMessageBox::critical(parent, "Ошибка", "Некорректный указатель!");
+            QMessageBox::critical(nullptr, "Ошибка", "Некорректный указатель!");
             break;
         case ERROR_OPENING_FILE:
-            QMessageBox::critical(parent, "Ошибка", "Ошибка открытия файла!");
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка открытия файла!");
             break;
         case ERROR_EMPTY_STRING:
-            QMessageBox::critical(parent, "Ошибка", "Файл не должен содержать пустых строк!");
+            QMessageBox::critical(nullptr, "Ошибка", "Файл не должен содержать пустых строк!");
             break;
         case ERROR_READING_STRING:
-            QMessageBox::critical(parent, "Ошибка", "Ошибка чтения строки!");
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка чтения строки!");
             break;
         case ERROR_NOT_A_NUMBER:
-            QMessageBox::critical(parent, "Ошибка", "Ошибка парсинга числа из строки!");
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка парсинга числа из строки!");
             break;
         case ERROR_INVALID_POINTS_COUNT:
-            QMessageBox::critical(parent, "Ошибка", "Некорректное количество точек!");
+            QMessageBox::critical(nullptr, "Ошибка", "Некорректное количество точек!");
             break;
         case ERROR_INVALID_EDGES_COUNT:
-            QMessageBox::critical(parent, "Ошибка", "Некорректное количество ребер!");
+            QMessageBox::critical(nullptr, "Ошибка", "Некорректное количество ребер!");
             break;
         case ERROR_INVALID_EDGE:
-            QMessageBox::critical(parent, "Ошибка", "Модель содержит некорректные ребра!");
+            QMessageBox::critical(nullptr, "Ошибка", "Модель содержит некорректные ребра!");
             break;
         default:
             break;

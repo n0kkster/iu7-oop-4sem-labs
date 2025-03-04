@@ -78,3 +78,10 @@ err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_
         updateEdges(projection.edges, wireframe.edges, wireframe.points);
     return rc;
 }
+
+err_code_e moveProjection(/* OUT */ projection_t &dst, const projection_t &src)
+{
+    freeProjection(dst);
+    dst = src;
+    return ERROR_SUCCESS;
+}

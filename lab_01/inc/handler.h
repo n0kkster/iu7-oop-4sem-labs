@@ -1,6 +1,7 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
+#include <cstddef>
 #include "io.h"
 #include "projection.h"
 #include "morph.h"

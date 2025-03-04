@@ -7,7 +7,7 @@ static err_code_e readAmountOfEdges(/* OUT */ ssize_t &edgesCount, FILE *file)
 
     err_code_e rc = ERROR_SUCCESS;
 
-    if (fscanf(file, "%ld", &edgesCount) != 1)
+    if (fscanf(file, "%zd", &edgesCount) != 1)
         rc = ERROR_NOT_A_NUMBER;
 
     if (edgesCount <= 0)

@@ -21,13 +21,13 @@ void MainWindow::onLoadBtnClicked()
     err_code_e rc;
 
     if (filename.isNull())
-        handleError(this, ERROR_OPENING_FILE);
+        handleError(ERROR_OPENING_FILE);
     else
     {
         rc = ui->planeWidget->doAction({.action = LOAD, .io_params = {filename.toStdString().c_str()}});
         if (rc != ERROR_SUCCESS)
         {
-            handleError(this, rc);
+            handleError(rc);
             ui->planeWidget->doAction({.action = FREE, .null_params = nullptr});
         }
     }
@@ -39,12 +39,12 @@ void MainWindow::onSaveBtnClicked()
     err_code_e rc;
 
     if (filename.isNull())
-        handleError(this, ERROR_OPENING_FILE);
+        handleError(ERROR_OPENING_FILE);
     else
     {
         rc = ui->planeWidget->doAction({.action = SAVE, .io_params = {filename.toStdString().c_str()}});
         if (rc != ERROR_SUCCESS)
-            handleError(this, rc);
+            handleError(rc);
     }
 }
 
@@ -85,7 +85,7 @@ void MainWindow::onShiftBtnClicked()
 
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
-        handleError(this, rc);
+        handleError(rc);
 }
 
 void MainWindow::onScaleBtnClicked()
@@ -147,7 +147,7 @@ void MainWindow::onScaleBtnClicked()
     
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
-        handleError(this, rc);
+        handleError(rc);
 }
 
 void MainWindow::onRotateBtnClicked()
@@ -231,7 +231,7 @@ void MainWindow::onRotateBtnClicked()
     
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
-        handleError(this, rc);
+        handleError(rc);
 }
 
 MainWindow::~MainWindow()
