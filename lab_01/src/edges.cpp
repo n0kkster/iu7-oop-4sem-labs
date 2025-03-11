@@ -60,10 +60,7 @@ err_code_e readEdges(/* OUT */ edgeArray_t &edges, FILE *file)
         {
             rc = readEdgesArray(edges.edges, file, edges.count);
             if (rc != ERROR_SUCCESS)
-            {
                 free(edges.edges);
-                edges.count = 0;
-            }
         }
     }
     return rc;

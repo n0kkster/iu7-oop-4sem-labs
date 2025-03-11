@@ -57,14 +57,18 @@ err_code_e moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 err_code_e freePoints(pointArray_t &points)
 {
     free(points.points);
+    points.points = nullptr;
     points.count = 0;
+
     return ERROR_SUCCESS;
 }
 
 err_code_e freeEdges(edgeArray_t &edges)
 {
     free(edges.edges);
+    edges.edges = nullptr;
     edges.count = 0;
+
     return ERROR_SUCCESS;
 }
 
@@ -72,5 +76,6 @@ err_code_e freeWireframe(/* VAR */ wireframe_t &wireframe)
 {
     freeEdges(wireframe.edges);
     freePoints(wireframe.points);
+    
     return ERROR_SUCCESS;
 }

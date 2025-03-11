@@ -19,7 +19,7 @@ static err_code_e morphWireframe(/* VAR */ wireframe_t &wireframe, /* VAR */ pro
     }
     
     if (rc == ERROR_SUCCESS)
-        updateProjection(projection, wireframe);
+        rc = updateProjection(projection, wireframe);
 
     return rc;
 }

@@ -27,7 +27,7 @@ static err_code_e readData(/* OUT */ wireframe_t &wireframe, const char *filenam
     return rc;
 }
 
-err_code_e handleRead(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &projection , const io_params_t &params)
+err_code_e handleRead(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &projection, const io_params_t &params)
 {
     wireframe_t temp;
     projection_t temp_projection;

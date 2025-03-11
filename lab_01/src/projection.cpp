@@ -40,10 +40,21 @@ static void projectEdge(/* VAR */ edge2D_t &edge2D, const edge_t &edge3D, const 
     edge2D.end = projectPoint(points[edge3D.id2]);
 }
 
-static void updateEdges(/* VAR */ edge2DArray_t &edges2D, const edgeArray_t &edges3D, const pointArray_t &points)
+static err_code_e updateEdges(/* VAR */ edge2DArray_t &edges2D, const edgeArray_t &edges3D, const pointArray_t &points)
 {
+    if (edges2D.edges == nullptr || edges3D.edges == nullptr || points.points == nullptr)
+        return ERROR_INVALID_PTR;
+    
+    if (edges2D.count < 0 || edges3D.count < 0 || edges2D.count != edges3D.count)
+        return ERROR_INVALID_EDGES_COUNT;
+
+    if (points.count < 0)
+        return ERROR_INVALID_POINTS_COUNT;
+
     for (ssize_t i = 0; i < edges3D.count; i++)
         projectEdge(edges2D.edges[i], edges3D.edges[i], points.points);
+
+    return ERROR_SUCCESS;
 }
 
 static err_code_e createEdges(/* OUT */ edge2DArray_t &edges2D, const edgeArray_t &edges3D)
@@ -67,8 +78,8 @@ static err_code_e createEdges(/* OUT */ edge2DArray_t &edges2D, const edgeArray_
 
 err_code_e updateProjection(/* VAR */ projection_t &projection, const wireframe_t &wireframe)
 {
-    updateEdges(projection.edges, wireframe.edges, wireframe.points);
-    return ERROR_SUCCESS;
+    err_code_e rc = updateEdges(projection.edges, wireframe.edges, wireframe.points);
+    return rc;
 }
 
 err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_t &wireframe)
@@ -81,7 +92,8 @@ err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_
 
 err_code_e moveProjection(/* OUT */ projection_t &dst, const projection_t &src)
 {
-    freeProjection(dst);
-    dst = src;
-    return ERROR_SUCCESS;
+    err_code_e rc = freeProjection(dst);
+    if (rc == ERROR_SUCCESS)
+        dst = src;
+    return rc;
 }

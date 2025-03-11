@@ -57,10 +57,7 @@ err_code_e readPoints(/* OUT */ pointArray_t &points, FILE *file)
         {
             rc = readPointsArray(points.points, file, points.count);
             if (rc != ERROR_SUCCESS)
-            {
                 free(points.points);
-                points.count = 0;
-            }
         }  
     }      
 
