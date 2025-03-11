@@ -36,6 +36,18 @@ typedef struct
     angle_t angle;
 } rotation_params_t;
 
+typedef struct 
+{
+    double sin, cos;
+} trig_t;
+
+typedef struct
+{
+    trig_t trigX; 
+    trig_t trigY; 
+    trig_t trigZ;
+} trig_set_t;
+
 typedef enum
 {
     MOVE,
@@ -52,7 +64,6 @@ typedef struct
         scale_params_t scale_params;
         rotation_params_t rotation_params;
     };
-    
 } morph_params_t;
 
 err_code_e handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);

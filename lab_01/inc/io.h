@@ -6,8 +6,6 @@
 #include "errors.h"
 #include "projection.h"
 
-typedef char* pchar_t;
-
 typedef struct
 {
     const char *filename;
