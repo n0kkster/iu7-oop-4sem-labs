@@ -28,7 +28,7 @@ static err_code_e readPoint(/* OUT */ point_t &p, FILE *file)
 
 static err_code_e readPointsArray(/* OUT */ pPoints_t points, FILE *file, const ssize_t pointsCount)
 {
-    if (file == nullptr || points == nullptr)
+    if (points == nullptr)
         return ERROR_INVALID_PTR;
     
     if (pointsCount <= 0)

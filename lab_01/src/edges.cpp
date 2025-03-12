@@ -31,7 +31,7 @@ static err_code_e readEdge(/* OUT */ edge_t &t, FILE *file)
 
 static err_code_e readEdgesArray(/* OUT */ pEdge3D_t edges, FILE *file, const ssize_t edgesCount)
 {
-    if (file == nullptr || edges == nullptr)
+    if (edges == nullptr)
         return ERROR_INVALID_PTR;
     
     if (edgesCount <= 0)
