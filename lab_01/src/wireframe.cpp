@@ -1,18 +1,16 @@
 #include "wireframe.h"
 #include "errors.h"
 
-static err_code_e initEdges(edgeArray_t &edges)
+static void initEdges(edgeArray_t &edges)
 {
     edges.edges = nullptr;
     edges.count = 0;
-    return ERROR_SUCCESS;
 }
 
-static err_code_e initPoints(pointArray_t &points)
+static void initPoints(pointArray_t &points)
 {
     points.points = nullptr;
     points.count = 0;
-    return ERROR_SUCCESS;
 }
 
 wireframe_t initWireframe()
@@ -47,35 +45,40 @@ err_code_e checkWireframe(const wireframe_t &wireframe)
     return rc;
 }
 
-err_code_e moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
+void moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 {
-    freeWireframe(dst);
+    freeWireframe(dst); // нужно ли оно тут??
     dst = src;
-    return ERROR_SUCCESS;
 }
 
-err_code_e freePoints(pointArray_t &points)
+void freePoints(pointArray_t &points)
 {
     free(points.points);
     points.points = nullptr;
     points.count = 0;
-
-    return ERROR_SUCCESS;
 }
 
-err_code_e freeEdges(edgeArray_t &edges)
+void freeEdges(edgeArray_t &edges)
 {
     free(edges.edges);
     edges.edges = nullptr;
     edges.count = 0;
-
-    return ERROR_SUCCESS;
 }
 
-err_code_e freeWireframe(/* VAR */ wireframe_t &wireframe)
+void freeWireframe(/* VAR */ wireframe_t &wireframe)
 {
     freeEdges(wireframe.edges);
     freePoints(wireframe.points);
-    
-    return ERROR_SUCCESS;
+}
+
+err_code_e deepCopyWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
+{
+    err_code_e rc = deepCopyPoints(dst.points, src.points);
+    if (rc == ERROR_SUCCESS)
+    {
+        rc = deepCopyEdges(dst.edges, src.edges);
+        if (rc != ERROR_SUCCESS)
+            freePoints(dst.points);
+    }
+    return rc;
 }

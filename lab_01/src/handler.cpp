@@ -4,22 +4,36 @@
 
 static err_code_e morphWireframe(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &projection, const morph_params_t &morphParams)
 {
-    err_code_e rc = ERROR_SUCCESS;
-    switch (morphParams.type)
-    {
-        case MOVE:
-            rc = handleShiftWireframe(wireframe, morphParams);
-            break;
-        case SCALE:
-            rc = handleScaleWireframe(wireframe, morphParams);
-            break;
-        case ROTATE:
-            rc = handleRotateWireframe(wireframe, morphParams);
-            break;
-    }
-    
+    wireframe_t temp_wireframe;
+
+    err_code_e rc = deepCopyWireframe(temp_wireframe, wireframe);
+
     if (rc == ERROR_SUCCESS)
-        rc = updateProjection(projection, wireframe);
+    {
+        switch (morphParams.type)
+        {
+            case MOVE:
+                rc = handleShiftWireframe(temp_wireframe, morphParams.shift_params);                    
+                break;
+            case SCALE:
+                rc = handleScaleWireframe(temp_wireframe, morphParams.scale_params);
+                break;
+            case ROTATE:
+                rc = handleRotateWireframe(temp_wireframe, morphParams.rotation_params);
+                break;
+        }
+        
+        if (rc != ERROR_SUCCESS)
+            freeWireframe(temp_wireframe);
+        else
+        {
+            rc = updateProjection(projection, temp_wireframe);
+            if (rc != ERROR_SUCCESS)
+                freeWireframe(temp_wireframe);
+            else
+                moveWireframe(wireframe, temp_wireframe);
+        }
+    }
 
     return rc;
 }

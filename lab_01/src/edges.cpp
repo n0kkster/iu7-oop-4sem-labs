@@ -9,9 +9,11 @@ static err_code_e readAmountOfEdges(/* OUT */ ssize_t &edgesCount, FILE *file)
 
     if (fscanf(file, "%zd", &edgesCount) != 1)
         rc = ERROR_NOT_A_NUMBER;
-
-    if (edgesCount <= 0)
-        rc = ERROR_INVALID_EDGES_COUNT;
+    else
+    {
+        if (edgesCount <= 0)
+            rc = ERROR_INVALID_EDGES_COUNT;
+    }
     
     return rc;
 }
@@ -77,11 +79,11 @@ static err_code_e writeEdge(FILE *file, const edge_t &edge)
 
 err_code_e writeEdges(FILE *file, const edgeArray_t &edges)
 {
-    if (file == nullptr)
+    if (file == nullptr || edges.edges == nullptr)
         return ERROR_INVALID_PTR;
-
-    if (edges.edges == nullptr)
-        return ERROR_INVALID_PTR;
+    
+    if (edges.count <= 0)
+        return ERROR_INVALID_EDGES_COUNT;
 
     err_code_e rc = ERROR_SUCCESS;
 
@@ -89,5 +91,45 @@ err_code_e writeEdges(FILE *file, const edgeArray_t &edges)
     for (ssize_t i = 0; rc == ERROR_SUCCESS && i < edges.count; i++)
         rc = writeEdge(file, edges.edges[i]);
 
+    return rc;
+}
+
+static void copyEdge(/* OUT */ edge_t &dst, const edge_t &src)
+{
+    dst = src;
+}
+
+static err_code_e copyEdgesArray(/* OUT */ pEdge3D_t dst, const pEdge3D_t src, const ssize_t length)
+{
+    if (dst == nullptr || src == nullptr)
+        return ERROR_INVALID_PTR;
+
+    if (length <= 0)
+        return ERROR_INVALID_EDGES_COUNT;
+
+    for (ssize_t i = 0; i < length; i++)
+        copyEdge(dst[i], src[i]);
+
+    return ERROR_SUCCESS;
+}
+
+err_code_e deepCopyEdges(/* OUT */ edgeArray_t &dst, const edgeArray_t &src)
+{
+    if (src.count <= 0)
+        return ERROR_INVALID_EDGES_COUNT;
+
+    err_code_e rc = ERROR_SUCCESS;
+
+    dst.edges = (pEdge3D_t)malloc(src.count * sizeof(edge_t));
+    if (dst.edges == nullptr)
+        rc = ERROR_ALLOCATING_MEM;
+    else
+    {
+        rc = copyEdgesArray(dst.edges, src.edges, src.count);
+        if (rc != ERROR_SUCCESS)
+            free(dst.edges);
+        else
+            dst.count = src.count;
+    }
     return rc;
 }

@@ -66,8 +66,8 @@ typedef struct
     };
 } morph_params_t;
 
-err_code_e handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
-err_code_e handleScaleWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
-err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params);
+err_code_e handleShiftWireframe( /* VAR */ wireframe_t &wireframe, const shift_params_t &params);
+err_code_e handleScaleWireframe( /* VAR */ wireframe_t &wireframe, const scale_params_t &params);
+err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const rotation_params_t &params);
 
 #endif /* MORPH_H */

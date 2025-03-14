@@ -1,5 +1,19 @@
 #include "morph.h"
 
+static void calculateShiftToCenter(/* OUT */ shift_params_t &shift, const origin_t &origin)
+{
+    shift.dx = -origin.cx;
+    shift.dy = -origin.cy;
+    shift.dz = -origin.cz;
+}
+
+static void calculateShiftToOrigin(/* OUT */ shift_params_t &shift, const origin_t &origin)
+{
+    shift.dx = origin.cx;
+    shift.dy = origin.cy;
+    shift.dz = origin.cz;
+}
+
 static void applyPointShift(/* VAR */ point_t &point, const shift_params_t &params)
 {
     point.x += params.dx;
@@ -21,12 +35,11 @@ static err_code_e applyPointsShift(/* VAR */ pointArray_t &points, const shift_p
     return ERROR_SUCCESS;
 }
 
-err_code_e handleShiftWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleShiftWireframe(/* VAR */ wireframe_t &wireframe, const shift_params_t &params)
 {
-    err_code_e rc = applyPointsShift(wireframe.points, params.shift_params);
+    err_code_e rc = applyPointsShift(wireframe.points, params);
     return rc;
 }
-
 
 static void scalePoint(/* VAR */ point_t &point, const scale_t &scale)
 {
@@ -37,9 +50,14 @@ static void scalePoint(/* VAR */ point_t &point, const scale_t &scale)
 
 static void applyPointScale(/* VAR */ point_t &point, const origin_t &origin, const scale_t &scale)
 {   
-    applyPointShift(point, {-origin.cx, -origin.cy, -origin.cz});
+    shift_params_t shiftToCenter, shiftToOrigin;
+
+    calculateShiftToCenter(shiftToCenter, origin);
+    calculateShiftToOrigin(shiftToOrigin, origin);
+
+    applyPointShift(point, shiftToCenter);
     scalePoint(point, scale);
-    applyPointShift(point, {origin.cx, origin.cy, origin.cz});
+    applyPointShift(point, shiftToOrigin);
 }
 
 static err_code_e applyPointsScale(/* VAR */ pointArray_t &points, const scale_params_t &params)
@@ -56,41 +74,34 @@ static err_code_e applyPointsScale(/* VAR */ pointArray_t &points, const scale_p
     return ERROR_SUCCESS;
 }
 
-err_code_e handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleScaleWireframe(/* VAR */ wireframe_t &wireframe, const scale_params_t &params)
 {
-    err_code_e rc = applyPointsScale(wireframe.points, params.scale_params);
+    err_code_e rc = applyPointsScale(wireframe.points, params);
     return rc;
 }
 
-
-static err_code_e rotatePointByX(/* VAR */ point_t &point, const trig_t &trigX)
+static void rotatePointByX(/* VAR */ point_t &point, const trig_t &trigX)
 {
     double ty = point.y, tz = point.z;
 
     point.y = ty * trigX.cos - tz * trigX.sin;
     point.z = ty * trigX.sin + tz * trigX.cos; 
-
-    return ERROR_SUCCESS;
 }
 
-static err_code_e rotatePointByY(/* VAR */ point_t &point, const trig_t &trigY)
+static void rotatePointByY(/* VAR */ point_t &point, const trig_t &trigY)
 {
     double tx = point.x, tz = point.z;
 
     point.x = tx * trigY.cos + tz * trigY.sin;
     point.z = -tx * trigY.sin + tz * trigY.cos;
-
-    return ERROR_SUCCESS;
 }
 
-static err_code_e rotatePointByZ(/* VAR */ point_t &point, const trig_t &trigZ)
+static void rotatePointByZ(/* VAR */ point_t &point, const trig_t &trigZ)
 {
     double tx = point.x, ty = point.y;
 
     point.x = tx * trigZ.cos - ty * trigZ.sin;
     point.y = tx * trigZ.sin + ty * trigZ.cos;
-
-    return ERROR_SUCCESS;
 }
 
 static void rotatePoint(/* VAR */ point_t &point, const trig_set_t &trigSet)
@@ -102,9 +113,14 @@ static void rotatePoint(/* VAR */ point_t &point, const trig_set_t &trigSet)
 
 static void applyPointRotation(/* VAR */ point_t &point, const origin_t &origin, const trig_set_t &trigSet)
 {
-    applyPointShift(point, {-origin.cx, -origin.cy, -origin.cz});
+    shift_params_t shiftToCenter, shiftToOrigin;
+
+    calculateShiftToCenter(shiftToCenter, origin);
+    calculateShiftToOrigin(shiftToOrigin, origin);
+
+    applyPointShift(point, shiftToOrigin);
     rotatePoint(point, trigSet);
-    applyPointShift(point, {origin.cx, origin.cy, origin.cz});
+    applyPointShift(point, shiftToCenter);
 }
 
 static void calculateTrigAngle(/* OUT */ trig_t &trig, const double angle)
@@ -138,8 +154,8 @@ static err_code_e applyWireframeRotation(/* VAR */ pointArray_t &points, const r
     return ERROR_SUCCESS;
 }
 
-err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const morph_params_t &params)
+err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const rotation_params_t &params)
 {
-    err_code_e rc = applyWireframeRotation(wireframe.points, params.rotation_params);
+    err_code_e rc = applyWireframeRotation(wireframe.points, params);
     return rc;
 }
