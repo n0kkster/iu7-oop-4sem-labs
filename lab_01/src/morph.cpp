@@ -1,17 +1,10 @@
 #include "morph.h"
 
-static void calculateShiftToCenter(/* OUT */ shift_params_t &shift, const origin_t &origin)
+static void calculateShift(/* OUT */ shift_params_t &shift, const origin_t &origin, const double factor)
 {
-    shift.dx = -origin.cx;
-    shift.dy = -origin.cy;
-    shift.dz = -origin.cz;
-}
-
-static void calculateShiftToOrigin(/* OUT */ shift_params_t &shift, const origin_t &origin)
-{
-    shift.dx = origin.cx;
-    shift.dy = origin.cy;
-    shift.dz = origin.cz;
+    shift.dx = factor * origin.cx;
+    shift.dy = factor * origin.cy;
+    shift.dz = factor * origin.cz;
 }
 
 static void applyPointShift(/* VAR */ point_t &point, const shift_params_t &params)
@@ -52,8 +45,8 @@ static void applyPointScale(/* VAR */ point_t &point, const origin_t &origin, co
 {   
     shift_params_t shiftToCenter, shiftToOrigin;
 
-    calculateShiftToCenter(shiftToCenter, origin);
-    calculateShiftToOrigin(shiftToOrigin, origin);
+    calculateShift(shiftToCenter, origin, -1);
+    calculateShift(shiftToOrigin, origin, 1);
 
     applyPointShift(point, shiftToCenter);
     scalePoint(point, scale);
@@ -115,8 +108,8 @@ static void applyPointRotation(/* VAR */ point_t &point, const origin_t &origin,
 {
     shift_params_t shiftToCenter, shiftToOrigin;
 
-    calculateShiftToCenter(shiftToCenter, origin);
-    calculateShiftToOrigin(shiftToOrigin, origin);
+    calculateShift(shiftToCenter, origin, -1);
+    calculateShift(shiftToOrigin, origin, 1);
 
     applyPointShift(point, shiftToOrigin);
     rotatePoint(point, trigSet);

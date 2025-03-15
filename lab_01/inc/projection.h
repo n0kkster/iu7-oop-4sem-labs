@@ -26,9 +26,9 @@ typedef struct
 } projection_t;
 
 err_code_e initProjection(/* OUT */ projection_t &projection);
-err_code_e freeProjection(/* VAR */ projection_t &projection);
+void freeProjection(/* VAR */ projection_t &projection);
 err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_t &wireframe);
 err_code_e updateProjection(/* VAR */ projection_t &projection, const wireframe_t &wireframe);
-err_code_e moveProjection(/* OUT */ projection_t &dst, const projection_t &src);
+void moveProjection(/* OUT */ projection_t &dst, const projection_t &src);
 
 #endif /* PROJECTION_H */

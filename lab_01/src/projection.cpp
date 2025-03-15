@@ -21,17 +21,15 @@ err_code_e initProjection(/* OUT */ projection_t &projection)
     return rc;
 }
 
-static err_code_e freeEdges2D(/* VAR */ edge2DArray_t &edges)
+static void freeEdges2D(/* VAR */ edge2DArray_t &edges)
 {
     free(edges.edges);
     edges.count = 0;
-    return ERROR_SUCCESS;
 }
 
-err_code_e freeProjection(/* VAR */ projection_t &projection)
+void freeProjection(/* VAR */ projection_t &projection)
 {
-    err_code_e rc = freeEdges2D(projection.edges);
-    return rc;
+    freeEdges2D(projection.edges);
 }
 
 static void projectEdge(/* VAR */ edge2D_t &edge2D, const edge_t &edge3D, const pPoints_t &points)
@@ -86,14 +84,16 @@ err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_
 {
     err_code_e rc = createEdges(projection.edges, wireframe.edges);
     if (rc == ERROR_SUCCESS)
-        updateEdges(projection.edges, wireframe.edges, wireframe.points);
+    {
+        rc = updateEdges(projection.edges, wireframe.edges, wireframe.points);
+        if (rc != ERROR_SUCCESS)
+            freeEdges2D(projection.edges);
+    }
     return rc;
 }
 
-err_code_e moveProjection(/* OUT */ projection_t &dst, const projection_t &src)
+void moveProjection(/* OUT */ projection_t &dst, const projection_t &src)
 {
-    err_code_e rc = freeProjection(dst);
-    if (rc == ERROR_SUCCESS)
-        dst = src;
-    return rc;
+    freeProjection(dst);
+    dst = src;
 }

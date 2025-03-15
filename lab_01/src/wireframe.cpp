@@ -47,7 +47,7 @@ err_code_e checkWireframe(const wireframe_t &wireframe)
 
 void moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
 {
-    freeWireframe(dst); // нужно ли оно тут??
+    freeWireframe(dst);
     dst = src;
 }
 
