@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "out/ui_mainwindow.h"
+
 #include "handler.h"
-#include "wireframe.h"
+
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -53,7 +55,6 @@ void MainWindow::onShiftBtnClicked()
     double dx, dy, dz;
     bool ok;
     action_params_t action_params;
-    morph_params_t morph_params;
     err_code_e rc;
 
     dx = ui->dxOffsetInput->text().toDouble(&ok);
@@ -76,12 +77,9 @@ void MainWindow::onShiftBtnClicked()
         QMessageBox::critical(this, "Ошибка", "Величина сдвига по оси Z должна быть вещественным числом.");
         return;
     }
-
-    morph_params.type = MOVE;
-    morph_params.shift_params = {dx, dy, dz};
     
-    action_params.morph_params = morph_params;
-    action_params.action = MORPH;
+    action_params.shift_params = {dx, dy, dz};
+    action_params.action = MOVE;
 
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
@@ -94,7 +92,6 @@ void MainWindow::onScaleBtnClicked()
     double cx, cy, cz;
     bool ok;
     action_params_t action_params;
-    morph_params_t morph_params;
     err_code_e rc;
 
     cx = ui->centerXScale->text().toDouble(&ok);
@@ -139,11 +136,8 @@ void MainWindow::onScaleBtnClicked()
         return;
     }
 
-    morph_params.type = SCALE;
-    morph_params.scale_params = {{cx, cy, cz}, {kx, ky, kz}};
-
-    action_params.morph_params = morph_params;
-    action_params.action = MORPH;
+    action_params.scale_params = {{cx, cy, cz}, {kx, ky, kz}};
+    action_params.action = SCALE;
     
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)
@@ -156,7 +150,6 @@ void MainWindow::onRotateBtnClicked()
     double angleX, angleY, angleZ;
     bool ok;
     action_params_t action_params;
-    morph_params_t morph_params;
     err_code_e rc;
 
     cx = ui->centerXRotate->text().toDouble(&ok);
@@ -223,11 +216,8 @@ void MainWindow::onRotateBtnClicked()
     // });
     // thread->start();
 
-    morph_params.type = ROTATE;
-    morph_params.rotation_params = {{cx, cy, cz}, {angleX, angleY, angleZ}};
-
-    action_params.morph_params = morph_params;
-    action_params.action = MORPH;
+    action_params.rotation_params = {{cx, cy, cz}, {angleX, angleY, angleZ}};
+    action_params.action = ROTATE;
     
     rc = ui->planeWidget->doAction(action_params);
     if (rc != ERROR_SUCCESS)

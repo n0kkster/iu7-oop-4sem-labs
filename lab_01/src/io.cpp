@@ -27,10 +27,9 @@ static err_code_e readData(/* OUT */ wireframe_t &wireframe, const char *filenam
     return rc;
 }
 
-err_code_e handleRead(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &projection, const io_params_t &params)
+err_code_e handleRead(/* VAR */ wireframe_t &wireframe, const io_params_t &params)
 {
     wireframe_t temp;
-    projection_t temp_projection;
 
     err_code_e rc = readData(temp, params.filename);
     if (rc == ERROR_SUCCESS)
@@ -39,16 +38,7 @@ err_code_e handleRead(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &
         if (rc != ERROR_SUCCESS)
             freeWireframe(temp);
         else
-        {
-            rc = createProjection(temp_projection, temp);
-            if (rc != ERROR_SUCCESS)
-                freeWireframe(temp);
-            else
-            {
-                moveWireframe(wireframe, temp);
-                moveProjection(projection, temp_projection);
-            }
-        }
+            moveWireframe(wireframe, temp);
     }
     
     return rc;

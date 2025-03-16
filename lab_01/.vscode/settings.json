@@ -65,6 +65,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "qdebug": "cpp",
-        "qmessagebox": "cpp"
+        "qmessagebox": "cpp",
+        "qpainter": "cpp"
     }
 }

@@ -12,23 +12,7 @@ typedef struct
 {
     point2D_t start, end;
 } edge2D_t;
-typedef edge2D_t* pEdge2D_t;
 
-typedef struct
-{
-    pEdge2D_t edges;
-    ssize_t count;
-} edge2DArray_t;
-
-typedef struct
-{
-    edge2DArray_t edges;
-} projection_t;
-
-err_code_e initProjection(/* OUT */ projection_t &projection);
-void freeProjection(/* VAR */ projection_t &projection);
-err_code_e createProjection(/* OUT */ projection_t &projection, const wireframe_t &wireframe);
-err_code_e updateProjection(/* VAR */ projection_t &projection, const wireframe_t &wireframe);
-void moveProjection(/* OUT */ projection_t &dst, const projection_t &src);
+err_code_e projectEdge(/* VAR */ edge2D_t &edge2D, const edge_t &edge3D, const pointArray_t &points);
 
 #endif /* PROJECTION_H */

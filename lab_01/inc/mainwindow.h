@@ -2,11 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDebug>
 #include <QFileDialog>
 
-#include <unistd.h>
-#include <QThread>
+// #include <unistd.h>
+// #include <QThread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui

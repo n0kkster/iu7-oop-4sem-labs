@@ -11,7 +11,7 @@ typedef struct
     const char *filename;
 } io_params_t;
 
-err_code_e handleRead(/* VAR */ wireframe_t &wireframe, /* VAR */ projection_t &projection , const io_params_t &params);
+err_code_e handleRead(/* VAR */ wireframe_t &wireframe, const io_params_t &params);
 err_code_e handleWrite(const io_params_t &params, const wireframe_t &wireframe);
 
 #endif /* IO_H */

@@ -2,10 +2,7 @@
 
 // Конструктор
 // ==================================================
-Plane::Plane(QWidget *parent) : QGraphicsView(parent) 
-{
-    handleAction(projection, {.action = INIT, .null_params = nullptr});
-}
+Plane::Plane(QWidget *parent) : QGraphicsView(parent) {}
 // ==================================================
 
 void Plane::paintEvent(QPaintEvent *event)
@@ -13,14 +10,20 @@ void Plane::paintEvent(QPaintEvent *event)
     QGraphicsView::paintEvent(event);
     QPainter painter(viewport());
 
+    plane_t plane;
+    plane.painter.painter = &painter;
+    plane.plane_size.height = viewport()->height();
+    plane.plane_size.width = viewport()->width();
 
-    for (ssize_t i = 0; i < projection.edges.count; i++)
-        painter.drawLine(realCoordToScreenCoord(projection.edges.edges[i].start), realCoordToScreenCoord(projection.edges.edges[i].end));
+    err_code_e rc = handleAction(plane, {.action = DRAW, .null_params = nullptr});
+    if (rc != ERROR_SUCCESS)
+        handleError(rc);
 }
 
 err_code_e Plane::doAction(const action_params_t &action)
 {
-    err_code_e rc = handleAction(projection, action);
+    plane_t filler = {{nullptr}, {0, 0}};
+    err_code_e rc = handleAction(filler, action);
     viewport()->update();
     return rc;
 }

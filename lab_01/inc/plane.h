@@ -4,12 +4,7 @@
 #include <QGraphicsView>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QDebug>
-#include <QVector>
-#include <QPen>
-#include <QMessageBox>
 
-#include "projection.h"
 #include "errors.h"
 #include "handler.h"
 
@@ -19,7 +14,6 @@ class Plane : public QGraphicsView
 
 private:
     QPointF realCoordToScreenCoord(point2D_t point);
-    projection_t projection;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
