@@ -1,13 +1,13 @@
 #include "wireframe.h"
 #include "errors.h"
 
-static void initEdges(edgeArray_t &edges)
+static void initEdges(/* VAR */ edgeArray_t &edges)
 {
     edges.edges = nullptr;
     edges.count = 0;
 }
 
-static void initPoints(pointArray_t &points)
+static void initPoints(/* VAR */ pointArray_t &points)
 {
     points.points = nullptr;
     points.count = 0;
@@ -51,14 +51,14 @@ void moveWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
     dst = src;
 }
 
-void freePoints(pointArray_t &points)
+void freePoints(/* VAR */ pointArray_t &points)
 {
     free(points.points);
     points.points = nullptr;
     points.count = 0;
 }
 
-void freeEdges(edgeArray_t &edges)
+void freeEdges(/* VAR */ edgeArray_t &edges)
 {
     free(edges.edges);
     edges.edges = nullptr;
