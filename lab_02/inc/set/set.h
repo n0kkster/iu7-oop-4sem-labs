@@ -3,9 +3,11 @@
 
 #include <compare>
 #include <initializer_list>
+#include <memory>
 
-#include "const_iterator.h"
 #include "base_container.h"
+#include "const_iterator.h"
+#include "set_node.h"
 
 template <typename Type>
 class Set : public BaseContainer
@@ -134,46 +136,48 @@ public:
     std::partial_ordering operator<=>(const Set<Type> &other) const;
     std::partial_ordering operator<=>(const std::initializer_list<Type> ilist) const;
 
-    // bool less(Set<Type> &other) const;
+    bool less(Set<Type> &other) const;
     // bool operator<(const Set<Type> &other) const;
 
-    // bool lessOrEqual(Set<Type> &other) const;
+    bool lessOrEqual(Set<Type> &other) const;
     // bool operator<=(const Set<Type> &other) const;
 
-    // bool less(const std::initializer_list<Type> ilist) const;
+    bool less(const std::initializer_list<Type> ilist) const;
     // bool operator<(const std::initializer_list<Type> ilist) const;
 
-    // bool lessOrEqual(const std::initializer_list<Type> ilist) const;
+    bool lessOrEqual(const std::initializer_list<Type> ilist) const;
     // bool operator<=(const std::initializer_list<Type> ilist) const;
 
-    // bool greater(Set<Type> &other) const;
+    bool greater(Set<Type> &other) const;
     // bool operator>(const Set<Type> &other) const;
 
-    // bool greaterOrEqual(Set<Type> &other) const;
+    bool greaterOrEqual(Set<Type> &other) const;
     // bool operator>=(const Set<Type> &other) const;
 
-    // bool greater(const std::initializer_list<Type> ilist) const;
+    bool greater(const std::initializer_list<Type> ilist) const;
     // bool operator>(const std::initializer_list<Type> ilist) const;
 
-    // bool greaterOrEqual(const std::initializer_list<Type> ilist) const;
+    bool greaterOrEqual(const std::initializer_list<Type> ilist) const;
     // bool operator>=(const std::initializer_list<Type> ilist) const;
 
-    // bool equal(Set<Type> &other) const;
+    bool equal(Set<Type> &other) const;
     // bool operator==(const Set<Type> &other) const;
 
-    // bool equal(const std::initializer_list<Type> ilist) const;
+    bool equal(const std::initializer_list<Type> ilist) const;
     // bool operator==(const std::initializer_list<Type> ilist) const;
     
-    // bool notequal(Set<Type> &other) const;
+    bool notequal(Set<Type> &other) const;
     // bool operator!=(const Set<Type> &other) const;
 
-    // bool notEqual(const std::initializer_list<Type> ilist) const;
+    bool notEqual(const std::initializer_list<Type> ilist) const;
     // bool operator!=(const std::initializer_list<Type> ilist) const;
     // ======== ========= ========
 
     // ===================== ========= ======================
 
 private:
+    std::shared_ptr<SetNode<Type>> head;
+    std::shared_ptr<SetNode<Type>> tail;
 
 };
 
