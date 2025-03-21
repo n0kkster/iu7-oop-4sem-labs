@@ -19,6 +19,6 @@ typedef struct
 
 err_code_e readPoints(/* OUT */ pointArray_t &points, FILE *file);
 err_code_e writePoints(FILE *file, const pointArray_t &points);
-err_code_e deepCopyPoints(/* OUT */ pointArray_t &dst, const pointArray_t &src);
+void freePointsArray(/* VAR */ pPoints_t points);
 
 #endif /* POINTS_H */

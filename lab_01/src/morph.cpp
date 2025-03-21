@@ -129,7 +129,7 @@ static void calculateTrigAngles(/* OUT */ trig_set_t &trigSet, const angle_t &an
     calculateTrigAngle(trigSet.trigZ, angle.angleZ);
 }
 
-static err_code_e applyWireframeRotation(/* VAR */ pointArray_t &points, const rotation_params_t &params)
+static err_code_e applyPointsRotation(/* VAR */ pointArray_t &points, const origin_t &origin, const trig_set_t &trigSet)
 {
     if (points.points == nullptr)
         return ERROR_INVALID_PTR;
@@ -137,14 +137,18 @@ static err_code_e applyWireframeRotation(/* VAR */ pointArray_t &points, const r
     if (points.count < 0)
         return ERROR_INVALID_POINTS_COUNT;
 
-    trig_set_t trigSet;
-
-    calculateTrigAngles(trigSet, params.angle);
-
     for (ssize_t i = 0; i < points.count; i++)
-        applyPointRotation(points.points[i], params.origin, trigSet);
+        applyPointRotation(points.points[i], origin, trigSet);
+}
 
-    return ERROR_SUCCESS;
+static err_code_e applyWireframeRotation(/* VAR */ pointArray_t &points, const rotation_params_t &params)
+{
+    trig_set_t trigSet;
+    calculateTrigAngles(trigSet, params.angle);
+    
+    err_code_e rc = applyPointsRotation(points, params.origin, trigSet);
+
+    return rc;
 }
 
 err_code_e handleRotateWireframe( /* VAR */ wireframe_t &wireframe, const rotation_params_t &params)

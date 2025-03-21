@@ -14,6 +14,9 @@ err_code_e projectEdge(/* VAR */ edge2D_t &edge2D, const edge_t &edge3D, const p
     if (edge3D.id1 >= points.count || edge3D.id2 >= points.count)
         return ERROR_INVALID_POINTS_COUNT;
 
+    if (edge3D.id1 < 0 || edge3D.id2 < 0)
+        return ERROR_INVALID_EDGE;
+
     projectPoint(edge2D.start, points.points[edge3D.id1]);
     projectPoint(edge2D.end, points.points[edge3D.id2]);
     return ERROR_SUCCESS;

@@ -70,15 +70,3 @@ void freeWireframe(/* VAR */ wireframe_t &wireframe)
     freeEdges(wireframe.edges);
     freePoints(wireframe.points);
 }
-
-err_code_e deepCopyWireframe(/* OUT */ wireframe_t &dst, const wireframe_t &src)
-{
-    err_code_e rc = deepCopyPoints(dst.points, src.points);
-    if (rc == ERROR_SUCCESS)
-    {
-        rc = deepCopyEdges(dst.edges, src.edges);
-        if (rc != ERROR_SUCCESS)
-            freePoints(dst.points);
-    }
-    return rc;
-}

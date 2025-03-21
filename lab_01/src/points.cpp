@@ -1,5 +1,24 @@
 #include "points.h"
 
+static err_code_e allocatePointsArray(/* OUT */ pPoints_t &points, const ssize_t count)
+{
+    if (count <= 0)
+        return ERROR_INVALID_POINTS_COUNT;
+    
+    err_code_e rc = ERROR_SUCCESS;
+    
+    points = (pPoints_t)malloc(sizeof(point_t) * count);
+    if (points == nullptr)
+        rc = ERROR_ALLOCATING_MEM;
+
+    return rc;
+}
+
+void freePointsArray(/* VAR */ pPoints_t points)
+{
+    free(points);
+}
+
 static err_code_e readAmountOfPoints(/* OUT */ ssize_t &pointsCount, FILE *file)
 {
     if (file == nullptr)
@@ -55,14 +74,12 @@ err_code_e readPoints(/* OUT */ pointArray_t &points, FILE *file)
 
     if (rc == ERROR_SUCCESS)
     {
-        points.points = (pPoints_t)malloc(points.count * sizeof(point_t));
-        if (points.points == nullptr)
-            rc = ERROR_ALLOCATING_MEM;
-        else
+        rc = allocatePointsArray(points.points, points.count);
+        if (rc == ERROR_SUCCESS)
         {
             rc = readPointsArray(points.points, file, points.count);
             if (rc != ERROR_SUCCESS)
-                free(points.points);
+                freePointsArray(points.points);
         }  
     }      
 
@@ -92,45 +109,5 @@ err_code_e writePoints(FILE *file, const pointArray_t &points)
     for (ssize_t i = 0; rc == ERROR_SUCCESS && i < points.count; i++)
         rc = writePoint(file, points.points[i]);
 
-    return rc;
-}
-
-static void copyPoint(/* OUT */ point_t &dst, const point_t &src)
-{
-    dst = src;
-}
-
-static err_code_e copyPointsArray(/* OUT */ pPoints_t dst, const pPoints_t src, const ssize_t length)
-{
-    if (dst == nullptr || src == nullptr)
-        return ERROR_INVALID_PTR;
-
-    if (length <= 0)
-        return ERROR_INVALID_EDGES_COUNT;
-
-    for (ssize_t i = 0; i < length; i++)
-        copyPoint(dst[i], src[i]);
-
-    return ERROR_SUCCESS;
-}
-
-err_code_e deepCopyPoints(/* OUT */ pointArray_t &dst, const pointArray_t &src)
-{
-    if (src.count <= 0)
-        return ERROR_INVALID_EDGES_COUNT;
-
-    err_code_e rc = ERROR_SUCCESS;
-
-    dst.points = (pPoints_t)malloc(src.count * sizeof(point_t));
-    if (dst.points == nullptr)
-        rc = ERROR_ALLOCATING_MEM;
-    else
-    {
-        rc = copyPointsArray(dst.points, src.points, src.count);
-        if (rc != ERROR_SUCCESS)
-            free(dst.points);
-        else
-            dst.count = src.count;
-    }
     return rc;
 }

@@ -1,5 +1,24 @@
 #include "edges.h"
 
+static err_code_e allocateEdgesArray(/* OUT */ pEdge3D_t &edges, const ssize_t count)
+{
+    if (count <= 0)
+        return ERROR_INVALID_POINTS_COUNT;
+    
+    err_code_e rc = ERROR_SUCCESS;
+    
+    edges = (pEdge3D_t)malloc(sizeof(edge_t) * count);
+    if (edges == nullptr)
+        rc = ERROR_ALLOCATING_MEM;
+
+    return rc;
+}
+
+void freeEdgesArray(/* VAR */ pEdge3D_t edges)
+{
+    free(edges);
+}
+
 static err_code_e readAmountOfEdges(/* OUT */ ssize_t &edgesCount, FILE *file)
 {
     if (file == nullptr)
@@ -55,14 +74,12 @@ err_code_e readEdges(/* OUT */ edgeArray_t &edges, FILE *file)
 
     if (rc == ERROR_SUCCESS)
     {
-        edges.edges = (pEdge3D_t)malloc(edges.count * sizeof(edge_t));
-        if (edges.edges == nullptr)
-            rc = ERROR_ALLOCATING_MEM;
-        else
+        rc = allocateEdgesArray(edges.edges, edges.count);
+        if (rc == ERROR_SUCCESS)
         {
             rc = readEdgesArray(edges.edges, file, edges.count);
             if (rc != ERROR_SUCCESS)
-                free(edges.edges);
+                freeEdgesArray(edges.edges);
         }
     }
     return rc;
@@ -91,45 +108,5 @@ err_code_e writeEdges(FILE *file, const edgeArray_t &edges)
     for (ssize_t i = 0; rc == ERROR_SUCCESS && i < edges.count; i++)
         rc = writeEdge(file, edges.edges[i]);
 
-    return rc;
-}
-
-static void copyEdge(/* OUT */ edge_t &dst, const edge_t &src)
-{
-    dst = src;
-}
-
-static err_code_e copyEdgesArray(/* OUT */ pEdge3D_t dst, const pEdge3D_t src, const ssize_t length)
-{
-    if (dst == nullptr || src == nullptr)
-        return ERROR_INVALID_PTR;
-
-    if (length <= 0)
-        return ERROR_INVALID_EDGES_COUNT;
-
-    for (ssize_t i = 0; i < length; i++)
-        copyEdge(dst[i], src[i]);
-
-    return ERROR_SUCCESS;
-}
-
-err_code_e deepCopyEdges(/* OUT */ edgeArray_t &dst, const edgeArray_t &src)
-{
-    if (src.count <= 0)
-        return ERROR_INVALID_EDGES_COUNT;
-
-    err_code_e rc = ERROR_SUCCESS;
-
-    dst.edges = (pEdge3D_t)malloc(src.count * sizeof(edge_t));
-    if (dst.edges == nullptr)
-        rc = ERROR_ALLOCATING_MEM;
-    else
-    {
-        rc = copyEdgesArray(dst.edges, src.edges, src.count);
-        if (rc != ERROR_SUCCESS)
-            free(dst.edges);
-        else
-            dst.count = src.count;
-    }
     return rc;
 }

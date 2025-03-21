@@ -11,9 +11,8 @@ void Plane::paintEvent(QPaintEvent *event)
     QPainter painter(viewport());
 
     plane_t plane;
-    plane.painter.painter = &painter;
-    plane.plane_size.height = viewport()->height();
-    plane.plane_size.width = viewport()->width();
+    plane.painter = {&painter};
+    plane.plane_size = {(size_t)viewport()->height(), (size_t)viewport()->height()};
 
     err_code_e rc = handleAction(plane, {.action = DRAW, .null_params = nullptr});
     if (rc != ERROR_SUCCESS)
