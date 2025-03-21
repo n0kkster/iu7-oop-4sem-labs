@@ -12,6 +12,6 @@ typedef struct
     plane_size_t plane_size;
 } plane_t;
 
-err_code_e handleDraw(plane_t &plane, const wireframe_t &wireframe);
+err_code_e handleDraw(/* VAR */ plane_t &plane, const wireframe_t &wireframe);
 
 #endif /* DRAW_H */
