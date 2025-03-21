@@ -4,3 +4,5 @@ out
 *.o
 *.d
 example
+.vscode
+!lab_01/.vscode
