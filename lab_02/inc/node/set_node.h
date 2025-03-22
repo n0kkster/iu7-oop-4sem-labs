@@ -22,7 +22,7 @@ public:
 
     // ===================== Деструктор =====================
     ~SetNode() = default;
-    // ===================== Деструктор =====================
+    // ===================== ========== =====================
 
 
     void exclude();
@@ -50,6 +50,8 @@ public:
     // ======================= ======= ======================
 
     // ===================== Операторы ======================
+    // Мб добавить spaceship
+
     bool operator==(const std::shared_ptr<SetNode<Type>> &other) const;
     bool operator!=(const std::shared_ptr<SetNode<Type>> &other) const;
     bool operator<(const std::shared_ptr<SetNode<Type>> &other) const;

@@ -198,24 +198,6 @@ void MainWindow::onRotateBtnClicked()
     angleY = qDegreesToRadians(angleY);
     angleZ = qDegreesToRadians(angleZ);
 
-    // QThread *thread = QThread::create([cx, cy, cz, angleX, angleY, angleZ, this]{
-    //     while(1)
-    //     {
-    //         usleep(35 * 1000);
-    //         morph_params_t morph_params;
-    //         action_params_t action_params;
-
-    //         morph_params.rotation_params = {cx, cy, cz, angleX, angleY, angleZ};
-    //         morph_params.type = ROTATE;
-    //         action_params.action = MORPH;
-    //         action_params.morph_params = morph_params;
-
-    //         if (ui->planeWidget->doAction(action_params) != ERROR_SUCCESS)
-    //             break;
-    //     }
-    // });
-    // thread->start();
-
     action_params.rotation_params = {{cx, cy, cz}, {angleX, angleY, angleZ}};
     action_params.action = ROTATE;
     

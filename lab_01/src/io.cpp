@@ -21,9 +21,10 @@ static err_code_e readData(/* OUT */ wireframe_t &wireframe, const char *filenam
             if (rc != ERROR_SUCCESS)
                 freePoints(wireframe.points);
         }
+        
+        fclose(file);
     }
 
-    fclose(file);
     return rc;
 }
 
