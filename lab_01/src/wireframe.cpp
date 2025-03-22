@@ -65,8 +65,9 @@ void freeEdges(/* VAR */ edgeArray_t &edges)
     edges.count = 0;
 }
 
-void freeWireframe(/* VAR */ wireframe_t &wireframe)
+err_code_e freeWireframe(/* VAR */ wireframe_t &wireframe)
 {
     freeEdges(wireframe.edges);
     freePoints(wireframe.points);
+    return ERROR_SUCCESS;
 }

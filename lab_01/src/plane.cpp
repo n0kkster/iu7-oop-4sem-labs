@@ -26,8 +26,3 @@ err_code_e Plane::doAction(const action_params_t &action)
     viewport()->update();
     return rc;
 }
-
-QPointF Plane::realCoordToScreenCoord(point2D_t point)
-{
-    return {point.x + viewport()->size().width() / 2, -point.y + viewport()->size().height() / 2};
-}

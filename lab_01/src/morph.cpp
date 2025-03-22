@@ -139,6 +139,8 @@ static err_code_e applyPointsRotation(/* VAR */ pointArray_t &points, const orig
 
     for (ssize_t i = 0; i < points.count; i++)
         applyPointRotation(points.points[i], origin, trigSet);
+    
+    return ERROR_SUCCESS;
 }
 
 static err_code_e applyWireframeRotation(/* VAR */ pointArray_t &points, const rotation_params_t &params)

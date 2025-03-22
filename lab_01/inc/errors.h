@@ -13,7 +13,8 @@ typedef enum
     ERROR_NOT_A_NUMBER,
     ERROR_INVALID_POINTS_COUNT,
     ERROR_INVALID_EDGES_COUNT,
-    ERROR_INVALID_EDGE
+    ERROR_INVALID_EDGE,
+    ERROR_INVALID_ACTION
 } err_code_e;
 
 void handleError(err_code_e rc);

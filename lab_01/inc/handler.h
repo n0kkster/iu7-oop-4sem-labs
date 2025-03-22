@@ -9,7 +9,6 @@
 
 typedef enum
 {
-    INIT,
     LOAD,
     SAVE,
     MOVE,

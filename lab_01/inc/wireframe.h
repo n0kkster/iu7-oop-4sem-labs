@@ -14,7 +14,7 @@ typedef struct
 } wireframe_t;
 
 wireframe_t initWireframe(void);
-void freeWireframe(wireframe_t &wireframe);
+err_code_e freeWireframe(wireframe_t &wireframe);
 void moveWireframe(wireframe_t &dst, const wireframe_t &src);
 void freePoints(pointArray_t &points);
 void freeEdges(edgeArray_t &edges);

@@ -28,8 +28,10 @@ err_code_e handleAction(/* VAR */ plane_t &plane, const action_params_t &action)
             rc = handleDraw(plane, wireframe);
             break;
         case FREE:
-            freeWireframe(wireframe);
+            rc = freeWireframe(wireframe);
+            break;
         default:
+            rc = ERROR_INVALID_ACTION;
             break;
     }
 

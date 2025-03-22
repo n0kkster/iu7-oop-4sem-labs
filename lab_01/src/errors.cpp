@@ -35,6 +35,9 @@ void handleError(err_code_e rc)
         case ERROR_INVALID_EDGE:
             QMessageBox::critical(nullptr, "Ошибка", "Модель содержит некорректные ребра!");
             break;
+        case ERROR_INVALID_ACTION:
+            QMessageBox::critical(nullptr, "Ошибка", "Выбрано некорректное действие!");
+            break;
         default:
             break;
     }
