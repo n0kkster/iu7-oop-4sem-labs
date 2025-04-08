@@ -46,7 +46,7 @@ public:
     // ======== ============================== ========
 
     // ======== Получение количества элементов ========
-    size_t getSize() override const;
+    size_t getSize() const override;
     // ======== ============================== ========
 
     // ============== Очистка множества ===============
@@ -54,7 +54,7 @@ public:
     // =============== ================ ===============
 
     // ========= Проверка множества на пустоту ========
-    void isEmpty() override const;
+    void isEmpty() const override;
     // ========= ============================= ========
 
     // ============== Удаление элемента ===============
@@ -78,10 +78,10 @@ public:
     // ===================== Операторы ======================
 
     // ======= Присваивание =======
-    Set<Type> &assign(const set<Type> &other);
+    Set<Type> &assign(const Set<Type> &other);
     Set<Type> operator=(const Set<Type> &other);
 
-    Set<Type> &assign(set<Type> &&other);
+    Set<Type> &assign(Set<Type> &&other);
     Set<Type> operator=(Set<Type> &&other);
 
     Set<Type> &assign(const std::initializer_list<Type> ilist);
