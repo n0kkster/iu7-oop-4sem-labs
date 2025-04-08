@@ -14,8 +14,8 @@ public:
     // size_t getSize() const noexcept { return size; }
     // virtual ~BaseContainer() = 0;
 
-    virtual bool isEmpty() const = 0;
-    virtual size_t getSize() const = 0;
+    virtual bool isEmpty() const noexcept = 0;
+    virtual size_t getSize() const noexcept = 0;
     virtual void clear() = 0;
     virtual ~BaseContainer() = default;
 
