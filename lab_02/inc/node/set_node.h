@@ -15,7 +15,7 @@ private:
 public:
     // ==================== Конструкторы ====================
     SetNode() = default;
-    explicit SetNode(const Type value);
+    explicit SetNode(const Type &value);
     explicit SetNode(std::shared_ptr<SetNode<Type>> &node);
     // ==================== ============ ====================
 
@@ -26,7 +26,6 @@ public:
 
 
     void exclude();
-
 
     // ======================= Сеттеры ======================
     void set(const Type &value);
