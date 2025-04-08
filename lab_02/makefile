@@ -6,13 +6,13 @@ UI_DIR := ui
 OUT_DIR := out
 
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
-INCS := $(find $(HEADERS_DIR) -iregex ".+\.h\(pp\)?")
+# INCS := $(find $(HEADERS_DIR) -iregex ".+\.h\(pp\)?")
 
 DEPS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.d)
 
 OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
 
-CFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wfloat-equal -I$(HEADERS_DIR) -I.
+CFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wfloat-equal $(shell for f in inc/*; do echo -I $$f; done) 
 LDFLAGS := -lm
 
 all : app.exe
@@ -27,10 +27,10 @@ $(OUT_DIR)/%.o : $(OUT_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OUT_DIR)/%.d : $(SRC_DIR)/%.cpp | $(OUT_DIR)
-	$(CC) $(CFLAGS) -MM -MG -MF $@ -MT $(OUT_DIR)/$*.o $<
+	$(CC) $(CFLAGS) -MM -MF $@ -MT $(OUT_DIR)/$*.o $<
 
 $(OUT_DIR)/%.d : $(OUT_DIR)/%.cpp
-	$(CC) $(CFLAGS) -MM -MG -MF $@ -MT $(OUT_DIR)/$*.o $<
+	$(CC) $(CFLAGS) -MM -MF $@ -MT $(OUT_DIR)/$*.o $<
 
 ifneq (clean, $(MAKECMDGOALS))
   include $(DEPS)
@@ -43,4 +43,3 @@ clean :
 	$(RM) $(OUT_DIR)/* ./*.exe
 
 .PHONY : clean
-.PRECIOUS : $(OUT_DIR)/moc_%.cpp
