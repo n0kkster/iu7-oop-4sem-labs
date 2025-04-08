@@ -4,10 +4,11 @@
 #include <memory>
 #include <iterator>
 
+#include "base_iterator.h"
 #include "set_node.h"
 
 template <typename Type>
-class ConstIterator : public std::iterator<std::bidirectional_iterator_tag, Type>
+class ConstIterator : public BaseIterator
 {
 
 private:
