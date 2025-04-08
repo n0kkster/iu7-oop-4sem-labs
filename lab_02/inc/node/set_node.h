@@ -16,7 +16,7 @@ public:
     // ==================== Конструкторы ====================
     SetNode() = default;
     explicit SetNode(const Type &value);
-    explicit SetNode(std::shared_ptr<SetNode<Type>> &node);
+    explicit SetNode(const std::shared_ptr<SetNode<Type>> &pnode);
     // ==================== ============ ====================
 
 
@@ -27,34 +27,33 @@ public:
 
     void exclude();
 
+
     // ======================= Сеттеры ======================
-    void set(const Type &value);
+    void set(const Type &value) noexcept;
     void setNull();
 
     void setNext(const SetNode<Type> &node);
-    void setNext(const std::shared_ptr<SetNode<Type>> &pnode);
-    void setNextNull();
+    void setNext(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
 
     void setPrev(const SetNode<Type> &node);
-    void setPrev(const std::shared_ptr<SetNode<Type>> &pnode);
-    void setPrevNull();
+    void setPrev(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
     // ======================= ======= ======================
 
 
     // ======================= Геттеры ======================
-    const Type &getData() const;
+    const Type &value() const noexcept;
 
-    std::shared_ptr<SetNode<Type>> getNext() const;
-    std::shared_ptr<SetNode<Type>> getPrev() const;
+    std::shared_ptr<SetNode<Type>> getNext() const noexcept;
+    std::shared_ptr<SetNode<Type>> getPrev() const noexcept;
     // ======================= ======= ======================
 
     // ===================== Операторы ======================
     // Мб добавить spaceship
 
-    bool operator==(const std::shared_ptr<SetNode<Type>> &other) const;
-    bool operator!=(const std::shared_ptr<SetNode<Type>> &other) const;
-    bool operator<(const std::shared_ptr<SetNode<Type>> &other) const;
-    bool operator>(const std::shared_ptr<SetNode<Type>> &other) const;
+    bool operator==(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    bool operator!=(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    bool operator<(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    bool operator>(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
     // ===================== ========= ======================
 
 };
