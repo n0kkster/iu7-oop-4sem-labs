@@ -11,7 +11,7 @@ template <typename Type>
 class ConstIterator : public BaseIterator
 {
 
-private:
+protected:
     std::weak_ptr<SetNode<Type>> curr;
 
 public:
@@ -25,18 +25,25 @@ public:
     ~ConstIterator() = default;
     // ===================== ========== =====================
 
+    // ======================= Геттеры ======================
+    SetNode<Type> &getCurr() const;
+    // ================= =================== ================
+
     // ================= Изменение итератора ================
     void next();
     void prev();
-    // ================= Изменение итератора ================
+    // ================= =================== ================
 
     // ================= Проверка итератора =================
-    operator bool() const noexcept;
+    operator bool() const;
+
+    void checkExpired(int line) const;
     // ================= ================== =================
 
 
     // ===================== Операторы ======================
-    std::partial_ordering operator<=>(const ConstIterator<Type> &other);
+    bool operator==(const ConstIterator<Type> &other) const;
+    bool operator!=(const ConstIterator<Type> &other) const;
 
     ConstIterator<Type> &operator=(const ConstIterator<Type> &other);
     ConstIterator<Type> &operator=(const ConstIterator<Type> &&other);
@@ -57,5 +64,7 @@ public:
     // ===================== ========= ======================
 
 };
+
+#include "const_iterator.hpp"
 
 #endif /* CONST_ITERATOR_H */

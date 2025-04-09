@@ -3,14 +3,14 @@
 
 #include <cstddef>
 
+template <typename Type>
 class BaseIterator
 {
 public:
     virtual ~BaseIterator() = 0;
     
 protected:
-    size_t index;
-    size_t size;
+    std::weak_ptr<SetNode<Type>> curr;
 };
 
 #endif /* BASE_ITERATOR_H */
