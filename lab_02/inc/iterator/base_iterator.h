@@ -1,7 +1,8 @@
 #ifndef BASE_ITERATOR_H
 #define BASE_ITERATOR_H
 
-#include <cstddef>
+#include <memory>
+#include "set_node.h"
 
 template <typename Type>
 class BaseIterator

@@ -8,7 +8,7 @@
 #include "set_node.h"
 
 template <typename Type>
-class ConstIterator : public BaseIterator
+class ConstIterator : public BaseIterator<Type>
 {
 
 protected:
