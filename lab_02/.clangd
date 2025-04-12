@@ -1,0 +1,9 @@
+CompileFlags:
+  Add: [
+    -I../, 
+    -I../exception, 
+    -I../iterator, 
+    -I../node, 
+    -I../set, 
+    -std=c++20
+  ]
