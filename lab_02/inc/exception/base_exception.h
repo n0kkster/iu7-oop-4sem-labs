@@ -1,5 +1,4 @@
-#ifndef BASE_EXCEPTION_H
-#define BASE_EXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <string>
@@ -17,4 +16,3 @@ public:
 
 #include "base_exception.hpp"
 
-#endif /* BASE_EXCEPTION_H */

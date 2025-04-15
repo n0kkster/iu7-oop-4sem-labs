@@ -1,11 +1,10 @@
-#ifndef BASE_EXCEPTION_HPP
-#define BASE_EXCEPTION_HPP
+#pragma once
 
 #include "base_exception.h"
 
 #include <sstream>
 
-BaseException::BaseException(const std::string &info, const std::source_location &loc = std::source_location::current())
+BaseException::BaseException(const std::string &info, const std::source_location &loc)
 {
     std::stringstream ss;
     ss  << "File: "
@@ -22,4 +21,3 @@ const char *BaseException::what() const noexcept
     return message.c_str();
 }
 
-#endif /* BASE_EXCEPTION_H */
