@@ -1,60 +1,65 @@
-#ifndef SET_H
-#define SET_H
-
-#include <compare>
-#include <initializer_list>
-#include <memory>
+#pragma once
 
 #include "base_container.h"
 #include "const_iterator.h"
 #include "set_node.h"
+#include <initializer_list>
+
+#include <compare>
+#include <memory>
+#include <concepts>
 
 template <typename Type>
 class Set : public BaseContainer
 {
 
 public:
-
+    #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const Type *array); // К-тор на основе некого массива.
+    Set(const size_t size, const Type *array);       // К-тор на основе некого массива.
     explicit Set(std::initializer_list<Type> ilist); // К-тор на основе списка инициализации.
-    explicit Set(const Set<Type> &other); // К-тор копирования.
-    Set(const Set<Type> &&other) noexcept; // К-тор переноса.
+    explicit Set(const Set<Type> &other);            // К-тор копирования.
+    Set(const Set<Type> &&other) noexcept;           // К-тор переноса.
 
-    template <typename Iter>
-    Set(const Iter &begin, const Iter &end); // К-тор по двум итераторам
+    // template <typename Iter>
+    Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам
     // ==================== ============ ====================
+    #pragma endregion
 
-
+    #pragma region Destructor
     // ===================== Деструктор =====================
-    ~Set() override;
+    ~Set() = default;
     // ===================== Деструктор =====================
-
+    #pragma endregion
 
     // ================== Основные функции ==================
-    
+
+    #pragma region ElementAddition
     // ======= Добавление элементов в множество =======
-    void add(const Type &value);
-    void add(Type &&value);
-    void add(const std::initializer_list<Type> ilist);
-    void add(const size_t size, const Type *array);
+    template <typename T>
+    requires std::same_as<std::decay_t<T>, Type>
+    bool add(T &&value); // +
+    bool add(const std::initializer_list<Type> ilist);
+    bool add(const size_t size, const Type *array);
     // ======= ================================ =======
+    #pragma endregion
 
     // ======== Проверка элемента на вхождение ========
-    bool in(const Type &value) const;
+    bool in(const Type &value) const; // +
+    bool in(const ConstIterator<Type> &it) const;
     // ======== ============================== ========
 
     // ======== Получение количества элементов ========
-    size_t getSize() const override;
+    size_t size() const noexcept override; // +
     // ======== ============================== ========
 
     // ============== Очистка множества ===============
-    void clear() override;
+    void clear() override; // +
     // =============== ================ ===============
 
     // ========= Проверка множества на пустоту ========
-    void isEmpty() const override;
+    bool isEmpty() const noexcept override; // +
     // ========= ============================= ========
 
     // ============== Удаление элемента ===============
@@ -68,13 +73,14 @@ public:
 
     // ================== ============== ====================
 
-
+    #pragma region Iterators
     // ===================== Итераторы ======================
-    ConstIterator<Type> begin() const;
-    ConstIterator<Type> end() const;
+    ConstIterator<Type> cbegin() const;
+    ConstIterator<Type> cend() const;
     // ===================== ========= ======================
+    #pragma endregion
 
-
+    #pragma region Operators
     // ===================== Операторы ======================
 
     // ======= Присваивание =======
@@ -165,22 +171,25 @@ public:
 
     bool equal(const std::initializer_list<Type> ilist) const;
     // bool operator==(const std::initializer_list<Type> ilist) const;
-    
-    bool notequal(Set<Type> &other) const;
+
+    bool notEqual(Set<Type> &other) const;
     // bool operator!=(const Set<Type> &other) const;
 
     bool notEqual(const std::initializer_list<Type> ilist) const;
     // bool operator!=(const std::initializer_list<Type> ilist) const;
     // ======== ========= ========
+    #pragma endregion
 
     // ===================== ========= ======================
+
+protected:
+    bool add(const std::shared_ptr<SetNode<Type>> &node); // +
 
 private:
     std::shared_ptr<SetNode<Type>> head;
     std::shared_ptr<SetNode<Type>> tail;
-
 };
 
-#include "set.hpp"
 
-#endif /* SET_H */
+
+#include "set.hpp"
