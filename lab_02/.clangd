@@ -6,6 +6,9 @@ CompileFlags:
     -I../node, 
     -I../set, 
     -I../inc/set,
+    -I../inc/exception,
+    -I../inc/iterator,
+    -I../inc/node,
     -std=c++20
   ]
 Diagnostics:
