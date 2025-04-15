@@ -1,5 +1,4 @@
-#ifndef CONST_ITERATOR_H
-#define CONST_ITERATOR_H
+#pragma once
 
 #include <memory>
 #include <iterator>
@@ -11,8 +10,10 @@ template <typename Type>
 class ConstIterator : public BaseIterator<Type>
 {
 
-protected:
-    std::weak_ptr<SetNode<Type>> curr;
+private:
+    // ======================= Геттеры ======================
+    SetNode<Type> &getCurr() const; 
+    // ================= =================== ================
 
 public:
     // ==================== Конструкторы ====================
@@ -22,12 +23,8 @@ public:
     // ==================== ============ ====================
 
     // ===================== Деструктор =====================
-    ~ConstIterator() = default;
+    ~ConstIterator() override = default;
     // ===================== ========== =====================
-
-    // ======================= Геттеры ======================
-    SetNode<Type> &getCurr() const;
-    // ================= =================== ================
 
     // ================= Изменение итератора ================
     void next();
@@ -66,5 +63,3 @@ public:
 };
 
 #include "const_iterator.hpp"
-
-#endif /* CONST_ITERATOR_H */
