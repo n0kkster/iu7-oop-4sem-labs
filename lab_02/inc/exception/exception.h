@@ -1,5 +1,3 @@
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#pragma once
 
-
-#endif /* EXCEPTION_H */
+#include "base_exception.h"

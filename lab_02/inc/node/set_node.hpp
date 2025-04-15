@@ -1,5 +1,4 @@
-#ifndef SET_NODE_HPP
-#define SET_NODE_HPP
+#pragma once
 
 #include "set_node.h"
 
@@ -107,5 +106,3 @@ void SetNode<Type>::exclude()
 
     setNull();
 }
-
-#endif /* SET_NODE_HPP */

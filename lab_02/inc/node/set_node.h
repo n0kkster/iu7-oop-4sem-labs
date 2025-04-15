@@ -1,5 +1,4 @@
-#ifndef SET_NODE_H
-#define SET_NODE_H
+#pragma once
 
 #include <memory>
 
@@ -60,4 +59,3 @@ public:
 
 #include "set_node.hpp"
 
-#endif /* SET_NODE_H */

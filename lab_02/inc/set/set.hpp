@@ -1,5 +1,5 @@
-#ifndef SET_HPP
-#define SET_HPP
+#pragma once
+
+#include "set.h"
 
 
-#endif /* SET_HPP */

@@ -1,5 +1,4 @@
-#ifndef BASE_ITERATOR_H
-#define BASE_ITERATOR_H
+#pragma once
 
 #include <memory>
 #include "set_node.h"
@@ -13,5 +12,3 @@ public:
 protected:
     std::weak_ptr<SetNode<Type>> curr;
 };
-
-#endif /* BASE_ITERATOR_H */
