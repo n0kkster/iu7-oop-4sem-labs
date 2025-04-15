@@ -15,6 +15,7 @@ public:
     // ==================== Конструкторы ====================
     SetNode() = default;
     explicit SetNode(const Type &value);
+    explicit SetNode(Type &&value);
     explicit SetNode(const std::shared_ptr<SetNode<Type>> &pnode);
     // ==================== ============ ====================
 
@@ -33,9 +34,11 @@ public:
 
     void setNext(const SetNode<Type> &node);
     void setNext(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
+    void setNextNull() noexcept;
 
     void setPrev(const SetNode<Type> &node);
     void setPrev(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
+    void setPrevNull() noexcept;
     // ======================= ======= ======================
 
 

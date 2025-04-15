@@ -10,6 +10,13 @@ SetNode<Type>::SetNode(const Type &value)
 }
 
 template <typename Type>
+SetNode<Type>::SetNode(Type &&value)
+    : SetNode<Type>()
+{
+    this->data = std::move(value);
+}
+
+template <typename Type>
 SetNode<Type>::SetNode(const std::shared_ptr<SetNode<Type>> &pnode)
     : SetNode<Type>(pnode.data)
 {
@@ -60,6 +67,12 @@ void SetNode<Type>::setNext(const std::shared_ptr<SetNode<Type>> &pnode) noexcep
 }
 
 template <typename Type>
+void SetNode<Type>::setNextNull() noexcept
+{
+    this->next = nullptr;
+}
+
+template <typename Type>
 void SetNode<Type>::setPrev(const SetNode<Type> &node)
 {
     this->prev = std::make_shared<SetNode<Type>>(node);
@@ -69,6 +82,12 @@ template <typename Type>
 void SetNode<Type>::setPrev(const std::shared_ptr<SetNode<Type>> &pnode) noexcept
 {
     this->prev = pnode;
+}
+
+template <typename Type>
+void SetNode<Type>::setPrevNull() noexcept
+{
+    this->prev = nullptr;
 }
 
 template <typename Type>
