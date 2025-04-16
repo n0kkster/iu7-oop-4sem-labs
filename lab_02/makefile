@@ -12,10 +12,13 @@ DEPS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.d)
 
 OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
 
-CFLAGS := -std=c++20 -Wno-unknown-pragmas -Wall -Wextra -Wpedantic -Wfloat-equal $(shell for f in inc/*; do echo -I $$f; done) 
+CFLAGS := -std=c++20 -O0 -Wno-unknown-pragmas -Wall -Wextra -Wpedantic -Wfloat-equal $(shell for f in inc/*; do echo -I $$f; done) 
 LDFLAGS := -lm
 
 all : app.exe
+
+debug: CFLAGS += -g3
+debug: app.exe 
 
 app.exe : $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o ./app.exe
