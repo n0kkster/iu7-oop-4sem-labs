@@ -17,7 +17,7 @@ private:
 
 public:
     // ==================== Конструкторы ====================
-    ConstIterator();
+    ConstIterator() noexcept;
     explicit ConstIterator(const std::shared_ptr<SetNode<Type>> &pnode);
     ConstIterator(const ConstIterator<Type> &iter);
     // ==================== ============ ====================

@@ -4,7 +4,7 @@
 #include "const_iterator.h"
 
 template <typename Type>
-ConstIterator<Type>::ConstIterator()
+ConstIterator<Type>::ConstIterator() noexcept
 {
     this->curr.lock() = nullptr;
 }
