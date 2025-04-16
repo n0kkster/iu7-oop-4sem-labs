@@ -69,7 +69,7 @@ void SetNode<Type>::setNext(const std::shared_ptr<SetNode<Type>> &pnode) noexcep
 template <typename Type>
 void SetNode<Type>::setNextNull() noexcept
 {
-    this->next = nullptr;
+    this->next.reset();
 }
 
 template <typename Type>
@@ -87,7 +87,7 @@ void SetNode<Type>::setPrev(const std::shared_ptr<SetNode<Type>> &pnode) noexcep
 template <typename Type>
 void SetNode<Type>::setPrevNull() noexcept
 {
-    this->prev = nullptr;
+    this->prev.reset();
 }
 
 template <typename Type>

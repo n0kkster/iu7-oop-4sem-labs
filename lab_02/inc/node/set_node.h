@@ -54,6 +54,8 @@ public:
 
     bool operator==(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
     bool operator!=(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    
+    // Мб убрать эти сравнения
     bool operator<(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
     bool operator>(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
     // ===================== ========= ======================
