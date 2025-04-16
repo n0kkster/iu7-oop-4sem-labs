@@ -36,6 +36,10 @@ void ConstIterator<Type>::next()
 {
     checkExpired(__LINE__);
 
+    if (getCurr().getNext() == nullptr)
+        throw OutOfRangeException("The iterator went out of bounds while trying to increment.");
+
+
     this->curr = getCurr().getNext();
 }
 
@@ -62,6 +66,9 @@ template <typename Type>
 void ConstIterator<Type>::prev()
 {
     checkExpired(__LINE__);
+
+    if (getCurr().getPrev() == nullptr)
+        throw OutOfRangeException("The iterator went out of bounds while trying to decrement.");
 
     this->curr = getCurr().getPrev();
 }

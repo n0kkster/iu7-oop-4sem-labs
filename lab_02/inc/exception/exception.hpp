@@ -10,3 +10,6 @@ SetException::SetException(const char *info, const std::source_location &loc) :
 
 MemoryException::MemoryException(const char *info, const std::source_location &loc) :
     BaseException(info, loc) { };
+
+OutOfRangeException::OutOfRangeException(const char *info, const std::source_location &loc) :
+    BaseException(info, loc) { };

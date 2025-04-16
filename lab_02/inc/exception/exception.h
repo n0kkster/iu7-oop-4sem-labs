@@ -21,4 +21,10 @@ public:
     MemoryException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
+class OutOfRangeException : BaseException
+{
+public:
+    OutOfRangeException(const char *info, const std::source_location &loc = std::source_location::current());
+};
+
 #include "exception.hpp"
