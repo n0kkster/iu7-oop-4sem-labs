@@ -58,12 +58,12 @@ public:
 
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
-    bool in(const Type &value) const; // +
-    bool in(const ConstIterator<Type> &it) const;
+    bool in(const Type &value) const noexcept; // +
+    bool in(const ConstIterator<Type> &it) const noexcept; // +
     // ======== ============================== ========
 
     // ================ Поиск элемента ================
-    ConstIterator<Type> find(const Type &value);
+    ConstIterator<Type> find(const Type &value) const noexcept; // +
     // ================ ============== ================
 #pragma endregion
 
@@ -90,8 +90,8 @@ public:
 
 #pragma region Iterators
     // ===================== Итераторы ======================
-    ConstIterator<Type> cbegin() const;
-    ConstIterator<Type> cend() const;
+    ConstIterator<Type> cbegin() const noexcept; // +
+    ConstIterator<Type> cend() const noexcept; // +
 // ===================== ========= ======================
 #pragma endregion
 
@@ -99,14 +99,16 @@ public:
     // ===================== Операторы ======================
 
     // ======= Присваивание =======
-    Set<Type> &assign(const Set<Type> &other);
-    Set<Type> operator=(const Set<Type> &other);
+    // Копирующий оператор присваивания
+    Set<Type> &assign(const Set<Type> &other); // +
+    Set<Type> &operator=(const Set<Type> &other); // +
 
-    Set<Type> &assign(Set<Type> &&other);
-    Set<Type> operator=(Set<Type> &&other);
+    // Перемещающий оператор присваивания
+    Set<Type> &assign(Set<Type> &&other); // +
+    Set<Type> &operator=(Set<Type> &&other); // +
 
-    Set<Type> &assign(const std::initializer_list<Type> ilist);
-    Set<Type> operator=(const std::initializer_list<Type> ilist);
+    Set<Type> &assign(const std::initializer_list<Type> ilist); // +
+    Set<Type> &operator=(const std::initializer_list<Type> ilist); // +
     // ======= ============ =======
 
     // ======= Объединение =======

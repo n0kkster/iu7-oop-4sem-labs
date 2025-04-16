@@ -119,13 +119,13 @@ bool Set<Type>::add(const size_t size, const Type *array)
 #pragma region Iterators
 
 template <typename Type>
-ConstIterator<Type> Set<Type>::cbegin() const
+ConstIterator<Type> Set<Type>::cbegin() const noexcept
 {
     return ConstIterator<Type>(this->head);
 }
 
 template <typename Type>
-ConstIterator<Type> Set<Type>::cend() const
+ConstIterator<Type> Set<Type>::cend() const noexcept
 {
     return this->tail ? ConstIterator<Type>(this->tail->getNext()) : ConstIterator<Type>();
 }
@@ -143,14 +143,15 @@ bool Set<Type>::isEmpty() const noexcept
 template <typename Type>
 void Set<Type>::clear()
 {
-    std::shared_ptr<SetNode<Type>> temp;
     while (this->head)
     {
-        temp = head;
-        head = head->getNext();
+        auto temp = this->head;
+        this->head = this->head->getNext();
         temp->setNextNull();
+        temp->setPrevNull();
     }
 
+    this->tail.reset();
     this->_size = 0;
 }
 
@@ -165,12 +166,89 @@ size_t Set<Type>::size() const noexcept
 #pragma region Find
 
 template <typename Type>
-bool Set<Type>::in(const Type &value) const
+bool Set<Type>::in(const Type &value) const noexcept
 {
     for (auto it = this->cbegin(); it != this->cend(); ++it)
         if (*it == value)
             return true;
     return false;
+}
+
+template <typename Type>
+bool Set<Type>::in(const ConstIterator<Type> &it) const noexcept
+{
+    for (auto _it = this->cbegin(); _it != this->cend(); ++_it)
+        if (*_it == *it)
+            return true;
+    return false;
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::find(const Type &value) const noexcept
+{
+    for (auto it = this->cbegin(); it != this->cend(); ++it)
+        if (*it == value)
+            return it;
+
+    return this->cend();
+}
+
+#pragma endregion
+
+#pragma region Operators
+
+template <typename Type>
+Set<Type> &Set<Type>::assign(const Set<Type> &other)
+{
+    if (&other == this)
+        return *this;
+    
+    this->clear();
+    for (auto it = other.cbegin(); it != other.cend(); ++it)
+        add(*it);
+
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator=(const Set<Type> &other)
+{
+    return this->assign(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::assign(Set<Type> &&other)
+{
+    this->clear();
+
+    this->_size = other._size;
+    this->head = std::move(other.head);
+    this->tail = std::move(other.tail);
+
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator=(Set<Type> &&other)
+{
+    return this->assign(std::forward<Set<Type>>(other));
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::assign(const std::initializer_list<Type> ilist)
+{
+    this->clear();
+    
+    for (const Type &el : ilist)
+        this->add(el);
+
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator=(const std::initializer_list<Type> ilist)
+{
+    return this->assign(ilist);
 }
 
 #pragma endregion
