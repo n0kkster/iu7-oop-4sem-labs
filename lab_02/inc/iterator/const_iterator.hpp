@@ -53,7 +53,7 @@ ConstIterator<Type> ConstIterator<Type>::operator++(int)
 {
     checkExpired(__LINE__);
 
-    ConstIterator<Type> copy = this;
+    auto copy = *this;
     next();
     return copy;
 }
@@ -72,7 +72,7 @@ ConstIterator<Type> &ConstIterator<Type>::operator--()
     checkExpired(__LINE__);
 
     prev();
-    return this;
+    return *this;
 }
 
 template <typename Type>
@@ -80,7 +80,7 @@ ConstIterator<Type> ConstIterator<Type>::operator--(int)
 {
     checkExpired(__LINE__);
 
-    auto copy = this;
+    auto copy = *this;
     prev();
     return copy;
 }
@@ -98,7 +98,7 @@ ConstIterator<Type> ConstIterator<Type>::operator+(int n) const
 {
     checkExpired(__LINE__);
 
-    auto copy = this;
+    auto copy = *this;
     while (n --> 0)
         ++copy;
 
@@ -110,9 +110,9 @@ ConstIterator<Type> &ConstIterator<Type>::operator+=(int n)
 {
     checkExpired(__LINE__);
 
-    this = this + n;
+    *this = *this + n;
 
-    return this;
+    return *this;
 }
 
 template <typename Type>
@@ -120,7 +120,7 @@ ConstIterator<Type> ConstIterator<Type>::operator-(int n) const
 {
     checkExpired(__LINE__);
 
-    auto copy = this;
+    auto copy = *this;
     while (n --> 0)
         --copy;
 
@@ -132,9 +132,9 @@ ConstIterator<Type> &ConstIterator<Type>::operator-=(int n)
 {
     checkExpired(__LINE__);
 
-    this = this - n;
+    *this = *this - n;
     
-    return this;
+    return *this;
 }
 
 template <typename Type>
