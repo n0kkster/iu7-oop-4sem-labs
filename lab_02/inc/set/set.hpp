@@ -60,16 +60,32 @@ bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
     if (this->in(node->value()))
         return false;
 
+    std::shared_ptr<SetNode<Type>> after_last;
+    try
+    {
+        after_last = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
+    }
+    catch (const std::bad_alloc &ex)
+    {
+        throw MemoryException("Error allocating after last!");
+    }
+
     if (this->isEmpty())
     {
         this->head = node;
         this->tail = node;
+
+        after_last->setPrev(this->tail);
+        this->tail->setNext(after_last);
     }
     else
     {
         node->setPrev(this->tail);
         this->tail->setNext(node);
         this->tail = node;
+
+        after_last->setPrev(node);
+        node->setNext(after_last);
     }
 
     this->_size++;
@@ -361,7 +377,11 @@ std::ostream &operator<<(std::ostream &os, const Set<Type> &set)
     os << "{";
 
     for (const auto &el : set)
-        os << el << ", ";
+    {
+        os << el;
+        if (set.find(el) != set.cend() - 1)
+            os << ", ";
+    }
 
     os << "}";
     os << "(" << set.size() << ")";
