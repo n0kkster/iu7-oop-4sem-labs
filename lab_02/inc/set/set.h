@@ -6,50 +6,68 @@
 #include <initializer_list>
 
 #include <compare>
-#include <memory>
 #include <concepts>
+#include <memory>
 
 template <typename Type>
 class Set : public BaseContainer
 {
 
 public:
-    #pragma region Constructors
+#pragma region Aliases
+    using value_type = Type;
+    using reference = Type &;
+    using const_reference = const Type &;
+    using const_iterator = ConstIterator<Type>;
+    using difference_type = ptrdiff_t;
+    using size_type = size_t; 
+#pragma endregion
+
+#pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const Type *array);       // К-тор на основе некого массива.
-    explicit Set(std::initializer_list<Type> ilist); // К-тор на основе списка инициализации.
-    explicit Set(const Set<Type> &other);            // К-тор копирования.
-    Set(const Set<Type> &&other) noexcept;           // К-тор переноса.
+    Set(const size_t size, const Type *array);       // К-тор на основе некого массива. +
+    explicit Set(const std::initializer_list<Type> ilist); // К-тор на основе списка инициализации. +
+    explicit Set(const Set<Type> &other);            // К-тор копирования. +
+    Set(Set<Type> &&other) noexcept;           // К-тор переноса. +
 
     // template <typename Iter>
-    Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам
-    // ==================== ============ ====================
-    #pragma endregion
+    Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам +
 
-    #pragma region Destructor
+    // Добавить конструктор от range
+    // ==================== ============ ====================
+#pragma endregion
+
+#pragma region Destructor
     // ===================== Деструктор =====================
-    ~Set() = default;
-    // ===================== Деструктор =====================
-    #pragma endregion
+    ~Set(); // +
+// ===================== Деструктор =====================
+#pragma endregion
 
     // ================== Основные функции ==================
 
-    #pragma region ElementAddition
+#pragma region ElementAddition
     // ======= Добавление элементов в множество =======
     template <typename T>
-    requires std::same_as<std::decay_t<T>, Type>
+        requires std::same_as<std::decay_t<T>, Type>
     bool add(T &&value); // +
-    bool add(const std::initializer_list<Type> ilist);
-    bool add(const size_t size, const Type *array);
-    // ======= ================================ =======
-    #pragma endregion
+    bool add(const std::initializer_list<Type> ilist); // +
+    bool add(const size_t size, const Type *array); // +
+// ======= ================================ =======
+#pragma endregion
 
+#pragma region Find
     // ======== Проверка элемента на вхождение ========
     bool in(const Type &value) const; // +
     bool in(const ConstIterator<Type> &it) const;
     // ======== ============================== ========
 
+    // ================ Поиск элемента ================
+    ConstIterator<Type> find(const Type &value);
+    // ================ ============== ================
+#pragma endregion
+
+#pragma region Misc
     // ======== Получение количества элементов ========
     size_t size() const noexcept override; // +
     // ======== ============================== ========
@@ -61,26 +79,23 @@ public:
     // ========= Проверка множества на пустоту ========
     bool isEmpty() const noexcept override; // +
     // ========= ============================= ========
+#pragma endregion
 
     // ============== Удаление элемента ===============
     bool erase(const Type &value);
     void erase(ConstIterator<Type> pos);
     // ============== ================= ===============
 
-    // ================ Поиск элемента ================
-    ConstIterator<Type> find(const Type &value);
-    // ================ ============== ================
-
     // ================== ============== ====================
 
-    #pragma region Iterators
+#pragma region Iterators
     // ===================== Итераторы ======================
     ConstIterator<Type> cbegin() const;
     ConstIterator<Type> cend() const;
-    // ===================== ========= ======================
-    #pragma endregion
+// ===================== ========= ======================
+#pragma endregion
 
-    #pragma region Operators
+#pragma region Operators
     // ===================== Операторы ======================
 
     // ======= Присваивание =======
@@ -176,9 +191,9 @@ public:
     // bool operator!=(const Set<Type> &other) const;
 
     bool notEqual(const std::initializer_list<Type> ilist) const;
-    // bool operator!=(const std::initializer_list<Type> ilist) const;
-    // ======== ========= ========
-    #pragma endregion
+// bool operator!=(const std::initializer_list<Type> ilist) const;
+// ======== ========= ========
+#pragma endregion
 
     // ===================== ========= ======================
 
@@ -189,7 +204,5 @@ private:
     std::shared_ptr<SetNode<Type>> head;
     std::shared_ptr<SetNode<Type>> tail;
 };
-
-
 
 #include "set.hpp"
