@@ -39,7 +39,6 @@ void ConstIterator<Type>::next()
     if (getCurr().getNext() == nullptr)
         throw OutOfRangeException("The iterator went out of bounds while trying to increment.");
 
-
     this->curr = getCurr().getNext();
 }
 
