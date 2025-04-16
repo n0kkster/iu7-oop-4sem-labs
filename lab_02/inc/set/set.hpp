@@ -52,15 +52,13 @@ Set<Type>::Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end)
 
 #pragma endregion
 
-#pragma region ElementAddition
+#pragma region Add
 
 template <typename Type>
 bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
 {
     if (this->in(node->value()))
         return false;
-
-    
 
     if (this->isEmpty())
     {
@@ -93,8 +91,6 @@ bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
 
         this->tail->setNext(node);
         this->tail = node;
-
-        
     }
 
     this->_size++;
@@ -122,24 +118,6 @@ bool Set<Type>::add(T &&value)
 
     return add(newNode);
 }
-
-// template <typename Type>
-// bool Set<Type>::add(const std::initializer_list<Type> ilist)
-// {
-//     for (const Type &el : ilist)
-//         if (!this->add(el))
-//             return false;
-//     return true;
-// }
-
-// template <typename Type>
-// bool Set<Type>::add(const size_t size, const Type *array)
-// {
-//     for (size_t i = 0; i < size; ++i)
-//         if (!this->add(array[i]))
-//             return false;
-//     return true;
-// }
 
 #pragma endregion
 
@@ -265,7 +243,7 @@ Set<Type> &Set<Type>::assign(const Set<Type> &other)
 {
     if (&other == this)
         return *this;
-    
+
     this->clear();
     for (const auto &el : other)
         add(el);
@@ -301,7 +279,7 @@ template <typename Type>
 Set<Type> &Set<Type>::assign(const std::initializer_list<Type> ilist)
 {
     this->clear();
-    
+
     for (const Type &el : ilist)
         this->add(el);
 
@@ -316,7 +294,7 @@ Set<Type> &Set<Type>::operator=(const std::initializer_list<Type> ilist)
 
 template <typename Type>
 Set<Type> Set<Type>::make_union(const Set<Type> &other) const
-{    
+{
     Set<Type> set_union(*this);
     set_union.unite(other);
 
@@ -337,7 +315,7 @@ Set<Type> Set<Type>::operator+(const Set<Type> &other) const
 
 template <typename Type>
 Set<Type> &Set<Type>::unite(const Set<Type> &other)
-{    
+{
     for (const auto &el : other)
         this->add(el);
 
@@ -392,6 +370,60 @@ Set<Type> &Set<Type>::operator+=(const std::initializer_list<Type> ilist)
     return this->unite(ilist);
 }
 
+template <typename Type>
+Set<Type> Set<Type>::make_intersection(const Set<Type> &other) const
+{
+    Set<Type> copy;
+    for (const auto &el : *this)
+        if (other.in(el))
+            copy.add(el);
+
+    return copy;
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator&(const Set<Type> &other) const
+{
+    return this->make_intersection(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::intersect(const Set<Type> &other)
+{
+    *this = std::move(this->make_intersection(other));
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator&=(const Set<Type> &other)
+{
+    return this->intersect(other);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::make_intersection(const std::initializer_list<Type> ilist) const
+{
+    return this->make_intersection(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator&(const std::initializer_list<Type> ilist) const
+{
+    return this->make_intersection(ilist);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::intersect(const std::initializer_list<Type> ilist)
+{
+    return this->intersect(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator&=(const std::initializer_list<Type> ilist)
+{
+    return this->intersect(ilist);
+}
+
 #pragma endregion
 
 #pragma region Destructor
@@ -403,6 +435,8 @@ Set<Type>::~Set()
 }
 
 #pragma endregion
+
+#pragma region Output
 
 template <typename Type>
 std::ostream &operator<<(std::ostream &os, const Set<Type> &set)
@@ -417,7 +451,9 @@ std::ostream &operator<<(std::ostream &os, const Set<Type> &set)
     }
 
     os << "}";
-    os << "(" << set.size() << ")";
+    os << " (" << set.size() << ")";
 
     return os;
 }
+
+#pragma endregion

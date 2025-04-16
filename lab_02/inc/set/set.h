@@ -21,16 +21,16 @@ public:
     using iterator = ConstIterator<value_type>;
     using const_iterator = ConstIterator<value_type>;
     using difference_type = ptrdiff_t;
-    using size_type = size_t; 
+    using size_type = size_t;
 #pragma endregion
 
 #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const Type *array);       // К-тор на основе некого массива. +
+    Set(const size_t size, const Type *array);             // К-тор на основе некого массива. +
     explicit Set(const std::initializer_list<Type> ilist); // К-тор на основе списка инициализации. +
-    explicit Set(const Set<Type> &other);            // К-тор копирования. +
-    Set(Set<Type> &&other) noexcept;           // К-тор переноса. +
+    explicit Set(const Set<Type> &other);                  // К-тор копирования. +
+    Set(Set<Type> &&other) noexcept;                       // К-тор переноса. +
 
     // template <typename Iter>
     Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам +
@@ -47,19 +47,17 @@ public:
 
     // ================== Основные функции ==================
 
-#pragma region ElementAddition
-    // ======= Добавление элементов в множество =======
+#pragma region Add
+    // ======= Добавление элемента в множество =======
     template <typename T>
         requires std::same_as<std::decay_t<T>, Type>
     bool add(T &&value); // +
-    // bool add(const std::initializer_list<Type> ilist); // + мб убрать
-    // bool add(const size_t size, const Type *array); // + мб убрать
 // ======= ================================ =======
 #pragma endregion
 
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
-    bool in(const Type &value) const noexcept; // +
+    bool in(const Type &value) const noexcept;             // +
     bool in(const ConstIterator<Type> &it) const noexcept; // +
     // ======== ============================== ========
 
@@ -82,23 +80,25 @@ public:
     // ========= ============================= ========
 #pragma endregion
 
+#pragma region Erase
     // ============== Удаление элемента ===============
     bool erase(const Type &value);
     void erase(ConstIterator<Type> pos);
     // ============== ================= ===============
+#pragma endregion
 
     // ================== ============== ====================
 
 #pragma region Iterators
     // ===================== Итераторы ======================
-    ConstIterator<Type> begin() const noexcept; // +
-    ConstIterator<Type> end() const noexcept; // +
-    ConstIterator<Type> cbegin() const noexcept; // +
-    ConstIterator<Type> cend() const noexcept; // +
-    ConstIterator<Type> rbegin() const noexcept; // +
-    ConstIterator<Type> rend() const noexcept; // +
+    ConstIterator<Type> begin() const noexcept;   // +
+    ConstIterator<Type> end() const noexcept;     // +
+    ConstIterator<Type> cbegin() const noexcept;  // +
+    ConstIterator<Type> cend() const noexcept;    // +
+    ConstIterator<Type> rbegin() const noexcept;  // +
+    ConstIterator<Type> rend() const noexcept;    // +
     ConstIterator<Type> crbegin() const noexcept; // +
-    ConstIterator<Type> crend() const noexcept; // +
+    ConstIterator<Type> crend() const noexcept;   // +
 // ===================== ========= ======================
 #pragma endregion
 
@@ -107,43 +107,47 @@ public:
 
     // ======= Присваивание =======
     // Копирующий оператор присваивания
-    Set<Type> &assign(const Set<Type> &other); // +
+    Set<Type> &assign(const Set<Type> &other);    // +
     Set<Type> &operator=(const Set<Type> &other); // +
 
     // Перемещающий оператор присваивания
-    Set<Type> &assign(Set<Type> &&other); // +
+    Set<Type> &assign(Set<Type> &&other);    // +
     Set<Type> &operator=(Set<Type> &&other); // +
 
-    Set<Type> &assign(const std::initializer_list<Type> ilist); // +
+    Set<Type> &assign(const std::initializer_list<Type> ilist);    // +
     Set<Type> &operator=(const std::initializer_list<Type> ilist); // +
     // ======= ============ =======
 
     // ======= Объединение =======
     Set<Type> make_union(const Set<Type> &other) const; // +
-    Set<Type> operator|(const Set<Type> &other) const; // +
-    Set<Type> operator+(const Set<Type> &other) const; // +
+    Set<Type> operator|(const Set<Type> &other) const;  // +
+    Set<Type> operator+(const Set<Type> &other) const;  // +
 
-    Set<Type> &unite(const Set<Type> &other); // +
+    Set<Type> &unite(const Set<Type> &other);      // +
     Set<Type> &operator|=(const Set<Type> &other); // +
     Set<Type> &operator+=(const Set<Type> &other); // +
 
     Set<Type> make_union(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator|(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator+(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator|(const std::initializer_list<Type> ilist) const;  // +
+    Set<Type> operator+(const std::initializer_list<Type> ilist) const;  // +
 
-    Set<Type> &unite(const std::initializer_list<Type> ilist); // +
+    Set<Type> &unite(const std::initializer_list<Type> ilist);      // +
     Set<Type> &operator|=(const std::initializer_list<Type> ilist); // +
     Set<Type> &operator+=(const std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Пересечение =======
-    Set<Type> intersect(const Set<Type> &other) const;
-    Set<Type> operator&(const Set<Type> &other) const;
-    Set<Type> &operator&=(const Set<Type> &other);
+    Set<Type> make_intersection(const Set<Type> &other) const; // +
+    Set<Type> operator&(const Set<Type> &other) const; // +
 
-    Set<Type> intersect(const std::initializer_list<Type> ilist) const;
-    Set<Type> operator&(const std::initializer_list<Type> ilist) const;
-    Set<Type> &operator&=(const std::initializer_list<Type> ilist);
+    Set<Type> &intersect(const Set<Type> &other); // +
+    Set<Type> &operator&=(const Set<Type> &other); // +
+
+    Set<Type> make_intersection(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator&(const std::initializer_list<Type> ilist) const; // +
+
+    Set<Type> &intersect(const std::initializer_list<Type> ilist); // +
+    Set<Type> &operator&=(const std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Разность =======
@@ -204,11 +208,11 @@ public:
     // bool operator!=(const Set<Type> &other) const;
 
     bool notEqual(const std::initializer_list<Type> ilist) const;
-// bool operator!=(const std::initializer_list<Type> ilist) const;
-// ======== ========= ========
+    // bool operator!=(const std::initializer_list<Type> ilist) const;
+    // ======== ========= ========
+    // ===================== ========= ======================
 #pragma endregion
 
-    // ===================== ========= ======================
 
 protected:
     bool add(const std::shared_ptr<SetNode<Type>> &node); // +
