@@ -18,7 +18,8 @@ public:
     using value_type = Type;
     using reference = Type &;
     using const_reference = const Type &;
-    using const_iterator = ConstIterator<Type>;
+    using iterator = ConstIterator<value_type>;
+    using const_iterator = ConstIterator<value_type>;
     using difference_type = ptrdiff_t;
     using size_type = size_t; 
 #pragma endregion
@@ -51,8 +52,8 @@ public:
     template <typename T>
         requires std::same_as<std::decay_t<T>, Type>
     bool add(T &&value); // +
-    bool add(const std::initializer_list<Type> ilist); // +
-    bool add(const size_t size, const Type *array); // +
+    // bool add(const std::initializer_list<Type> ilist); // + мб убрать
+    // bool add(const size_t size, const Type *array); // + мб убрать
 // ======= ================================ =======
 #pragma endregion
 
@@ -90,6 +91,8 @@ public:
 
 #pragma region Iterators
     // ===================== Итераторы ======================
+    ConstIterator<Type> begin() const noexcept; // +
+    ConstIterator<Type> end() const noexcept; // +
     ConstIterator<Type> cbegin() const noexcept; // +
     ConstIterator<Type> cend() const noexcept; // +
 // ===================== ========= ======================
@@ -112,17 +115,21 @@ public:
     // ======= ============ =======
 
     // ======= Объединение =======
-    Set<Type> unite(const Set<Type> &other) const;
-    Set<Type> operator|(const Set<Type> &other) const;
-    Set<Type> &operator|=(const Set<Type> &other);
-    Set<Type> operator+(const Set<Type> &other) const;
-    Set<Type> &operator+=(const Set<Type> &other);
+    Set<Type> make_union(const Set<Type> &other) const; // +
+    Set<Type> operator|(const Set<Type> &other) const; // +
+    Set<Type> operator+(const Set<Type> &other) const; // +
 
-    Set<Type> unite(const std::initializer_list<Type> ilist) const;
-    Set<Type> operator|(const std::initializer_list<Type> ilist) const;
-    Set<Type> &operator|=(const std::initializer_list<Type> ilist);
-    Set<Type> operator+(const std::initializer_list<Type> ilist) const;
-    Set<Type> &operator+=(const std::initializer_list<Type> ilist);
+    Set<Type> &unite(const Set<Type> &other); // +
+    Set<Type> &operator|=(const Set<Type> &other); // +
+    Set<Type> &operator+=(const Set<Type> &other); // +
+
+    Set<Type> make_union(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator|(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator+(const std::initializer_list<Type> ilist) const; // +
+
+    Set<Type> &unite(const std::initializer_list<Type> ilist); // +
+    Set<Type> &operator|=(const std::initializer_list<Type> ilist); // +
+    Set<Type> &operator+=(const std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Пересечение =======

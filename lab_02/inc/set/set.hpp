@@ -12,22 +12,24 @@ template <typename Type>
 Set<Type>::Set(const size_t size, const Type *array) : Set()
 {
     std::cout << "arr cctor called\n";
-    add(size, array);
+    for (size_t i = 0; i < size; ++i)
+        this->add(array[i]);
 }
 
 template <typename Type>
-Set<Type>::Set(const std::initializer_list<Type> list) : Set()
+Set<Type>::Set(const std::initializer_list<Type> ilist) : Set()
 {
     std::cout << "ilist cctor called\n";
-    this->add(list);
+    for (const Type &el : ilist)
+        this->add(el);
 }
 
 template <typename Type>
 Set<Type>::Set(const Set<Type> &other) : Set()
 {
     std::cout << "copy cctor called\n";
-    for (auto it = other.cbegin(); it != other.cend(); ++it)
-        this->add(*it);
+    for (const auto &el : other)
+        this->add(el);
 }
 
 template <typename Type>
@@ -96,23 +98,23 @@ bool Set<Type>::add(T &&value)
     return add(newNode);
 }
 
-template <typename Type>
-bool Set<Type>::add(const std::initializer_list<Type> list)
-{
-    for (const Type &el : list)
-        if (!this->add(el))
-            return false;
-    return true;
-}
+// template <typename Type>
+// bool Set<Type>::add(const std::initializer_list<Type> ilist)
+// {
+//     for (const Type &el : ilist)
+//         if (!this->add(el))
+//             return false;
+//     return true;
+// }
 
-template <typename Type>
-bool Set<Type>::add(const size_t size, const Type *array)
-{
-    for (size_t i = 0; i < size; ++i)
-        if (!this->add(array[i]))
-            return false;
-    return true;
-}
+// template <typename Type>
+// bool Set<Type>::add(const size_t size, const Type *array)
+// {
+//     for (size_t i = 0; i < size; ++i)
+//         if (!this->add(array[i]))
+//             return false;
+//     return true;
+// }
 
 #pragma endregion
 
@@ -128,6 +130,18 @@ template <typename Type>
 ConstIterator<Type> Set<Type>::cend() const noexcept
 {
     return this->tail ? ConstIterator<Type>(this->tail->getNext()) : ConstIterator<Type>();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::begin() const noexcept
+{
+    return this->cbegin();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::end() const noexcept
+{
+    return this->cend();
 }
 
 #pragma endregion
@@ -168,8 +182,8 @@ size_t Set<Type>::size() const noexcept
 template <typename Type>
 bool Set<Type>::in(const Type &value) const noexcept
 {
-    for (auto it = this->cbegin(); it != this->cend(); ++it)
-        if (*it == value)
+    for (const auto &el : *this)
+        if (el == value)
             return true;
     return false;
 }
@@ -177,8 +191,8 @@ bool Set<Type>::in(const Type &value) const noexcept
 template <typename Type>
 bool Set<Type>::in(const ConstIterator<Type> &it) const noexcept
 {
-    for (auto _it = this->cbegin(); _it != this->cend(); ++_it)
-        if (*_it == *it)
+    for (const auto &el : *this)
+        if (el == *it)
             return true;
     return false;
 }
@@ -204,8 +218,8 @@ Set<Type> &Set<Type>::assign(const Set<Type> &other)
         return *this;
     
     this->clear();
-    for (auto it = other.cbegin(); it != other.cend(); ++it)
-        add(*it);
+    for (const auto &el : other)
+        add(el);
 
     return *this;
 }
@@ -251,6 +265,84 @@ Set<Type> &Set<Type>::operator=(const std::initializer_list<Type> ilist)
     return this->assign(ilist);
 }
 
+template <typename Type>
+Set<Type> Set<Type>::make_union(const Set<Type> &other) const
+{    
+    Set<Type> set_union(*this);
+    set_union.unite(other);
+
+    return set_union;
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator|(const Set<Type> &other) const
+{
+    return this->make_union(other);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator+(const Set<Type> &other) const
+{
+    return this->make_union(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::unite(const Set<Type> &other)
+{    
+    for (const auto &el : other)
+        this->add(el);
+
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator|=(const Set<Type> &other)
+{
+    return this->unite(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator+=(const Set<Type> &other)
+{
+    return this->unite(other);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::make_union(const std::initializer_list<Type> ilist) const
+{
+    return make_union(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator|(const std::initializer_list<Type> ilist) const
+{
+    return this->make_union(ilist);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator+(const std::initializer_list<Type> ilist) const
+{
+    return this->make_union(ilist);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::unite(const std::initializer_list<Type> ilist)
+{
+    return this->unite(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator|=(const std::initializer_list<Type> ilist)
+{
+    return this->unite(ilist);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator+=(const std::initializer_list<Type> ilist)
+{
+    return this->unite(ilist);
+}
+
 #pragma endregion
 
 #pragma region Destructor
@@ -268,8 +360,8 @@ std::ostream &operator<<(std::ostream &os, const Set<Type> &set)
 {
     os << "{";
 
-    for (auto it = set.cbegin(); it != set.cend(); ++it)
-        os << *it << ", ";
+    for (const auto &el : set)
+        os << el << ", ";
 
     os << "}";
     os << "(" << set.size() << ")";
