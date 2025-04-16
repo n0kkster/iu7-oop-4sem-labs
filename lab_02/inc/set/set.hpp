@@ -60,32 +60,41 @@ bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
     if (this->in(node->value()))
         return false;
 
-    std::shared_ptr<SetNode<Type>> after_last;
-    try
-    {
-        after_last = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
-    }
-    catch (const std::bad_alloc &ex)
-    {
-        throw MemoryException("Error allocating after last!");
-    }
+    
 
     if (this->isEmpty())
     {
+        std::shared_ptr<SetNode<Type>> after_last, before_first;
+        try
+        {
+            after_last = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
+            before_first = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
+        }
+        catch (const std::bad_alloc &ex)
+        {
+            throw MemoryException("Error allocating edge nodes!");
+        }
+
         this->head = node;
         this->tail = node;
 
         after_last->setPrev(this->tail);
         this->tail->setNext(after_last);
+
+        before_first->setNext(this->head);
+        this->head->setPrev(before_first);
     }
     else
     {
         node->setPrev(this->tail);
+        node->setNext(this->tail->getNext());
+
+        this->tail->getNext()->setPrev(node);
+
         this->tail->setNext(node);
         this->tail = node;
 
-        after_last->setPrev(node);
-        node->setNext(after_last);
+        
     }
 
     this->_size++;
@@ -158,6 +167,30 @@ template <typename Type>
 ConstIterator<Type> Set<Type>::end() const noexcept
 {
     return this->cend();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::crbegin() const noexcept
+{
+    return this->cbegin();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::crend() const noexcept
+{
+    return this->cend();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::rbegin() const noexcept
+{
+    return this->begin();
+}
+
+template <typename Type>
+ConstIterator<Type> Set<Type>::rend() const noexcept
+{
+    return this->end();
 }
 
 #pragma endregion

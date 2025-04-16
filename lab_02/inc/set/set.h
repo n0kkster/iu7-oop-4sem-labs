@@ -95,6 +95,10 @@ public:
     ConstIterator<Type> end() const noexcept; // +
     ConstIterator<Type> cbegin() const noexcept; // +
     ConstIterator<Type> cend() const noexcept; // +
+    ConstIterator<Type> rbegin() const noexcept; // +
+    ConstIterator<Type> rend() const noexcept; // +
+    ConstIterator<Type> crbegin() const noexcept; // +
+    ConstIterator<Type> crend() const noexcept; // +
 // ===================== ========= ======================
 #pragma endregion
 
