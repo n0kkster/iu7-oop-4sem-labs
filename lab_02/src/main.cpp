@@ -85,56 +85,62 @@ void test_assign()
     Set<int> is2({ 1, 2, 3, 4, 5, 6 });
 
     std::cout << "1. Присваивание другого списка" << std::endl;
-    std::cout << "Множество до присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tМножество до присваивания: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is1.assign(is2);
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tassign: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is1 = is2;
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\toperator =: ";
+    std::cout << "\t" << is1 << std::endl;
 
     // ================================================
 
     std::cout << "2. Присваивание rvalue" << std::endl;
     is1.clear();
 
-    std::cout << "Множество до присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tМножество до присваивания: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is1.assign(std::move(is2));
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tassign: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is2 = { 3, 2, 1, 0, -1, -2, -3 };
 
     is1 = std::move(is2);
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\toperator =: ";
+    std::cout << "\t" << is1 << std::endl;
 
     // ================================================
 
     std::cout << "3. Присваивание списка инициализации" << std::endl;
     is1.clear();
 
-    std::cout << "Множество до присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tМножество до присваивания: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is1.assign({ 1, 2, 3, 4, 5, 6 });
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\tassign: ";
+    std::cout << "\t" << is1 << std::endl;
 
     is1 = { 5, 4, 3, 2, 1 };
 
-    std::cout << "Множество после присваивания: ";
-    std::cout << is1 << std::endl;
+    std::cout << "\toperator =: ";
+    std::cout << "\t" << is1 << std::endl;
+
+    std::cout << "4. Последовательное присваивание:" << std::endl;
+    Set<int> is3;
+
+    is1 = is2 = is3 = { 1, 2, 3, 4 };
+    std::cout << "\t" << is1 << std::endl << "\t" << is2 << std::endl << "\t" << is3 << std::endl;
 
     std::cout << "=====================================\n";
 }
@@ -173,8 +179,165 @@ void test_union()
     is3 |= is2;
     std::cout << "\toperator |=: " << is3 << std::endl;
 
+    std::cout << "3. Последовательное объединение множеств:" << std::endl;
+    is3 = { 7, 8, 9, 10, 11, 12 };
+    Set<int> is4 = is1 + is2 + is3;
+    std::cout << is4 << std::endl;
+
     std::cout << "=====================================\n";
 }
+
+void test_intersection()
+{
+    std::cout << "=====================================\n";
+
+    Set<int> is1{ 1, 2, 3, 4, 5 };
+    Set<int> is2{ 4, 5, 6, 7, 8 };
+
+    std::cout << "1. Пересечение множеств " << is1 << " и " << is2
+              << " с созданием нового мн-ва:" << std::endl;
+
+    Set<int> is3 = is1.make_intersection(is2);
+    std::cout << "\tmake_intersection: " << is3 << std::endl;
+
+    is3 = is1 & is2;
+    std::cout << "\toperator &: " << is3 << std::endl;
+
+    std::cout << "2. Пересечение множеств " << is1 << " и " << is2
+              << " с модификацией исходного мн-ва:" << std::endl;
+
+    is3 = is1;
+    is3.intersect(is2);
+    std::cout << "\tintersect: " << is3 << std::endl;
+
+    is3 = is1;
+    is3 &= is2;
+    std::cout << "\toperator &=: " << is3 << std::endl;
+
+    std::cout << "3. Последовательное пересечение множеств:" << std::endl;
+    is3 = { 7, 8, 9, 10, 11, 12 };
+    Set<int> is4 = is1 & is2 & is3;
+    std::cout << is4 << std::endl;
+
+    std::cout << "=====================================\n";
+}
+
+void test_erase()
+{
+    std::cout << "=====================================\n";
+
+    Set<int> is({1, 2, 3, 4});
+    std::cout << "1. Удаление произвольного элемента из мн-ва " << is << " по значению (3): ";
+    is.erase(3);
+    std::cout << is << std::endl;
+
+    is.add(3);
+
+    std::cout << "2. Удаление первого элемента из мн-ва " << is << " по значению (1): ";
+    is.erase(1);
+    std::cout << is << std::endl;
+    
+    is.add(5);
+
+    std::cout << "3. Удаление последнего элемента из мн-ва " << is << " по значению (5): ";
+    is.erase(5);
+    std::cout << is << std::endl;
+
+    std::cout << "4. Удаление всех элементов элемента из мн-ва " << is << " в цикле: ";
+    for (auto it = is.cbegin(); it != is.cend();)
+        is.erase(it);
+    std::cout << is << std::endl;
+
+    std::cout << "=====================================\n";
+}
+
+void test_subtract()
+{
+    std::cout << "=====================================\n";
+
+    Set<int> is1({1, 2, 3, 4});
+    Set<int> is2({3, 4, 5, 6});
+
+    std::cout << "1. Вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_difference: " << is1.make_difference(is2) << std::endl;
+    std::cout << "\toperator -: " << is1 - is2 << std::endl;
+
+    is1.subtract(is2);
+    std::cout << "\tsubtract: " << is1 << std::endl;
+    is1 = {1, 2, 3, 4};
+    is1 -= is2;
+    std::cout << "\toperator -=: " << is1 << std::endl;
+
+    is1 = {1, 2, 3, 4};
+    is2 = {5, 6, 7, 8};
+    std::cout << "2. Вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_difference: " << is1.make_difference(is2) << std::endl;
+    std::cout << "\toperator -: " << is1 - is2 << std::endl;
+
+    is1.subtract(is2);
+    std::cout << "\tsubtract: " << is1 << std::endl;
+    is1 = {1, 2, 3, 4};
+    is1 -= is2;
+    std::cout << "\toperator -=: " << is1 << std::endl;
+
+    is2 = is1;
+    std::cout << "3. Вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_difference: " << is1.make_difference(is2) << std::endl;
+    std::cout << "\toperator -: " << is1 - is2 << std::endl;
+
+    is1.subtract(is2);
+    std::cout << "\tsubtract: " << is1 << std::endl;
+    is1 = {1, 2, 3, 4};
+    is1 -= is2;
+    std::cout << "\toperator -=: " << is1 << std::endl;
+
+    std::cout << "=====================================\n";
+}
+
+void test_xor()
+{
+    std::cout << "=====================================\n";
+
+    Set<int> is1({1, 2, 3, 4});
+    Set<int> is2({3, 4, 5, 6});
+
+    std::cout << "1. Симметрическое вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_symm_difference: " << is1.make_symm_difference(is2) << std::endl;
+    std::cout << "\toperator ^: " << (is1 ^ is2) << std::endl;
+
+    is1.symm_subtract(is2);
+    std::cout << "\tsymm_subtract: " << is1 << std::endl;
+    is1 = {1, 2, 3, 4};
+    is1 ^= is2;
+    std::cout << "\toperator ^=: " << is1 << std::endl;
+
+    is1 = {1, 2, 3, 4};
+    is2 = {5, 6, 7, 8};
+    std::cout << "2. Симметрическое вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_symm_difference: " << is1.make_symm_difference(is2) << std::endl;
+    std::cout << "\toperator ^: " << (is1 ^ is2) << std::endl;
+
+    is1.symm_subtract(is2);
+    std::cout << "\tsymm_subtract: " << is1 << std::endl;
+    is1 = {1, 2, 3, 4};
+    is1 ^= is2;
+    std::cout << "\toperator ^=: " << is1 << std::endl;
+
+    is2 = is1;
+    std::cout << "3. Симметрическое вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
+    std::cout << "\tmake_symm_difference: " << is1.make_symm_difference(is2) << std::endl;
+    std::cout << "\toperator ^: " << (is1 ^ is2) << std::endl;
+
+    is1.symm_subtract(is2);
+    std::cout << "\tsymm_subtract: " << is1 << std::endl;
+    is1 = is2;
+    is1 ^= is2;
+    std::cout << "\toperator ^=: " << is1 << std::endl;
+
+    std::cout << "=====================================\n";   
+}
+
+// #include <vector>
 
 int main()
 {
@@ -183,6 +346,10 @@ int main()
     test_addition();
     test_assign();
     test_union();
+    test_intersection();
+    test_erase();
+    test_subtract();
+    test_xor();
     // ==================== ТЕСТЫ ==================
 
     return 0;
