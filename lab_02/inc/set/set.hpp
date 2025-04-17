@@ -154,7 +154,7 @@ bool Set<Type>::erase(ConstIterator<Type> &pos)
 
     pos = it_copy;
     --_size;
-    
+
     return true;
 }
 
@@ -472,6 +472,62 @@ template <typename Type>
 Set<Type> &Set<Type>::operator&=(const std::initializer_list<Type> ilist)
 {
     return this->intersect(ilist);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::make_difference(const Set<Type> &other) const 
+{
+    Set<Type> copy(*this);
+
+    for (const auto &el : other)
+        copy.erase(el);
+
+    return copy;
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator-(const Set<Type> &other) const 
+{
+    return this->make_difference(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::subtract(const Set<Type> &other) 
+{
+    for (const auto &el : other)
+        this->erase(el);
+
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator-=(const Set<Type> &other) 
+{
+    return this->subtract(other);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::make_difference(const std::initializer_list<Type> ilist) const 
+{
+    return this->make_difference(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator-(const std::initializer_list<Type> ilist) const 
+{
+    return make_difference(ilist);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::subtract(const std::initializer_list<Type> ilist) 
+{
+    return this->subtract(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator-=(const std::initializer_list<Type> ilist) 
+{
+    return this->subtract(ilist);
 }
 
 #pragma endregion

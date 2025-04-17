@@ -82,8 +82,8 @@ public:
 
 #pragma region Erase
     // ============== Удаление элемента ===============
-    bool erase(const Type &value);
-    bool erase(ConstIterator<Type> &pos);
+    bool erase(const Type &value);        // +
+    bool erase(ConstIterator<Type> &pos); // +
     // ============== ================= ===============
 #pragma endregion
 
@@ -151,17 +151,17 @@ public:
     // ======= =========== =======
 
     // ======= Разность =======
-    Set<Type> make_difference(const Set<Type> &other) const;
-    Set<Type> operator-(const Set<Type> &other) const;
+    Set<Type> make_difference(const Set<Type> &other) const; // +
+    Set<Type> operator-(const Set<Type> &other) const;       // +
 
-    Set<Type> &subtract(const Set<Type> &other);
-    Set<Type> &operator-=(const Set<Type> &other);
+    Set<Type> &subtract(const Set<Type> &other);   // +
+    Set<Type> &operator-=(const Set<Type> &other); // +
 
-    Set<Type> make_difference(const std::initializer_list<Type> ilist) const;
-    Set<Type> operator-(const std::initializer_list<Type> ilist) const;
+    Set<Type> make_difference(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator-(const std::initializer_list<Type> ilist) const;       // +
 
-    Set<Type> &subtract(const std::initializer_list<Type> ilist);
-    Set<Type> &operator-=(const std::initializer_list<Type> ilist);
+    Set<Type> &subtract(const std::initializer_list<Type> ilist);   // +
+    Set<Type> &operator-=(const std::initializer_list<Type> ilist); // +
     // ======= ======== =======
 
     // ======= Симметрическая разность =======
