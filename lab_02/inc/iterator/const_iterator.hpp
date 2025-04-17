@@ -158,6 +158,7 @@ ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &o
     other.checkExpired(__LINE__);
 
     this->curr = other.curr.lock();
+    return *this;
 }
 
 template <typename Type>
@@ -167,6 +168,7 @@ ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &&
     other.checkExpired(__LINE__);
 
     this->curr = std::move(other.curr.lock());
+    return *this;
 }
 
 template <typename Type>
