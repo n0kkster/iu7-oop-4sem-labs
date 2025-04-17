@@ -76,8 +76,11 @@ public:
     // =============== ================ ===============
 
     // ========= Проверка множества на пустоту ========
-    bool isEmpty() const noexcept override; // +
+    bool empty() const noexcept override; // +
     // ========= ============================= ========
+
+    bool subsetOf(const Set<Type> &other) const;   // +
+    bool supersetOf(const Set<Type> &other) const; // +
 #pragma endregion
 
 #pragma region Erase
@@ -177,15 +180,17 @@ public:
     Set<Type> &symm_subtract(std::initializer_list<Type> ilist); // +
     Set<Type> &operator^=(std::initializer_list<Type> ilist);    // +
     // ======= =========== =======
+#pragma endregion
 
+#pragma region Compare
     // ======== Сравнение ========
-    std::partial_ordering operator<=>(const Set<Type> &other) const;
+    std::partial_ordering operator<=>(const Set<Type> &other) const; // +
     std::partial_ordering operator<=>(std::initializer_list<Type> ilist) const;
 
-    bool less(Set<Type> &other) const;
+    bool less(const Set<Type> &other) const; // +
     // bool operator<(const Set<Type> &other) const;
 
-    bool lessOrEqual(Set<Type> &other) const;
+    bool lessOrEqual(const Set<Type> &other) const; // +
     // bool operator<=(const Set<Type> &other) const;
 
     bool less(std::initializer_list<Type> ilist) const;
@@ -194,10 +199,10 @@ public:
     bool lessOrEqual(std::initializer_list<Type> ilist) const;
     // bool operator<=(std::initializer_list<Type> ilist) const;
 
-    bool greater(Set<Type> &other) const;
+    bool greater(const Set<Type> &other) const; // +
     // bool operator>(const Set<Type> &other) const;
 
-    bool greaterOrEqual(Set<Type> &other) const;
+    bool greaterOrEqual(const Set<Type> &other) const; // +
     // bool operator>=(const Set<Type> &other) const;
 
     bool greater(std::initializer_list<Type> ilist) const;
@@ -206,17 +211,20 @@ public:
     bool greaterOrEqual(std::initializer_list<Type> ilist) const;
     // bool operator>=(std::initializer_list<Type> ilist) const;
 
-    bool equal(Set<Type> &other) const;
-    // bool operator==(const Set<Type> &other) const;
+    bool equal(const Set<Type> &other) const;      // +
+    bool operator==(const Set<Type> &other) const; // +
 
     bool equal(std::initializer_list<Type> ilist) const;
     // bool operator==(std::initializer_list<Type> ilist) const;
 
-    bool notEqual(Set<Type> &other) const;
-    // bool operator!=(const Set<Type> &other) const;
+    bool notEqual(const Set<Type> &other) const;   // +
+    bool operator!=(const Set<Type> &other) const; // +
 
     bool notEqual(std::initializer_list<Type> ilist) const;
     // bool operator!=(std::initializer_list<Type> ilist) const;
+
+    bool comparable(const Set<Type> &other) const;
+    bool nonComparable(const Set<Type> &other) const;
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion

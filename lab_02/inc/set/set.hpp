@@ -3,7 +3,6 @@
 #include "exception.h"
 #include "set.h"
 
-#include <concepts>
 #include <iostream>
 
 #pragma region Constructors
@@ -60,7 +59,7 @@ bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
     if (this->in(node->value()))
         return false;
 
-    if (this->isEmpty())
+    if (this->empty())
     {
         std::shared_ptr<SetNode<Type>> after_last, before_first;
         try
@@ -136,7 +135,7 @@ bool Set<Type>::erase(ConstIterator<Type> &pos)
         return false;
 
     auto it_copy = pos + 1;
-    
+
     if (pos == this->cbegin())
     {
         auto temp = this->head;
@@ -226,7 +225,7 @@ ConstIterator<Type> Set<Type>::rend() const noexcept
 #pragma region Misc
 
 template <typename Type>
-bool Set<Type>::isEmpty() const noexcept
+bool Set<Type>::empty() const noexcept
 {
     return this->_size == 0;
 }
@@ -250,6 +249,22 @@ template <typename Type>
 size_t Set<Type>::size() const noexcept
 {
     return this->_size;
+}
+
+template <typename Type>
+bool Set<Type>::subsetOf(const Set<Type> &other) const
+{
+    for (const auto &el : *this)
+        if (!other.in(el))
+            return false;
+
+    return true;
+}
+
+template <typename Type>
+bool Set<Type>::supersetOf(const Set<Type> &other) const
+{
+    return other.subsetOf(*this);
 }
 
 #pragma endregion
@@ -482,7 +497,7 @@ Set<Type> &Set<Type>::operator&=(std::initializer_list<Type> ilist)
 }
 
 template <typename Type>
-Set<Type> Set<Type>::make_difference(const Set<Type> &other) const 
+Set<Type> Set<Type>::make_difference(const Set<Type> &other) const
 {
     Set<Type> copy(*this);
 
@@ -493,13 +508,13 @@ Set<Type> Set<Type>::make_difference(const Set<Type> &other) const
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator-(const Set<Type> &other) const 
+Set<Type> Set<Type>::operator-(const Set<Type> &other) const
 {
     return this->make_difference(other);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::subtract(const Set<Type> &other) 
+Set<Type> &Set<Type>::subtract(const Set<Type> &other)
 {
     for (const auto &el : other)
         this->erase(el);
@@ -508,31 +523,31 @@ Set<Type> &Set<Type>::subtract(const Set<Type> &other)
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator-=(const Set<Type> &other) 
+Set<Type> &Set<Type>::operator-=(const Set<Type> &other)
 {
     return this->subtract(other);
 }
 
 template <typename Type>
-Set<Type> Set<Type>::make_difference(std::initializer_list<Type> ilist) const 
+Set<Type> Set<Type>::make_difference(std::initializer_list<Type> ilist) const
 {
     return this->make_difference(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator-(std::initializer_list<Type> ilist) const 
+Set<Type> Set<Type>::operator-(std::initializer_list<Type> ilist) const
 {
     return this->make_difference(ilist);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::subtract(std::initializer_list<Type> ilist) 
+Set<Type> &Set<Type>::subtract(std::initializer_list<Type> ilist)
 {
     return this->subtract(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator-=(std::initializer_list<Type> ilist) 
+Set<Type> &Set<Type>::operator-=(std::initializer_list<Type> ilist)
 {
     return this->subtract(ilist);
 }
@@ -589,6 +604,86 @@ Set<Type> &Set<Type>::operator^=(std::initializer_list<Type> ilist)
 {
     return this->symm_subtract()(ilist);
 }
+
+#pragma endregion
+
+#pragma region Compare
+
+template <typename Type>
+bool Set<Type>::equal(const Set<Type> &other) const
+{
+    return this->_size == other._size && (*this - other).empty();
+}
+
+template <typename Type>
+bool Set<Type>::operator==(const Set<Type> &other) const
+{
+    return this->equal(other);
+}
+
+template <typename Type>
+bool Set<Type>::notEqual(const Set<Type> &other) const
+{
+    return !this->equal(other);
+}
+
+template <typename Type>
+bool Set<Type>::operator!=(const Set<Type> &other) const
+{
+    return this->notEqual(other);
+}
+
+template <typename Type>
+std::partial_ordering Set<Type>::operator<=>(const Set<Type> &other) const
+{
+    if (this->equal(other))
+        return std::partial_ordering::equivalent;
+
+    if (this->subsetOf(other))
+        return std::partial_ordering::less;
+
+    if (this->supersetOf(other))
+        return std::partial_ordering::greater;
+
+    return std::partial_ordering::unordered;
+}
+
+template <typename Type>
+bool Set<Type>::less(const Set<Type> &other) const
+{
+    return *this < other;
+}
+
+template <typename Type>
+bool Set<Type>::lessOrEqual(const Set<Type> &other) const
+{
+    return *this <= other;
+}
+
+template <typename Type>
+bool Set<Type>::greater(const Set<Type> &other) const
+{
+    return *this > other;
+}
+
+template <typename Type>
+bool Set<Type>::greaterOrEqual(const Set<Type> &other) const
+{
+    return *this >= other;
+}
+
+template <typename Type>
+bool Set<Type>::comparable(const Set<Type> &other) const
+{
+    return (*this <=> other) != std::partial_ordering::unordered;
+}
+
+template <typename Type>
+bool Set<Type>::nonComparable(const Set<Type> &other) const
+{
+    return (*this <=> other) == std::partial_ordering::unordered;
+}
+
 
 #pragma endregion
 
