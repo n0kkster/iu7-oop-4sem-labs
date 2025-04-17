@@ -1,7 +1,7 @@
 #pragma once
 
-#include "exception.h"
 #include "const_iterator.h"
+#include "exception.h"
 
 template <typename Type>
 ConstIterator<Type>::ConstIterator() noexcept
@@ -32,6 +32,12 @@ SetNode<Type> &ConstIterator<Type>::getCurr() const
 }
 
 template <typename Type>
+void ConstIterator<Type>::erase()
+{
+    this->curr.lock()->exclude();
+}
+
+template <typename Type>
 void ConstIterator<Type>::next()
 {
     checkExpired(__LINE__);
@@ -41,6 +47,19 @@ void ConstIterator<Type>::next()
 
     this->curr = getCurr().getNext();
 }
+
+template <typename Type>
+void ConstIterator<Type>::prev()
+{
+    checkExpired(__LINE__);
+
+    if (getCurr().getPrev() == nullptr)
+        throw OutOfRangeException("The iterator went out of bounds while trying to decrement.");
+
+    this->curr = getCurr().getPrev();
+}
+
+#pragma region Operators
 
 template <typename Type>
 ConstIterator<Type> &ConstIterator<Type>::operator++()
@@ -59,17 +78,6 @@ ConstIterator<Type> ConstIterator<Type>::operator++(int)
     auto copy = *this;
     next();
     return copy;
-}
-
-template <typename Type>
-void ConstIterator<Type>::prev()
-{
-    checkExpired(__LINE__);
-
-    if (getCurr().getPrev() == nullptr)
-        throw OutOfRangeException("The iterator went out of bounds while trying to decrement.");
-
-    this->curr = getCurr().getPrev();
 }
 
 template <typename Type>
@@ -92,20 +100,12 @@ ConstIterator<Type> ConstIterator<Type>::operator--(int)
 }
 
 template <typename Type>
-ConstIterator<Type>::operator bool() const
-{
-    checkExpired(__LINE__);
-
-    return this->curr.lock() != nullptr;
-}
-
-template <typename Type>
 ConstIterator<Type> ConstIterator<Type>::operator+(int n) const
 {
     checkExpired(__LINE__);
 
     auto copy = *this;
-    while (n --> 0)
+    while (n-- > 0)
         ++copy;
 
     return copy;
@@ -127,7 +127,7 @@ ConstIterator<Type> ConstIterator<Type>::operator-(int n) const
     checkExpired(__LINE__);
 
     auto copy = *this;
-    while (n --> 0)
+    while (n-- > 0)
         --copy;
 
     return copy;
@@ -139,8 +139,16 @@ ConstIterator<Type> &ConstIterator<Type>::operator-=(int n)
     checkExpired(__LINE__);
 
     *this = *this - n;
-    
+
     return *this;
+}
+
+template <typename Type>
+ConstIterator<Type>::operator bool() const
+{
+    checkExpired(__LINE__);
+
+    return this->curr.lock() != nullptr;
 }
 
 template <typename Type>
@@ -158,7 +166,7 @@ ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &&
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
 
-    this->curr = other.curr.lock();
+    this->curr = std::move(other.curr.lock());
 }
 
 template <typename Type>
@@ -203,6 +211,8 @@ bool ConstIterator<Type>::operator!=(const ConstIterator<Type> &other) const
 
     return this->curr.lock() != other.curr.lock();
 }
+
+#pragma endregion
 
 template <typename Type>
 void ConstIterator<Type>::checkExpired(int line) const

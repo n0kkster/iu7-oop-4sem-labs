@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
-#include <iterator>
-
 #include "base_iterator.h"
 #include "set_node.h"
+
+#include <iterator>
+#include <memory>
 
 template <typename Type>
 class ConstIterator : public BaseIterator<Type>
@@ -12,7 +12,7 @@ class ConstIterator : public BaseIterator<Type>
 
 private:
     // ======================= Геттеры ======================
-    SetNode<Type> &getCurr() const; 
+    SetNode<Type> &getCurr() const;
     // ================= =================== ================
 
 public:
@@ -31,13 +31,17 @@ public:
     void prev();
     // ================= =================== ================
 
+    // =============== Удаление ноды итератора ==============
+    void erase();
+    // =============== ======================= ==============
+
     // ================= Проверка итератора =================
     operator bool() const;
 
     void checkExpired(int line) const;
     // ================= ================== =================
 
-
+#pragma region Operators
     // ===================== Операторы ======================
     bool operator==(const ConstIterator<Type> &other) const;
     bool operator!=(const ConstIterator<Type> &other) const;
@@ -59,6 +63,7 @@ public:
     ConstIterator<Type> &operator--();
     ConstIterator<Type> operator--(int);
     // ===================== ========= ======================
+#pragma endregion
 
 };
 
