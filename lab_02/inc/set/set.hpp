@@ -121,6 +121,34 @@ bool Set<Type>::add(T &&value)
 
 #pragma endregion
 
+#pragma region Erase
+
+template <typename Type>
+void Set<Type>::erase(ConstIterator<Type> &pos)
+{
+    pos.erase();
+    --_size;
+}
+
+template <typename Type>
+bool Set<Type>::erase(const Type &value)
+{
+    ConstIterator<Type> it = this->find(value);
+    if (it == this->cend())
+        return false;
+
+    if (it == this->cbegin())
+        this->head = this->head->getNext();
+
+    if (it == this->cend() - 1)
+        this->tail = this->tail->getPrev();
+
+    this->erase(it);
+    return true;
+}
+
+#pragma endregion
+
 #pragma region Iterators
 
 template <typename Type>

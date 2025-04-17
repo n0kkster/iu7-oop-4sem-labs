@@ -83,7 +83,7 @@ public:
 #pragma region Erase
     // ============== Удаление элемента ===============
     bool erase(const Type &value);
-    void erase(ConstIterator<Type> pos);
+    void erase(ConstIterator<Type> &pos);
     // ============== ================= ===============
 #pragma endregion
 
@@ -138,27 +138,31 @@ public:
 
     // ======= Пересечение =======
     Set<Type> make_intersection(const Set<Type> &other) const; // +
-    Set<Type> operator&(const Set<Type> &other) const; // +
+    Set<Type> operator&(const Set<Type> &other) const;         // +
 
-    Set<Type> &intersect(const Set<Type> &other); // +
+    Set<Type> &intersect(const Set<Type> &other);  // +
     Set<Type> &operator&=(const Set<Type> &other); // +
 
     Set<Type> make_intersection(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator&(const std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator&(const std::initializer_list<Type> ilist) const;         // +
 
-    Set<Type> &intersect(const std::initializer_list<Type> ilist); // +
+    Set<Type> &intersect(const std::initializer_list<Type> ilist);  // +
     Set<Type> &operator&=(const std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Разность =======
-    Set<Type> difference(const Set<Type> &other) const;
+    Set<Type> make_difference(const Set<Type> &other) const;
     Set<Type> operator-(const Set<Type> &other) const;
+
+    Set<Type> &subtract(const Set<Type> &other);
     Set<Type> &operator-=(const Set<Type> &other);
 
-    Set<Type> difference(const std::initializer_list<Type> ilist) const;
+    Set<Type> make_difference(const std::initializer_list<Type> ilist) const;
     Set<Type> operator-(const std::initializer_list<Type> ilist) const;
+
+    Set<Type> &subtract(const std::initializer_list<Type> ilist);
     Set<Type> &operator-=(const std::initializer_list<Type> ilist);
-    // ======= =========== =======
+    // ======= ======== =======
 
     // ======= Симметрическая разность =======
     Set<Type> symmetric_difference(const Set<Type> &other) const;
@@ -212,7 +216,6 @@ public:
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion
-
 
 protected:
     bool add(const std::shared_ptr<SetNode<Type>> &node); // +
