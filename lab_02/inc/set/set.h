@@ -83,7 +83,7 @@ public:
 #pragma region Erase
     // ============== Удаление элемента ===============
     bool erase(const Type &value);
-    void erase(ConstIterator<Type> &pos);
+    bool erase(ConstIterator<Type> &pos);
     // ============== ================= ===============
 #pragma endregion
 

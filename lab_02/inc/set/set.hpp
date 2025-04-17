@@ -124,10 +124,38 @@ bool Set<Type>::add(T &&value)
 #pragma region Erase
 
 template <typename Type>
-void Set<Type>::erase(ConstIterator<Type> &pos)
+bool Set<Type>::erase(ConstIterator<Type> &pos)
 {
-    pos.erase();
+    if (this->head == this->tail)
+    {
+        this->clear();
+        return true;
+    }
+
+    if (pos == this->cend())
+        return false;
+
+    auto it_copy = pos + 1;
+    
+    if (pos == this->cbegin())
+    {
+        auto temp = this->head;
+        this->head = this->head->getNext();
+        temp->exclude();
+    }
+    else if (pos == this->cend() - 1)
+    {
+        auto temp = this->tail;
+        this->tail = this->tail->getPrev();
+        temp->exclude();
+    }
+    else
+        pos.erase();
+
+    pos = it_copy;
     --_size;
+    
+    return true;
 }
 
 template <typename Type>
@@ -136,12 +164,6 @@ bool Set<Type>::erase(const Type &value)
     ConstIterator<Type> it = this->find(value);
     if (it == this->cend())
         return false;
-
-    if (it == this->cbegin())
-        this->head = this->head->getNext();
-
-    if (it == this->cend() - 1)
-        this->tail = this->tail->getPrev();
 
     this->erase(it);
     return true;
