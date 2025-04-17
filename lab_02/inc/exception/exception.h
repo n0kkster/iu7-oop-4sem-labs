@@ -3,25 +3,25 @@
 #include "base_exception.h"
 #include <source_location>
 
-class IteratorException : BaseException
+class IteratorException : public BaseException
 {
 public:
     IteratorException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
-class SetException : BaseException
+class SetException : public BaseException
 {
 public:
     SetException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
-class MemoryException : BaseException
+class MemoryException : public BaseException
 {
 public:
     MemoryException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
-class OutOfRangeException : BaseException
+class OutOfRangeException : public BaseException
 {
 public:
     OutOfRangeException(const char *info, const std::source_location &loc = std::source_location::current());
