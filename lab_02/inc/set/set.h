@@ -28,7 +28,7 @@ public:
     // ==================== Конструкторы ====================
     Set() = default;
     Set(const size_t size, const Type *array);             // К-тор на основе некого массива. +
-    explicit Set(const std::initializer_list<Type> ilist); // К-тор на основе списка инициализации. +
+    explicit Set(std::initializer_list<Type> ilist); // К-тор на основе списка инициализации. +
     explicit Set(const Set<Type> &other);                  // К-тор копирования. +
     Set(Set<Type> &&other) noexcept;                       // К-тор переноса. +
 
@@ -114,8 +114,8 @@ public:
     Set<Type> &assign(Set<Type> &&other);    // +
     Set<Type> &operator=(Set<Type> &&other); // +
 
-    Set<Type> &assign(const std::initializer_list<Type> ilist);    // +
-    Set<Type> &operator=(const std::initializer_list<Type> ilist); // +
+    Set<Type> &assign(std::initializer_list<Type> ilist);    // +
+    Set<Type> &operator=(std::initializer_list<Type> ilist); // +
     // ======= ============ =======
 
     // ======= Объединение =======
@@ -127,13 +127,13 @@ public:
     Set<Type> &operator|=(const Set<Type> &other); // +
     Set<Type> &operator+=(const Set<Type> &other); // +
 
-    Set<Type> make_union(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator|(const std::initializer_list<Type> ilist) const;  // +
-    Set<Type> operator+(const std::initializer_list<Type> ilist) const;  // +
+    Set<Type> make_union(std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator|(std::initializer_list<Type> ilist) const;  // +
+    Set<Type> operator+(std::initializer_list<Type> ilist) const;  // +
 
-    Set<Type> &unite(const std::initializer_list<Type> ilist);      // +
-    Set<Type> &operator|=(const std::initializer_list<Type> ilist); // +
-    Set<Type> &operator+=(const std::initializer_list<Type> ilist); // +
+    Set<Type> &unite(std::initializer_list<Type> ilist);      // +
+    Set<Type> &operator|=(std::initializer_list<Type> ilist); // +
+    Set<Type> &operator+=(std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Пересечение =======
@@ -143,11 +143,11 @@ public:
     Set<Type> &intersect(const Set<Type> &other);  // +
     Set<Type> &operator&=(const Set<Type> &other); // +
 
-    Set<Type> make_intersection(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator&(const std::initializer_list<Type> ilist) const;         // +
+    Set<Type> make_intersection(std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator&(std::initializer_list<Type> ilist) const;         // +
 
-    Set<Type> &intersect(const std::initializer_list<Type> ilist);  // +
-    Set<Type> &operator&=(const std::initializer_list<Type> ilist); // +
+    Set<Type> &intersect(std::initializer_list<Type> ilist);  // +
+    Set<Type> &operator&=(std::initializer_list<Type> ilist); // +
     // ======= =========== =======
 
     // ======= Разность =======
@@ -157,11 +157,11 @@ public:
     Set<Type> &subtract(const Set<Type> &other);   // +
     Set<Type> &operator-=(const Set<Type> &other); // +
 
-    Set<Type> make_difference(const std::initializer_list<Type> ilist) const; // +
-    Set<Type> operator-(const std::initializer_list<Type> ilist) const;       // +
+    Set<Type> make_difference(std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator-(std::initializer_list<Type> ilist) const;       // +
 
-    Set<Type> &subtract(const std::initializer_list<Type> ilist);   // +
-    Set<Type> &operator-=(const std::initializer_list<Type> ilist); // +
+    Set<Type> &subtract(std::initializer_list<Type> ilist);   // +
+    Set<Type> &operator-=(std::initializer_list<Type> ilist); // +
     // ======= ======== =======
 
     // ======= Симметрическая разность =======
@@ -169,14 +169,14 @@ public:
     Set<Type> operator^(const Set<Type> &other) const;
     Set<Type> &operator^=(const Set<Type> &other);
 
-    Set<Type> symmetric_difference(const std::initializer_list<Type> ilist) const;
-    Set<Type> operator^(const std::initializer_list<Type> ilist) const;
-    Set<Type> &operator^=(const std::initializer_list<Type> ilist);
+    Set<Type> symmetric_difference(std::initializer_list<Type> ilist) const;
+    Set<Type> operator^(std::initializer_list<Type> ilist) const;
+    Set<Type> &operator^=(std::initializer_list<Type> ilist);
     // ======= =========== =======
 
     // ======== Сравнение ========
     std::partial_ordering operator<=>(const Set<Type> &other) const;
-    std::partial_ordering operator<=>(const std::initializer_list<Type> ilist) const;
+    std::partial_ordering operator<=>(std::initializer_list<Type> ilist) const;
 
     bool less(Set<Type> &other) const;
     // bool operator<(const Set<Type> &other) const;
@@ -184,11 +184,11 @@ public:
     bool lessOrEqual(Set<Type> &other) const;
     // bool operator<=(const Set<Type> &other) const;
 
-    bool less(const std::initializer_list<Type> ilist) const;
-    // bool operator<(const std::initializer_list<Type> ilist) const;
+    bool less(std::initializer_list<Type> ilist) const;
+    // bool operator<(std::initializer_list<Type> ilist) const;
 
-    bool lessOrEqual(const std::initializer_list<Type> ilist) const;
-    // bool operator<=(const std::initializer_list<Type> ilist) const;
+    bool lessOrEqual(std::initializer_list<Type> ilist) const;
+    // bool operator<=(std::initializer_list<Type> ilist) const;
 
     bool greater(Set<Type> &other) const;
     // bool operator>(const Set<Type> &other) const;
@@ -196,23 +196,23 @@ public:
     bool greaterOrEqual(Set<Type> &other) const;
     // bool operator>=(const Set<Type> &other) const;
 
-    bool greater(const std::initializer_list<Type> ilist) const;
-    // bool operator>(const std::initializer_list<Type> ilist) const;
+    bool greater(std::initializer_list<Type> ilist) const;
+    // bool operator>(std::initializer_list<Type> ilist) const;
 
-    bool greaterOrEqual(const std::initializer_list<Type> ilist) const;
-    // bool operator>=(const std::initializer_list<Type> ilist) const;
+    bool greaterOrEqual(std::initializer_list<Type> ilist) const;
+    // bool operator>=(std::initializer_list<Type> ilist) const;
 
     bool equal(Set<Type> &other) const;
     // bool operator==(const Set<Type> &other) const;
 
-    bool equal(const std::initializer_list<Type> ilist) const;
-    // bool operator==(const std::initializer_list<Type> ilist) const;
+    bool equal(std::initializer_list<Type> ilist) const;
+    // bool operator==(std::initializer_list<Type> ilist) const;
 
     bool notEqual(Set<Type> &other) const;
     // bool operator!=(const Set<Type> &other) const;
 
-    bool notEqual(const std::initializer_list<Type> ilist) const;
-    // bool operator!=(const std::initializer_list<Type> ilist) const;
+    bool notEqual(std::initializer_list<Type> ilist) const;
+    // bool operator!=(std::initializer_list<Type> ilist) const;
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion

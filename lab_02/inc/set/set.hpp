@@ -17,7 +17,7 @@ Set<Type>::Set(const size_t size, const Type *array) : Set()
 }
 
 template <typename Type>
-Set<Type>::Set(const std::initializer_list<Type> ilist) : Set()
+Set<Type>::Set(std::initializer_list<Type> ilist) : Set()
 {
     std::cout << "ilist cctor called\n";
     for (const Type &el : ilist)
@@ -326,7 +326,7 @@ Set<Type> &Set<Type>::operator=(Set<Type> &&other)
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::assign(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::assign(std::initializer_list<Type> ilist)
 {
     this->clear();
 
@@ -337,7 +337,7 @@ Set<Type> &Set<Type>::assign(const std::initializer_list<Type> ilist)
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator=(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::operator=(std::initializer_list<Type> ilist)
 {
     return this->assign(ilist);
 }
@@ -385,37 +385,37 @@ Set<Type> &Set<Type>::operator+=(const Set<Type> &other)
 }
 
 template <typename Type>
-Set<Type> Set<Type>::make_union(const std::initializer_list<Type> ilist) const
+Set<Type> Set<Type>::make_union(std::initializer_list<Type> ilist) const
 {
     return make_union(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator|(const std::initializer_list<Type> ilist) const
+Set<Type> Set<Type>::operator|(std::initializer_list<Type> ilist) const
 {
     return this->make_union(ilist);
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator+(const std::initializer_list<Type> ilist) const
+Set<Type> Set<Type>::operator+(std::initializer_list<Type> ilist) const
 {
     return this->make_union(ilist);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::unite(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::unite(std::initializer_list<Type> ilist)
 {
     return this->unite(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator|=(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::operator|=(std::initializer_list<Type> ilist)
 {
     return this->unite(ilist);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator+=(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::operator+=(std::initializer_list<Type> ilist)
 {
     return this->unite(ilist);
 }
@@ -451,25 +451,25 @@ Set<Type> &Set<Type>::operator&=(const Set<Type> &other)
 }
 
 template <typename Type>
-Set<Type> Set<Type>::make_intersection(const std::initializer_list<Type> ilist) const
+Set<Type> Set<Type>::make_intersection(std::initializer_list<Type> ilist) const
 {
     return this->make_intersection(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator&(const std::initializer_list<Type> ilist) const
+Set<Type> Set<Type>::operator&(std::initializer_list<Type> ilist) const
 {
     return this->make_intersection(ilist);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::intersect(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::intersect(std::initializer_list<Type> ilist)
 {
     return this->intersect(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator&=(const std::initializer_list<Type> ilist)
+Set<Type> &Set<Type>::operator&=(std::initializer_list<Type> ilist)
 {
     return this->intersect(ilist);
 }
@@ -507,28 +507,30 @@ Set<Type> &Set<Type>::operator-=(const Set<Type> &other)
 }
 
 template <typename Type>
-Set<Type> Set<Type>::make_difference(const std::initializer_list<Type> ilist) const 
+Set<Type> Set<Type>::make_difference(std::initializer_list<Type> ilist) const 
 {
     return this->make_difference(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> Set<Type>::operator-(const std::initializer_list<Type> ilist) const 
+Set<Type> Set<Type>::operator-(std::initializer_list<Type> ilist) const 
 {
     return make_difference(ilist);
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::subtract(const std::initializer_list<Type> ilist) 
+Set<Type> &Set<Type>::subtract(std::initializer_list<Type> ilist) 
 {
     return this->subtract(Set<Type>(ilist));
 }
 
 template <typename Type>
-Set<Type> &Set<Type>::operator-=(const std::initializer_list<Type> ilist) 
+Set<Type> &Set<Type>::operator-=(std::initializer_list<Type> ilist) 
 {
     return this->subtract(ilist);
 }
+
+
 
 #pragma endregion
 
