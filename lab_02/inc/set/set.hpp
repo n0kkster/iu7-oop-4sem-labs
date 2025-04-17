@@ -11,7 +11,7 @@
 template <typename Type>
 Set<Type>::Set(const size_t size, const Type *array) : Set()
 {
-    std::cout << "arr cctor called\n";
+    // std::cout << "arr cctor called\n";
     for (size_t i = 0; i < size; ++i)
         this->add(array[i]);
 }
@@ -19,7 +19,7 @@ Set<Type>::Set(const size_t size, const Type *array) : Set()
 template <typename Type>
 Set<Type>::Set(std::initializer_list<Type> ilist) : Set()
 {
-    std::cout << "ilist cctor called\n";
+    // std::cout << "ilist cctor called\n";
     for (const Type &el : ilist)
         this->add(el);
 }
@@ -27,7 +27,7 @@ Set<Type>::Set(std::initializer_list<Type> ilist) : Set()
 template <typename Type>
 Set<Type>::Set(const Set<Type> &other) : Set()
 {
-    std::cout << "copy cctor called\n";
+    // std::cout << "copy cctor called\n";
     for (const auto &el : other)
         this->add(el);
 }
@@ -35,7 +35,7 @@ Set<Type>::Set(const Set<Type> &other) : Set()
 template <typename Type>
 Set<Type>::Set(Set<Type> &&other) noexcept
 {
-    std::cout << "move cctor called\n";
+    // std::cout << "move cctor called\n";
 
     this->_size = other._size;
     this->head = std::move(other.head);
@@ -45,7 +45,7 @@ Set<Type>::Set(Set<Type> &&other) noexcept
 template <typename Type>
 Set<Type>::Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end)
 {
-    std::cout << "iter cctor called\n";
+    // std::cout << "iter cctor called\n";
     for (auto it = begin; it != end; ++it)
         this->add(*it);
 }
@@ -440,7 +440,14 @@ Set<Type> Set<Type>::operator&(const Set<Type> &other) const
 template <typename Type>
 Set<Type> &Set<Type>::intersect(const Set<Type> &other)
 {
-    *this = std::move(this->make_intersection(other));
+    for (auto it = this->cbegin(); it != this->cend();)
+    {
+        if (!other.in(*it))
+            this->erase(it);
+        else
+            ++it;
+    }
+
     return *this;
 }
 
@@ -515,7 +522,7 @@ Set<Type> Set<Type>::make_difference(std::initializer_list<Type> ilist) const
 template <typename Type>
 Set<Type> Set<Type>::operator-(std::initializer_list<Type> ilist) const 
 {
-    return make_difference(ilist);
+    return this->make_difference(ilist);
 }
 
 template <typename Type>
@@ -530,7 +537,58 @@ Set<Type> &Set<Type>::operator-=(std::initializer_list<Type> ilist)
     return this->subtract(ilist);
 }
 
+template <typename Type>
+Set<Type> Set<Type>::make_symm_difference(const Set<Type> &other) const
+{
+    Set<Type> d1 = *this - other;
+    Set<Type> d2 = other - *this;
+    return d1 + d2;
+}
 
+template <typename Type>
+Set<Type> Set<Type>::operator^(const Set<Type> &other) const
+{
+    return this->make_symm_difference(other);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::symm_subtract(const Set<Type> &other)
+{
+    Set<Type> intersection = *this & other;
+    *this += other;
+    *this -= intersection;
+    return *this;
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator^=(const Set<Type> &other)
+{
+    return this->symm_subtract(other);
+}
+
+template <typename Type>
+Set<Type> Set<Type>::make_symm_difference(std::initializer_list<Type> ilist) const
+{
+    return this->make_symm_difference(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> Set<Type>::operator^(std::initializer_list<Type> ilist) const
+{
+    return this->make_symm_difference(ilist);
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::symm_subtract(std::initializer_list<Type> ilist)
+{
+    return this->symm_subtract(Set<Type>(ilist));
+}
+
+template <typename Type>
+Set<Type> &Set<Type>::operator^=(std::initializer_list<Type> ilist)
+{
+    return this->symm_subtract()(ilist);
+}
 
 #pragma endregion
 

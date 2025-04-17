@@ -27,10 +27,10 @@ public:
 #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const Type *array);             // К-тор на основе некого массива. +
+    Set(const size_t size, const Type *array);       // К-тор на основе некого массива. +
     explicit Set(std::initializer_list<Type> ilist); // К-тор на основе списка инициализации. +
-    explicit Set(const Set<Type> &other);                  // К-тор копирования. +
-    Set(Set<Type> &&other) noexcept;                       // К-тор переноса. +
+    explicit Set(const Set<Type> &other);            // К-тор копирования. +
+    Set(Set<Type> &&other) noexcept;                 // К-тор переноса. +
 
     // template <typename Iter>
     Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам +
@@ -165,13 +165,17 @@ public:
     // ======= ======== =======
 
     // ======= Симметрическая разность =======
-    Set<Type> symmetric_difference(const Set<Type> &other) const;
-    Set<Type> operator^(const Set<Type> &other) const;
-    Set<Type> &operator^=(const Set<Type> &other);
+    Set<Type> make_symm_difference(const Set<Type> &other) const; // +
+    Set<Type> operator^(const Set<Type> &other) const;            // +
 
-    Set<Type> symmetric_difference(std::initializer_list<Type> ilist) const;
-    Set<Type> operator^(std::initializer_list<Type> ilist) const;
-    Set<Type> &operator^=(std::initializer_list<Type> ilist);
+    Set<Type> &symm_subtract(const Set<Type> &other); // +
+    Set<Type> &operator^=(const Set<Type> &other);    // +
+
+    Set<Type> make_symm_difference(std::initializer_list<Type> ilist) const; // +
+    Set<Type> operator^(std::initializer_list<Type> ilist) const;            // +
+
+    Set<Type> &symm_subtract(std::initializer_list<Type> ilist); // +
+    Set<Type> &operator^=(std::initializer_list<Type> ilist);    // +
     // ======= =========== =======
 
     // ======== Сравнение ========
