@@ -3,19 +3,19 @@
 #include "const_iterator.h"
 #include "exception.h"
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T>::ConstIterator() noexcept
 {
     this->curr.lock() = nullptr;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T>::ConstIterator(const std::shared_ptr<SetNode<T>> &pnode)
 {
     this->curr = pnode;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter)
 {
     checkExpired(__LINE__);
@@ -23,7 +23,7 @@ ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter)
     this->curr = iter.curr.lock();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 SetNode<T> &ConstIterator<T>::getCurr() const
 {
     checkExpired(__LINE__);
@@ -31,13 +31,13 @@ SetNode<T> &ConstIterator<T>::getCurr() const
     return *this->curr.lock();
 }
 
-template <typename T>
-void ConstIterator<T>::erase()
+template <CopyMoveAssignable T>
+void ConstIterator<T>::erase() const
 {
     this->curr.lock()->exclude();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 void ConstIterator<T>::next()
 {
     checkExpired(__LINE__);
@@ -48,7 +48,7 @@ void ConstIterator<T>::next()
     this->curr = getCurr().getNext();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 void ConstIterator<T>::prev()
 {
     checkExpired(__LINE__);
@@ -61,7 +61,7 @@ void ConstIterator<T>::prev()
 
 #pragma region Operators
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator++()
 {
     checkExpired(__LINE__);
@@ -70,7 +70,7 @@ ConstIterator<T> &ConstIterator<T>::operator++()
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> ConstIterator<T>::operator++(int)
 {
     checkExpired(__LINE__);
@@ -80,7 +80,7 @@ ConstIterator<T> ConstIterator<T>::operator++(int)
     return copy;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator--()
 {
     checkExpired(__LINE__);
@@ -89,7 +89,7 @@ ConstIterator<T> &ConstIterator<T>::operator--()
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> ConstIterator<T>::operator--(int)
 {
     checkExpired(__LINE__);
@@ -99,7 +99,7 @@ ConstIterator<T> ConstIterator<T>::operator--(int)
     return copy;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> ConstIterator<T>::operator+(int n) const
 {
     checkExpired(__LINE__);
@@ -111,7 +111,7 @@ ConstIterator<T> ConstIterator<T>::operator+(int n) const
     return copy;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator+=(int n)
 {
     checkExpired(__LINE__);
@@ -121,7 +121,7 @@ ConstIterator<T> &ConstIterator<T>::operator+=(int n)
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> ConstIterator<T>::operator-(int n) const
 {
     checkExpired(__LINE__);
@@ -133,7 +133,7 @@ ConstIterator<T> ConstIterator<T>::operator-(int n) const
     return copy;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator-=(int n)
 {
     checkExpired(__LINE__);
@@ -143,7 +143,7 @@ ConstIterator<T> &ConstIterator<T>::operator-=(int n)
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T>::operator bool() const
 {
     checkExpired(__LINE__);
@@ -151,7 +151,7 @@ ConstIterator<T>::operator bool() const
     return this->curr.lock() != nullptr;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
 {
     checkExpired(__LINE__);
@@ -161,8 +161,8 @@ ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
     return *this;
 }
 
-template <typename T>
-ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &&other)
+template <CopyMoveAssignable T>
+ConstIterator<T> &ConstIterator<T>::operator=(ConstIterator<T> &&other)
 {
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
@@ -171,7 +171,7 @@ ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &&other)
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 const T &ConstIterator<T>::operator*() const
 {
     checkExpired(__LINE__);
@@ -179,7 +179,7 @@ const T &ConstIterator<T>::operator*() const
     return getCurr().value();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 const T *ConstIterator<T>::operator->() const
 {
     checkExpired(__LINE__);
@@ -187,7 +187,7 @@ const T *ConstIterator<T>::operator->() const
     return &getCurr().value();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 const T &ConstIterator<T>::operator[](size_t offset) const
 {
     checkExpired(__LINE__);
@@ -196,7 +196,7 @@ const T &ConstIterator<T>::operator[](size_t offset) const
     return it.getCurr().value();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 bool ConstIterator<T>::operator==(const ConstIterator<T> &other) const
 {
     checkExpired(__LINE__);
@@ -205,7 +205,7 @@ bool ConstIterator<T>::operator==(const ConstIterator<T> &other) const
     return this->curr.lock() == other.curr.lock();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 bool ConstIterator<T>::operator!=(const ConstIterator<T> &other) const
 {
     checkExpired(__LINE__);
@@ -216,7 +216,7 @@ bool ConstIterator<T>::operator!=(const ConstIterator<T> &other) const
 
 #pragma endregion
 
-template <typename T>
+template <CopyMoveAssignable T>
 void ConstIterator<T>::checkExpired(int line) const
 {
     if (this->curr.expired() && this->curr.lock())
