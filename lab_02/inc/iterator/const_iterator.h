@@ -6,20 +6,20 @@
 #include <iterator>
 #include <memory>
 
-template <typename Type>
-class ConstIterator : public BaseIterator<Type>
+template <typename T>
+class ConstIterator : public BaseIterator<T>
 {
 
 private:
     // ======================= Геттеры ======================
-    SetNode<Type> &getCurr() const;
+    SetNode<T> &getCurr() const;
     // ================= =================== ================
 
 public:
     // ==================== Конструкторы ====================
     ConstIterator() noexcept;
-    explicit ConstIterator(const std::shared_ptr<SetNode<Type>> &pnode);
-    ConstIterator(const ConstIterator<Type> &iter);
+    explicit ConstIterator(const std::shared_ptr<SetNode<T>> &pnode);
+    ConstIterator(const ConstIterator<T> &iter);
     // ==================== ============ ====================
 
     // ===================== Деструктор =====================
@@ -43,25 +43,25 @@ public:
 
 #pragma region Operators
     // ===================== Операторы ======================
-    bool operator==(const ConstIterator<Type> &other) const;
-    bool operator!=(const ConstIterator<Type> &other) const;
+    bool operator==(const ConstIterator<T> &other) const;
+    bool operator!=(const ConstIterator<T> &other) const;
 
-    ConstIterator<Type> &operator=(const ConstIterator<Type> &other);
-    ConstIterator<Type> &operator=(const ConstIterator<Type> &&other);
+    ConstIterator<T> &operator=(const ConstIterator<T> &other);
+    ConstIterator<T> &operator=(const ConstIterator<T> &&other);
 
-    const Type &operator*() const;
-    const Type *operator->() const;
-    const Type &operator[](size_t offset) const;
+    const T &operator*() const;
+    const T *operator->() const;
+    const T &operator[](size_t offset) const;
 
-    ConstIterator<Type> &operator+=(int n);
-    ConstIterator<Type> operator+(int n) const;
-    ConstIterator<Type> &operator++();
-    ConstIterator<Type> operator++(int);
+    ConstIterator<T> &operator+=(int n);
+    ConstIterator<T> operator+(int n) const;
+    ConstIterator<T> &operator++();
+    ConstIterator<T> operator++(int);
 
-    ConstIterator<Type> &operator-=(int n);
-    ConstIterator<Type> operator-(int n) const;
-    ConstIterator<Type> &operator--();
-    ConstIterator<Type> operator--(int);
+    ConstIterator<T> &operator-=(int n);
+    ConstIterator<T> operator-(int n) const;
+    ConstIterator<T> &operator--();
+    ConstIterator<T> operator--(int);
     // ===================== ========= ======================
 #pragma endregion
 

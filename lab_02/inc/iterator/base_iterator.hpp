@@ -2,5 +2,5 @@
 
 #include "base_iterator.h"
 
-template <typename Type>
-BaseIterator<Type>::~BaseIterator() { }
+template <typename T>
+BaseIterator<T>::~BaseIterator() { }

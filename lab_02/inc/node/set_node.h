@@ -2,21 +2,21 @@
 
 #include <memory>
 
-template <typename Type>
+template <typename T>
 class SetNode
 {
 
 private:
-    Type data;
-    std::shared_ptr<SetNode<Type>> next;
-    std::shared_ptr<SetNode<Type>> prev;
+    T data;
+    std::shared_ptr<SetNode<T>> next;
+    std::shared_ptr<SetNode<T>> prev;
 
 public:
     // ==================== Конструкторы ====================
     SetNode() = default;
-    explicit SetNode(const Type &value);
-    explicit SetNode(Type &&value);
-    explicit SetNode(const std::shared_ptr<SetNode<Type>> &pnode);
+    explicit SetNode(const T &value);
+    explicit SetNode(T &&value);
+    explicit SetNode(const std::shared_ptr<SetNode<T>> &pnode);
     // ==================== ============ ====================
 
 
@@ -29,35 +29,35 @@ public:
 
 
     // ======================= Сеттеры ======================
-    void set(const Type &value) noexcept;
+    void set(const T &value) noexcept;
     void setNull();
 
-    void setNext(const SetNode<Type> &node);
-    void setNext(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
+    void setNext(const SetNode<T> &node);
+    void setNext(const std::shared_ptr<SetNode<T>> &pnode) noexcept;
     void setNextNull() noexcept;
 
-    void setPrev(const SetNode<Type> &node);
-    void setPrev(const std::shared_ptr<SetNode<Type>> &pnode) noexcept;
+    void setPrev(const SetNode<T> &node);
+    void setPrev(const std::shared_ptr<SetNode<T>> &pnode) noexcept;
     void setPrevNull() noexcept;
     // ======================= ======= ======================
 
 
     // ======================= Геттеры ======================
-    const Type &value() const noexcept;
+    const T &value() const noexcept;
 
-    std::shared_ptr<SetNode<Type>> getNext() const noexcept;
-    std::shared_ptr<SetNode<Type>> getPrev() const noexcept;
+    std::shared_ptr<SetNode<T>> getNext() const noexcept;
+    std::shared_ptr<SetNode<T>> getPrev() const noexcept;
     // ======================= ======= ======================
 
     // ===================== Операторы ======================
     // Мб добавить spaceship
 
-    bool operator==(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
-    bool operator!=(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    bool operator==(const std::shared_ptr<SetNode<T>> &other) const noexcept;
+    bool operator!=(const std::shared_ptr<SetNode<T>> &other) const noexcept;
     
     // Мб убрать эти сравнения
-    bool operator<(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
-    bool operator>(const std::shared_ptr<SetNode<Type>> &other) const noexcept;
+    bool operator<(const std::shared_ptr<SetNode<T>> &other) const noexcept;
+    bool operator>(const std::shared_ptr<SetNode<T>> &other) const noexcept;
     // ===================== ========= ======================
 
 };

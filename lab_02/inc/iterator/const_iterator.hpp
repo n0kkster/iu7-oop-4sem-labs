@@ -3,42 +3,42 @@
 #include "const_iterator.h"
 #include "exception.h"
 
-template <typename Type>
-ConstIterator<Type>::ConstIterator() noexcept
+template <typename T>
+ConstIterator<T>::ConstIterator() noexcept
 {
     this->curr.lock() = nullptr;
 }
 
-template <typename Type>
-ConstIterator<Type>::ConstIterator(const std::shared_ptr<SetNode<Type>> &pnode)
+template <typename T>
+ConstIterator<T>::ConstIterator(const std::shared_ptr<SetNode<T>> &pnode)
 {
     this->curr = pnode;
 }
 
-template <typename Type>
-ConstIterator<Type>::ConstIterator(const ConstIterator<Type> &iter)
+template <typename T>
+ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter)
 {
     checkExpired(__LINE__);
 
     this->curr = iter.curr.lock();
 }
 
-template <typename Type>
-SetNode<Type> &ConstIterator<Type>::getCurr() const
+template <typename T>
+SetNode<T> &ConstIterator<T>::getCurr() const
 {
     checkExpired(__LINE__);
 
     return *this->curr.lock();
 }
 
-template <typename Type>
-void ConstIterator<Type>::erase()
+template <typename T>
+void ConstIterator<T>::erase()
 {
     this->curr.lock()->exclude();
 }
 
-template <typename Type>
-void ConstIterator<Type>::next()
+template <typename T>
+void ConstIterator<T>::next()
 {
     checkExpired(__LINE__);
 
@@ -48,8 +48,8 @@ void ConstIterator<Type>::next()
     this->curr = getCurr().getNext();
 }
 
-template <typename Type>
-void ConstIterator<Type>::prev()
+template <typename T>
+void ConstIterator<T>::prev()
 {
     checkExpired(__LINE__);
 
@@ -61,8 +61,8 @@ void ConstIterator<Type>::prev()
 
 #pragma region Operators
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator++()
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator++()
 {
     checkExpired(__LINE__);
 
@@ -70,8 +70,8 @@ ConstIterator<Type> &ConstIterator<Type>::operator++()
     return *this;
 }
 
-template <typename Type>
-ConstIterator<Type> ConstIterator<Type>::operator++(int)
+template <typename T>
+ConstIterator<T> ConstIterator<T>::operator++(int)
 {
     checkExpired(__LINE__);
 
@@ -80,8 +80,8 @@ ConstIterator<Type> ConstIterator<Type>::operator++(int)
     return copy;
 }
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator--()
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator--()
 {
     checkExpired(__LINE__);
 
@@ -89,8 +89,8 @@ ConstIterator<Type> &ConstIterator<Type>::operator--()
     return *this;
 }
 
-template <typename Type>
-ConstIterator<Type> ConstIterator<Type>::operator--(int)
+template <typename T>
+ConstIterator<T> ConstIterator<T>::operator--(int)
 {
     checkExpired(__LINE__);
 
@@ -99,8 +99,8 @@ ConstIterator<Type> ConstIterator<Type>::operator--(int)
     return copy;
 }
 
-template <typename Type>
-ConstIterator<Type> ConstIterator<Type>::operator+(int n) const
+template <typename T>
+ConstIterator<T> ConstIterator<T>::operator+(int n) const
 {
     checkExpired(__LINE__);
 
@@ -111,8 +111,8 @@ ConstIterator<Type> ConstIterator<Type>::operator+(int n) const
     return copy;
 }
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator+=(int n)
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator+=(int n)
 {
     checkExpired(__LINE__);
 
@@ -121,8 +121,8 @@ ConstIterator<Type> &ConstIterator<Type>::operator+=(int n)
     return *this;
 }
 
-template <typename Type>
-ConstIterator<Type> ConstIterator<Type>::operator-(int n) const
+template <typename T>
+ConstIterator<T> ConstIterator<T>::operator-(int n) const
 {
     checkExpired(__LINE__);
 
@@ -133,8 +133,8 @@ ConstIterator<Type> ConstIterator<Type>::operator-(int n) const
     return copy;
 }
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator-=(int n)
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator-=(int n)
 {
     checkExpired(__LINE__);
 
@@ -143,16 +143,16 @@ ConstIterator<Type> &ConstIterator<Type>::operator-=(int n)
     return *this;
 }
 
-template <typename Type>
-ConstIterator<Type>::operator bool() const
+template <typename T>
+ConstIterator<T>::operator bool() const
 {
     checkExpired(__LINE__);
 
     return this->curr.lock() != nullptr;
 }
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &other)
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
 {
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
@@ -161,8 +161,8 @@ ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &o
     return *this;
 }
 
-template <typename Type>
-ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &&other)
+template <typename T>
+ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &&other)
 {
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
@@ -171,24 +171,24 @@ ConstIterator<Type> &ConstIterator<Type>::operator=(const ConstIterator<Type> &&
     return *this;
 }
 
-template <typename Type>
-const Type &ConstIterator<Type>::operator*() const
+template <typename T>
+const T &ConstIterator<T>::operator*() const
 {
     checkExpired(__LINE__);
 
     return getCurr().value();
 }
 
-template <typename Type>
-const Type *ConstIterator<Type>::operator->() const
+template <typename T>
+const T *ConstIterator<T>::operator->() const
 {
     checkExpired(__LINE__);
 
     return &getCurr().value();
 }
 
-template <typename Type>
-const Type &ConstIterator<Type>::operator[](size_t offset) const
+template <typename T>
+const T &ConstIterator<T>::operator[](size_t offset) const
 {
     checkExpired(__LINE__);
     auto it = this + offset;
@@ -196,8 +196,8 @@ const Type &ConstIterator<Type>::operator[](size_t offset) const
     return it.getCurr().value();
 }
 
-template <typename Type>
-bool ConstIterator<Type>::operator==(const ConstIterator<Type> &other) const
+template <typename T>
+bool ConstIterator<T>::operator==(const ConstIterator<T> &other) const
 {
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
@@ -205,8 +205,8 @@ bool ConstIterator<Type>::operator==(const ConstIterator<Type> &other) const
     return this->curr.lock() == other.curr.lock();
 }
 
-template <typename Type>
-bool ConstIterator<Type>::operator!=(const ConstIterator<Type> &other) const
+template <typename T>
+bool ConstIterator<T>::operator!=(const ConstIterator<T> &other) const
 {
     checkExpired(__LINE__);
     other.checkExpired(__LINE__);
@@ -216,8 +216,8 @@ bool ConstIterator<Type>::operator!=(const ConstIterator<Type> &other) const
 
 #pragma endregion
 
-template <typename Type>
-void ConstIterator<Type>::checkExpired(int line) const
+template <typename T>
+void ConstIterator<T>::checkExpired(int line) const
 {
     if (this->curr.expired() && this->curr.lock())
         throw new IteratorException("Iterator pointer expired.");

@@ -4,7 +4,7 @@
 
 #include <memory>
 
-template <typename Type>
+template <typename T>
 class BaseIterator
 {
 public:
@@ -12,7 +12,7 @@ public:
     virtual ~BaseIterator() = 0;
 
 protected:
-    std::weak_ptr<SetNode<Type>> curr;
+    std::weak_ptr<SetNode<T>> curr;
 };
 
 #include "base_iterator.hpp"

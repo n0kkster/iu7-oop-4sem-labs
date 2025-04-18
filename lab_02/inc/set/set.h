@@ -2,6 +2,7 @@
 
 #include "base_container.h"
 #include "const_iterator.h"
+#include "set_concepts.h"
 #include "set_node.h"
 #include <initializer_list>
 
@@ -9,15 +10,15 @@
 #include <concepts>
 #include <memory>
 
-template <typename Type>
+template <typename T>
 class Set : public BaseContainer
 {
 
 public:
 #pragma region Aliases
-    using value_type = Type;
-    using reference = Type &;
-    using const_reference = const Type &;
+    using value_type = T;
+    using reference = T &;
+    using const_reference = const T &;
     using iterator = ConstIterator<value_type>;
     using const_iterator = ConstIterator<value_type>;
     using difference_type = ptrdiff_t;
@@ -27,13 +28,13 @@ public:
 #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const Type *array); // К-тор на основе некого массива. +
-    Set(std::initializer_list<Type> ilist);    // К-тор на основе списка инициализации. +
-    explicit Set(const Set<Type> &other);      // К-тор копирования. +
-    Set(Set<Type> &&other) noexcept;           // К-тор переноса. +
+    Set(const size_t size, const T *array); // К-тор на основе некого массива. +
+    Set(std::initializer_list<T> ilist);    // К-тор на основе списка инициализации. +
+    explicit Set(const Set<T> &other);      // К-тор копирования. +
+    Set(Set<T> &&other) noexcept;           // К-тор переноса. +
 
     // template <typename Iter>
-    Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end); // К-тор по двум итераторам +
+    Set(const ConstIterator<T> &begin, const ConstIterator<T> &end); // К-тор по двум итераторам +
 
     // Добавить конструктор от range
     // ==================== ============ ====================
@@ -49,20 +50,20 @@ public:
 
 #pragma region Add
     // ======= Добавление элемента в множество =======
-    template <typename T>
-        requires std::same_as<std::decay_t<T>, Type>
-    bool add(T &&value); // +
+    template <typename R>
+        requires std::same_as<std::decay_t<R>, T>
+    bool add(R &&value); // +
 // ======= ================================ =======
 #pragma endregion
 
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
-    bool in(const Type &value) const noexcept;             // +
-    bool in(const ConstIterator<Type> &it) const noexcept; // +
+    bool in(const T &value) const noexcept;             // +
+    bool in(const ConstIterator<T> &it) const noexcept; // +
     // ======== ============================== ========
 
     // ================ Поиск элемента ================
-    ConstIterator<Type> find(const Type &value) const noexcept; // +
+    ConstIterator<T> find(const T &value) const noexcept; // +
     // ================ ============== ================
 #pragma endregion
 
@@ -79,14 +80,14 @@ public:
     bool empty() const noexcept override; // +
     // ========= ============================= ========
 
-    bool subsetOf(const Set<Type> &other) const;   // +
-    bool supersetOf(const Set<Type> &other) const; // +
+    bool subsetOf(const Set<T> &other) const;   // +
+    bool supersetOf(const Set<T> &other) const; // +
 #pragma endregion
 
 #pragma region Erase
     // ============== Удаление элемента ===============
-    bool erase(const Type &value);        // +
-    bool erase(ConstIterator<Type> &pos); // +
+    bool erase(const T &value);        // +
+    bool erase(ConstIterator<T> &pos); // +
     // ============== ================= ===============
 #pragma endregion
 
@@ -94,14 +95,14 @@ public:
 
 #pragma region Iterators
     // ===================== Итераторы ======================
-    ConstIterator<Type> begin() const noexcept;   // +
-    ConstIterator<Type> end() const noexcept;     // +
-    ConstIterator<Type> cbegin() const noexcept;  // +
-    ConstIterator<Type> cend() const noexcept;    // +
-    ConstIterator<Type> rbegin() const noexcept;  // +
-    ConstIterator<Type> rend() const noexcept;    // +
-    ConstIterator<Type> crbegin() const noexcept; // +
-    ConstIterator<Type> crend() const noexcept;   // +
+    ConstIterator<T> begin() const noexcept;   // +
+    ConstIterator<T> end() const noexcept;     // +
+    ConstIterator<T> cbegin() const noexcept;  // +
+    ConstIterator<T> cend() const noexcept;    // +
+    ConstIterator<T> rbegin() const noexcept;  // +
+    ConstIterator<T> rend() const noexcept;    // +
+    ConstIterator<T> crbegin() const noexcept; // +
+    ConstIterator<T> crend() const noexcept;   // +
 // ===================== ========= ======================
 #pragma endregion
 
@@ -110,76 +111,76 @@ public:
 
     // ======= Присваивание =======
     // Копирующий оператор присваивания
-    Set<Type> &assign(const Set<Type> &other);    // +
-    Set<Type> &operator=(const Set<Type> &other); // +
+    Set<T> &assign(const Set<T> &other);    // +
+    Set<T> &operator=(const Set<T> &other); // +
 
     // Перемещающий оператор присваивания
-    Set<Type> &assign(Set<Type> &&other);    // +
-    Set<Type> &operator=(Set<Type> &&other); // +
+    Set<T> &assign(Set<T> &&other);    // +
+    Set<T> &operator=(Set<T> &&other); // +
     // ======= ============ =======
 
     // ======= Объединение =======
-    Set<Type> make_union(const Set<Type> &other) const; // +
-    Set<Type> operator|(const Set<Type> &other) const;  // +
-    Set<Type> operator+(const Set<Type> &other) const;  // +
+    Set<T> make_union(const Set<T> &other) const; // +
+    Set<T> operator|(const Set<T> &other) const;  // +
+    Set<T> operator+(const Set<T> &other) const;  // +
 
-    Set<Type> &unite(const Set<Type> &other);      // +
-    Set<Type> &operator|=(const Set<Type> &other); // +
-    Set<Type> &operator+=(const Set<Type> &other); // +
+    Set<T> &unite(const Set<T> &other);      // +
+    Set<T> &operator|=(const Set<T> &other); // +
+    Set<T> &operator+=(const Set<T> &other); // +
     // ======= =========== =======
 
     // ======= Пересечение =======
-    Set<Type> make_intersection(const Set<Type> &other) const; // +
-    Set<Type> operator&(const Set<Type> &other) const;         // +
+    Set<T> make_intersection(const Set<T> &other) const; // +
+    Set<T> operator&(const Set<T> &other) const;         // +
 
-    Set<Type> &intersect(const Set<Type> &other);  // +
-    Set<Type> &operator&=(const Set<Type> &other); // +
+    Set<T> &intersect(const Set<T> &other);  // +
+    Set<T> &operator&=(const Set<T> &other); // +
     // ======= =========== =======
 
     // ======= Разность =======
-    Set<Type> make_difference(const Set<Type> &other) const; // +
-    Set<Type> operator-(const Set<Type> &other) const;       // +
+    Set<T> make_difference(const Set<T> &other) const; // +
+    Set<T> operator-(const Set<T> &other) const;       // +
 
-    Set<Type> &subtract(const Set<Type> &other);   // +
-    Set<Type> &operator-=(const Set<Type> &other); // +
+    Set<T> &subtract(const Set<T> &other);   // +
+    Set<T> &operator-=(const Set<T> &other); // +
     // ======= ======== =======
 
     // ======= Симметрическая разность =======
-    Set<Type> make_symm_difference(const Set<Type> &other) const; // +
-    Set<Type> operator^(const Set<Type> &other) const;            // +
+    Set<T> make_symm_difference(const Set<T> &other) const; // +
+    Set<T> operator^(const Set<T> &other) const;            // +
 
-    Set<Type> &symm_subtract(const Set<Type> &other); // +
-    Set<Type> &operator^=(const Set<Type> &other);    // +
+    Set<T> &symm_subtract(const Set<T> &other); // +
+    Set<T> &operator^=(const Set<T> &other);    // +
     // ======= =========== =======
 #pragma endregion
 
 #pragma region Compare
     // ======== Сравнение ========
-    std::partial_ordering operator<=>(const Set<Type> &other) const; // +
+    std::partial_ordering operator<=>(const Set<T> &other) const; // +
 
-    bool less(const Set<Type> &other) const;           // +
-    bool lessOrEqual(const Set<Type> &other) const;    // +
-    bool greater(const Set<Type> &other) const;        // +
-    bool greaterOrEqual(const Set<Type> &other) const; // +
+    bool less(const Set<T> &other) const;           // +
+    bool lessOrEqual(const Set<T> &other) const;    // +
+    bool greater(const Set<T> &other) const;        // +
+    bool greaterOrEqual(const Set<T> &other) const; // +
 
-    bool equal(const Set<Type> &other) const;      // +
-    bool operator==(const Set<Type> &other) const; // +
+    bool equal(const Set<T> &other) const;      // +
+    bool operator==(const Set<T> &other) const; // +
 
-    bool notEqual(const Set<Type> &other) const;   // +
-    bool operator!=(const Set<Type> &other) const; // +
+    bool notEqual(const Set<T> &other) const;   // +
+    bool operator!=(const Set<T> &other) const; // +
 
-    bool comparable(const Set<Type> &other) const;
-    bool nonComparable(const Set<Type> &other) const;
+    bool comparable(const Set<T> &other) const;
+    bool nonComparable(const Set<T> &other) const;
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion
 
 protected:
-    bool add(const std::shared_ptr<SetNode<Type>> &node); // +
+    bool add(const std::shared_ptr<SetNode<T>> &node); // +
 
 private:
-    std::shared_ptr<SetNode<Type>> head;
-    std::shared_ptr<SetNode<Type>> tail;
+    std::shared_ptr<SetNode<T>> head;
+    std::shared_ptr<SetNode<T>> tail;
 };
 
 #include "set.hpp"

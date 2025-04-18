@@ -7,32 +7,32 @@
 
 #pragma region Constructors
 
-template <typename Type>
-Set<Type>::Set(const size_t size, const Type *array) : Set()
+template <typename T>
+Set<T>::Set(const size_t size, const T *array) : Set()
 {
     // std::cout << "arr cctor called\n";
     for (size_t i = 0; i < size; ++i)
         this->add(array[i]);
 }
 
-template <typename Type>
-Set<Type>::Set(std::initializer_list<Type> ilist) : Set()
+template <typename T>
+Set<T>::Set(std::initializer_list<T> ilist) : Set()
 {
     // std::cout << "ilist cctor called\n";
-    for (const Type &el : ilist)
+    for (const T &el : ilist)
         this->add(el);
 }
 
-template <typename Type>
-Set<Type>::Set(const Set<Type> &other) : Set()
+template <typename T>
+Set<T>::Set(const Set<T> &other) : Set()
 {
     // std::cout << "copy cctor called\n";
     for (const auto &el : other)
         this->add(el);
 }
 
-template <typename Type>
-Set<Type>::Set(Set<Type> &&other) noexcept
+template <typename T>
+Set<T>::Set(Set<T> &&other) noexcept
 {
     // std::cout << "move cctor called\n";
 
@@ -41,8 +41,8 @@ Set<Type>::Set(Set<Type> &&other) noexcept
     this->tail = std::move(other.tail);
 }
 
-template <typename Type>
-Set<Type>::Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end)
+template <typename T>
+Set<T>::Set(const ConstIterator<T> &begin, const ConstIterator<T> &end)
 {
     // std::cout << "iter cctor called\n";
     for (auto it = begin; it != end; ++it)
@@ -53,19 +53,19 @@ Set<Type>::Set(const ConstIterator<Type> &begin, const ConstIterator<Type> &end)
 
 #pragma region Add
 
-template <typename Type>
-bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
+template <typename T>
+bool Set<T>::add(const std::shared_ptr<SetNode<T>> &node)
 {
     if (this->in(node->value()))
         return false;
 
     if (this->empty())
     {
-        std::shared_ptr<SetNode<Type>> after_last, before_first;
+        std::shared_ptr<SetNode<T>> after_last, before_first;
         try
         {
-            after_last = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
-            before_first = std::make_shared<SetNode<Type>>(std::move(SetNode<Type>()));
+            after_last = std::make_shared<SetNode<T>>(std::move(SetNode<T>()));
+            before_first = std::make_shared<SetNode<T>>(std::move(SetNode<T>()));
         }
         catch (const std::bad_alloc &ex)
         {
@@ -97,18 +97,18 @@ bool Set<Type>::add(const std::shared_ptr<SetNode<Type>> &node)
     return true;
 }
 
-template <typename Type>
 template <typename T>
-    requires std::same_as<std::decay_t<T>, Type>
-bool Set<Type>::add(T &&value)
+template <typename R>
+    requires std::same_as<std::decay_t<R>, T>
+bool Set<T>::add(R &&value)
 {
     if (this->in(value))
         return false;
 
-    std::shared_ptr<SetNode<Type>> newNode;
+    std::shared_ptr<SetNode<T>> newNode;
     try
     {
-        newNode = std::make_shared<SetNode<Type>>(std::forward<T>(value));
+        newNode = std::make_shared<SetNode<T>>(std::forward<R>(value));
     }
     catch (const std::bad_alloc &ex)
     {
@@ -122,8 +122,8 @@ bool Set<Type>::add(T &&value)
 
 #pragma region Erase
 
-template <typename Type>
-bool Set<Type>::erase(ConstIterator<Type> &pos)
+template <typename T>
+bool Set<T>::erase(ConstIterator<T> &pos)
 {
     if (this->head == this->tail)
     {
@@ -157,10 +157,10 @@ bool Set<Type>::erase(ConstIterator<Type> &pos)
     return true;
 }
 
-template <typename Type>
-bool Set<Type>::erase(const Type &value)
+template <typename T>
+bool Set<T>::erase(const T &value)
 {
-    ConstIterator<Type> it = this->find(value);
+    ConstIterator<T> it = this->find(value);
     if (it == this->cend())
         return false;
 
@@ -172,50 +172,50 @@ bool Set<Type>::erase(const Type &value)
 
 #pragma region Iterators
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::cbegin() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::cbegin() const noexcept
 {
-    return ConstIterator<Type>(this->head);
+    return ConstIterator<T>(this->head);
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::cend() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::cend() const noexcept
 {
-    return this->tail ? ConstIterator<Type>(this->tail->getNext()) : ConstIterator<Type>();
+    return this->tail ? ConstIterator<T>(this->tail->getNext()) : ConstIterator<T>();
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::begin() const noexcept
-{
-    return this->cbegin();
-}
-
-template <typename Type>
-ConstIterator<Type> Set<Type>::end() const noexcept
-{
-    return this->cend();
-}
-
-template <typename Type>
-ConstIterator<Type> Set<Type>::crbegin() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::begin() const noexcept
 {
     return this->cbegin();
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::crend() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::end() const noexcept
 {
     return this->cend();
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::rbegin() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::crbegin() const noexcept
+{
+    return this->cbegin();
+}
+
+template <typename T>
+ConstIterator<T> Set<T>::crend() const noexcept
+{
+    return this->cend();
+}
+
+template <typename T>
+ConstIterator<T> Set<T>::rbegin() const noexcept
 {
     return this->begin();
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::rend() const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::rend() const noexcept
 {
     return this->end();
 }
@@ -224,14 +224,14 @@ ConstIterator<Type> Set<Type>::rend() const noexcept
 
 #pragma region Misc
 
-template <typename Type>
-bool Set<Type>::empty() const noexcept
+template <typename T>
+bool Set<T>::empty() const noexcept
 {
     return this->_size == 0;
 }
 
-template <typename Type>
-void Set<Type>::clear()
+template <typename T>
+void Set<T>::clear()
 {
     while (this->head)
     {
@@ -245,14 +245,14 @@ void Set<Type>::clear()
     this->_size = 0;
 }
 
-template <typename Type>
-size_t Set<Type>::size() const noexcept
+template <typename T>
+size_t Set<T>::size() const noexcept
 {
     return this->_size;
 }
 
-template <typename Type>
-bool Set<Type>::subsetOf(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::subsetOf(const Set<T> &other) const
 {
     for (const auto &el : *this)
         if (!other.in(el))
@@ -261,8 +261,8 @@ bool Set<Type>::subsetOf(const Set<Type> &other) const
     return true;
 }
 
-template <typename Type>
-bool Set<Type>::supersetOf(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::supersetOf(const Set<T> &other) const
 {
     return other.subsetOf(*this);
 }
@@ -271,8 +271,8 @@ bool Set<Type>::supersetOf(const Set<Type> &other) const
 
 #pragma region Find
 
-template <typename Type>
-bool Set<Type>::in(const Type &value) const noexcept
+template <typename T>
+bool Set<T>::in(const T &value) const noexcept
 {
     for (const auto &el : *this)
         if (el == value)
@@ -280,8 +280,8 @@ bool Set<Type>::in(const Type &value) const noexcept
     return false;
 }
 
-template <typename Type>
-bool Set<Type>::in(const ConstIterator<Type> &it) const noexcept
+template <typename T>
+bool Set<T>::in(const ConstIterator<T> &it) const noexcept
 {
     for (const auto &el : *this)
         if (el == *it)
@@ -289,8 +289,8 @@ bool Set<Type>::in(const ConstIterator<Type> &it) const noexcept
     return false;
 }
 
-template <typename Type>
-ConstIterator<Type> Set<Type>::find(const Type &value) const noexcept
+template <typename T>
+ConstIterator<T> Set<T>::find(const T &value) const noexcept
 {
     for (auto it = this->cbegin(); it != this->cend(); ++it)
         if (*it == value)
@@ -303,8 +303,8 @@ ConstIterator<Type> Set<Type>::find(const Type &value) const noexcept
 
 #pragma region Operators
 
-template <typename Type>
-Set<Type> &Set<Type>::assign(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::assign(const Set<T> &other)
 {
     if (&other == this)
         return *this;
@@ -316,14 +316,14 @@ Set<Type> &Set<Type>::assign(const Set<Type> &other)
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator=(const Set<T> &other)
 {
     return this->assign(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::assign(Set<Type> &&other)
+template <typename T>
+Set<T> &Set<T>::assign(Set<T> &&other)
 {
     this->clear();
 
@@ -334,35 +334,35 @@ Set<Type> &Set<Type>::assign(Set<Type> &&other)
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator=(Set<Type> &&other)
+template <typename T>
+Set<T> &Set<T>::operator=(Set<T> &&other)
 {
-    return this->assign(std::forward<Set<Type>>(other));
+    return this->assign(std::forward<Set<T>>(other));
 }
 
-template <typename Type>
-Set<Type> Set<Type>::make_union(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::make_union(const Set<T> &other) const
 {
-    Set<Type> set_union(*this);
+    Set<T> set_union(*this);
     set_union.unite(other);
 
     return set_union;
 }
 
-template <typename Type>
-Set<Type> Set<Type>::operator|(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::operator|(const Set<T> &other) const
 {
     return this->make_union(other);
 }
 
-template <typename Type>
-Set<Type> Set<Type>::operator+(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::operator+(const Set<T> &other) const
 {
     return this->make_union(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::unite(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::unite(const Set<T> &other)
 {
     for (const auto &el : other)
         this->add(el);
@@ -370,22 +370,22 @@ Set<Type> &Set<Type>::unite(const Set<Type> &other)
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator|=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator|=(const Set<T> &other)
 {
     return this->unite(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator+=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator+=(const Set<T> &other)
 {
     return this->unite(other);
 }
 
-template <typename Type>
-Set<Type> Set<Type>::make_intersection(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::make_intersection(const Set<T> &other) const
 {
-    Set<Type> copy;
+    Set<T> copy;
     for (const auto &el : *this)
         if (other.in(el))
             copy.add(el);
@@ -393,14 +393,14 @@ Set<Type> Set<Type>::make_intersection(const Set<Type> &other) const
     return copy;
 }
 
-template <typename Type>
-Set<Type> Set<Type>::operator&(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::operator&(const Set<T> &other) const
 {
     return this->make_intersection(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::intersect(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::intersect(const Set<T> &other)
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
@@ -413,16 +413,16 @@ Set<Type> &Set<Type>::intersect(const Set<Type> &other)
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator&=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator&=(const Set<T> &other)
 {
     return this->intersect(other);
 }
 
-template <typename Type>
-Set<Type> Set<Type>::make_difference(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::make_difference(const Set<T> &other) const
 {
-    Set<Type> copy(*this);
+    Set<T> copy(*this);
 
     for (const auto &el : other)
         copy.erase(el);
@@ -430,14 +430,14 @@ Set<Type> Set<Type>::make_difference(const Set<Type> &other) const
     return copy;
 }
 
-template <typename Type>
-Set<Type> Set<Type>::operator-(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::operator-(const Set<T> &other) const
 {
     return this->make_difference(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::subtract(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::subtract(const Set<T> &other)
 {
     for (const auto &el : other)
         this->erase(el);
@@ -445,37 +445,37 @@ Set<Type> &Set<Type>::subtract(const Set<Type> &other)
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator-=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator-=(const Set<T> &other)
 {
     return this->subtract(other);
 }
 
-template <typename Type>
-Set<Type> Set<Type>::make_symm_difference(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::make_symm_difference(const Set<T> &other) const
 {
-    Set<Type> d1 = *this - other;
-    Set<Type> d2 = other - *this;
+    Set<T> d1 = *this - other;
+    Set<T> d2 = other - *this;
     return d1 + d2;
 }
 
-template <typename Type>
-Set<Type> Set<Type>::operator^(const Set<Type> &other) const
+template <typename T>
+Set<T> Set<T>::operator^(const Set<T> &other) const
 {
     return this->make_symm_difference(other);
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::symm_subtract(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::symm_subtract(const Set<T> &other)
 {
-    Set<Type> intersection = *this & other;
+    Set<T> intersection = *this & other;
     *this += other;
     *this -= intersection;
     return *this;
 }
 
-template <typename Type>
-Set<Type> &Set<Type>::operator^=(const Set<Type> &other)
+template <typename T>
+Set<T> &Set<T>::operator^=(const Set<T> &other)
 {
     return this->symm_subtract(other);
 }
@@ -484,32 +484,32 @@ Set<Type> &Set<Type>::operator^=(const Set<Type> &other)
 
 #pragma region Compare
 
-template <typename Type>
-bool Set<Type>::equal(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::equal(const Set<T> &other) const
 {
     return this->_size == other._size && (*this - other).empty();
 }
 
-template <typename Type>
-bool Set<Type>::operator==(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::operator==(const Set<T> &other) const
 {
     return this->equal(other);
 }
 
-template <typename Type>
-bool Set<Type>::notEqual(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::notEqual(const Set<T> &other) const
 {
     return !this->equal(other);
 }
 
-template <typename Type>
-bool Set<Type>::operator!=(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::operator!=(const Set<T> &other) const
 {
     return this->notEqual(other);
 }
 
-template <typename Type>
-std::partial_ordering Set<Type>::operator<=>(const Set<Type> &other) const
+template <typename T>
+std::partial_ordering Set<T>::operator<=>(const Set<T> &other) const
 {
     if (this->equal(other))
         return std::partial_ordering::equivalent;
@@ -523,38 +523,38 @@ std::partial_ordering Set<Type>::operator<=>(const Set<Type> &other) const
     return std::partial_ordering::unordered;
 }
 
-template <typename Type>
-bool Set<Type>::less(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::less(const Set<T> &other) const
 {
     return *this < other;
 }
 
-template <typename Type>
-bool Set<Type>::lessOrEqual(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::lessOrEqual(const Set<T> &other) const
 {
     return *this <= other;
 }
 
-template <typename Type>
-bool Set<Type>::greater(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::greater(const Set<T> &other) const
 {
     return *this > other;
 }
 
-template <typename Type>
-bool Set<Type>::greaterOrEqual(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::greaterOrEqual(const Set<T> &other) const
 {
     return *this >= other;
 }
 
-template <typename Type>
-bool Set<Type>::comparable(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::comparable(const Set<T> &other) const
 {
     return (*this <=> other) != std::partial_ordering::unordered;
 }
 
-template <typename Type>
-bool Set<Type>::nonComparable(const Set<Type> &other) const
+template <typename T>
+bool Set<T>::nonComparable(const Set<T> &other) const
 {
     return (*this <=> other) == std::partial_ordering::unordered;
 }
@@ -564,8 +564,8 @@ bool Set<Type>::nonComparable(const Set<Type> &other) const
 
 #pragma region Destructor
 
-template <typename Type>
-Set<Type>::~Set()
+template <typename T>
+Set<T>::~Set()
 {
     this->clear();
 }
@@ -574,8 +574,8 @@ Set<Type>::~Set()
 
 #pragma region Output
 
-template <typename Type>
-std::ostream &operator<<(std::ostream &os, const Set<Type> &set)
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const Set<T> &set)
 {
     os << "{";
 
