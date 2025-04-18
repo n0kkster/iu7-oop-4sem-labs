@@ -1,8 +1,8 @@
 #pragma once
 
 #include "base_container.h"
+#include "concepts.h"
 #include "const_iterator.h"
-#include "set_concepts.h"
 #include "set_node.h"
 #include <initializer_list>
 
@@ -10,7 +10,7 @@
 #include <concepts>
 #include <memory>
 
-template <typename T>
+template <CopyMoveAssignable T>
 class Set : public BaseContainer
 {
 
@@ -28,15 +28,21 @@ public:
 #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
-    Set(const size_t size, const T *array); // К-тор на основе некого массива. +
-    Set(std::initializer_list<T> ilist);    // К-тор на основе списка инициализации. +
-    explicit Set(const Set<T> &other);      // К-тор копирования. +
-    Set(Set<T> &&other) noexcept;           // К-тор переноса. +
 
-    // template <typename Iter>
-    Set(const ConstIterator<T> &begin, const ConstIterator<T> &end); // К-тор по двум итераторам +
+    template <Convertible<T> U>
+    Set(const size_t size, const U *array); // К-тор на основе некого массива. +
 
-    // Добавить конструктор от range
+    template <Convertible<T> U>
+    Set(std::initializer_list<U> ilist); // К-тор на основе списка инициализации. +
+
+    explicit Set(const Set<T> &other); // К-тор копирования. +
+
+    Set(Set<T> &&other) noexcept; // К-тор переноса. +
+
+    template <ConvertibleInputIterator<T> It>
+    Set(const It &begin, const It &end); // К-тор по двум итераторам +
+
+    // Добавить конструктор от range и другого convetible container
     // ==================== ============ ====================
 #pragma endregion
 
@@ -50,20 +56,26 @@ public:
 
 #pragma region Add
     // ======= Добавление элемента в множество =======
-    template <typename R>
-        requires std::same_as<std::decay_t<R>, T>
-    bool add(R &&value); // +
+    template <Convertible<T> U>
+    bool add(const U &value); // +
+
+    template <Convertible<T> U>
+    bool add(U &&value); // +
 // ======= ================================ =======
 #pragma endregion
 
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
-    bool in(const T &value) const noexcept;             // +
-    bool in(const ConstIterator<T> &it) const noexcept; // +
+    template <Convertible<T> U>
+    bool in(const U &value) const noexcept; // +
+
+    template <ConvertibleInputIterator<T> It>
+    bool in(const It &it) const noexcept; // +
     // ======== ============================== ========
 
     // ================ Поиск элемента ================
-    ConstIterator<T> find(const T &value) const noexcept; // +
+    template <Convertible<T> U>
+    ConstIterator<T> find(const U &value) const noexcept; // +
     // ================ ============== ================
 #pragma endregion
 
@@ -80,14 +92,20 @@ public:
     bool empty() const noexcept override; // +
     // ========= ============================= ========
 
-    bool subsetOf(const Set<T> &other) const;   // +
-    bool supersetOf(const Set<T> &other) const; // +
+    template <Convertible<T> U>
+    bool subsetOf(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    bool supersetOf(const Set<U> &other) const; // +
 #pragma endregion
 
 #pragma region Erase
     // ============== Удаление элемента ===============
-    bool erase(const T &value);        // +
-    bool erase(ConstIterator<T> &pos); // +
+    template <Convertible<T> U>
+    bool erase(const U &value); // +
+
+    template <ConvertibleInputIterator<T> It>
+    bool erase(It &pos); // +
     // ============== ================= ===============
 #pragma endregion
 
@@ -111,66 +129,113 @@ public:
 
     // ======= Присваивание =======
     // Копирующий оператор присваивания
-    Set<T> &assign(const Set<T> &other);    // +
+    template <Convertible<T> U>
+    Set<T> &assign(const Set<U> &other);    // +
     Set<T> &operator=(const Set<T> &other); // +
 
     // Перемещающий оператор присваивания
-    Set<T> &assign(Set<T> &&other);    // +
+    template <Convertible<T> U>
+    Set<T> &assign(Set<U> &&other);    // +
     Set<T> &operator=(Set<T> &&other); // +
     // ======= ============ =======
 
     // ======= Объединение =======
-    Set<T> make_union(const Set<T> &other) const; // +
-    Set<T> operator|(const Set<T> &other) const;  // +
-    Set<T> operator+(const Set<T> &other) const;  // +
+    template <Convertible<T> U>
+    Set<T> make_union(const Set<U> &other) const; // +
 
-    Set<T> &unite(const Set<T> &other);      // +
-    Set<T> &operator|=(const Set<T> &other); // +
-    Set<T> &operator+=(const Set<T> &other); // +
+    template <Convertible<T> U>
+    Set<T> operator|(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> operator+(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &unite(const Set<U> &other); // +
+
+    template <Convertible<T> U>
+    Set<T> &operator|=(const Set<U> &other); // +
+
+    template <Convertible<T> U>
+    Set<T> &operator+=(const Set<U> &other); // +
     // ======= =========== =======
 
     // ======= Пересечение =======
-    Set<T> make_intersection(const Set<T> &other) const; // +
-    Set<T> operator&(const Set<T> &other) const;         // +
+    template <Convertible<T> U>
+    Set<T> make_intersection(const Set<U> &other) const; // +
 
-    Set<T> &intersect(const Set<T> &other);  // +
-    Set<T> &operator&=(const Set<T> &other); // +
+    template <Convertible<T> U>
+    Set<T> operator&(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &intersect(const Set<U> &other); // +
+
+    template <Convertible<T> U>
+    Set<T> &operator&=(const Set<U> &other); // +
     // ======= =========== =======
 
     // ======= Разность =======
-    Set<T> make_difference(const Set<T> &other) const; // +
-    Set<T> operator-(const Set<T> &other) const;       // +
+    template <Convertible<T> U>
+    Set<T> make_difference(const Set<U> &other) const; // +
 
-    Set<T> &subtract(const Set<T> &other);   // +
-    Set<T> &operator-=(const Set<T> &other); // +
+    template <Convertible<T> U>
+    Set<T> operator-(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &subtract(const Set<U> &other); // +
+
+    template <Convertible<T> U>
+    Set<T> &operator-=(const Set<U> &other); // +
     // ======= ======== =======
 
     // ======= Симметрическая разность =======
-    Set<T> make_symm_difference(const Set<T> &other) const; // +
-    Set<T> operator^(const Set<T> &other) const;            // +
+    template <Convertible<T> U>
+    Set<T> make_symm_difference(const Set<U> &other) const; // +
 
-    Set<T> &symm_subtract(const Set<T> &other); // +
-    Set<T> &operator^=(const Set<T> &other);    // +
+    template <Convertible<T> U>
+    Set<T> operator^(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &symm_subtract(const Set<U> &other); // +
+
+    template <Convertible<T> U>
+    Set<T> &operator^=(const Set<U> &other); // +
     // ======= =========== =======
 #pragma endregion
 
 #pragma region Compare
     // ======== Сравнение ========
-    std::partial_ordering operator<=>(const Set<T> &other) const; // +
+    template <EqualityComparable<T> U>
+    std::partial_ordering operator<=>(const Set<U> &other) const; // +
 
-    bool less(const Set<T> &other) const;           // +
-    bool lessOrEqual(const Set<T> &other) const;    // +
-    bool greater(const Set<T> &other) const;        // +
-    bool greaterOrEqual(const Set<T> &other) const; // +
+    template <EqualityComparable<T> U>
+    bool less(const Set<U> &other) const; // +
 
-    bool equal(const Set<T> &other) const;      // +
-    bool operator==(const Set<T> &other) const; // +
+    template <EqualityComparable<T> U>
+    bool lessOrEqual(const Set<U> &other) const; // +
 
-    bool notEqual(const Set<T> &other) const;   // +
-    bool operator!=(const Set<T> &other) const; // +
+    template <EqualityComparable<T> U>
+    bool greater(const Set<U> &other) const; // +
 
-    bool comparable(const Set<T> &other) const;
-    bool nonComparable(const Set<T> &other) const;
+    template <EqualityComparable<T> U>
+    bool greaterOrEqual(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool equal(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool operator==(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool notEqual(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool operator!=(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool comparable(const Set<U> &other) const;
+
+    template <EqualityComparable<T> U>
+    bool nonComparable(const Set<U> &other) const;
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion
@@ -178,7 +243,7 @@ public:
 protected:
     bool add(const std::shared_ptr<SetNode<T>> &node); // +
 
-private:
+public:
     std::shared_ptr<SetNode<T>> head;
     std::shared_ptr<SetNode<T>> tail;
 };

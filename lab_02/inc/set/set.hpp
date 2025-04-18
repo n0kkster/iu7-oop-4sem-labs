@@ -7,23 +7,25 @@
 
 #pragma region Constructors
 
-template <typename T>
-Set<T>::Set(const size_t size, const T *array) : Set()
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T>::Set(const size_t size, const U *array) : Set()
 {
     // std::cout << "arr cctor called\n";
     for (size_t i = 0; i < size; ++i)
         this->add(array[i]);
 }
 
-template <typename T>
-Set<T>::Set(std::initializer_list<T> ilist) : Set()
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T>::Set(std::initializer_list<U> ilist) : Set()
 {
     // std::cout << "ilist cctor called\n";
     for (const T &el : ilist)
         this->add(el);
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 Set<T>::Set(const Set<T> &other) : Set()
 {
     // std::cout << "copy cctor called\n";
@@ -31,7 +33,7 @@ Set<T>::Set(const Set<T> &other) : Set()
         this->add(el);
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 Set<T>::Set(Set<T> &&other) noexcept
 {
     // std::cout << "move cctor called\n";
@@ -41,8 +43,9 @@ Set<T>::Set(Set<T> &&other) noexcept
     this->tail = std::move(other.tail);
 }
 
-template <typename T>
-Set<T>::Set(const ConstIterator<T> &begin, const ConstIterator<T> &end)
+template <CopyMoveAssignable T>
+template <ConvertibleInputIterator<T> It>
+Set<T>::Set(const It &begin, const It &end)
 {
     // std::cout << "iter cctor called\n";
     for (auto it = begin; it != end; ++it)
@@ -53,7 +56,7 @@ Set<T>::Set(const ConstIterator<T> &begin, const ConstIterator<T> &end)
 
 #pragma region Add
 
-template <typename T>
+template <CopyMoveAssignable T>
 bool Set<T>::add(const std::shared_ptr<SetNode<T>> &node)
 {
     if (this->in(node->value()))
@@ -64,8 +67,8 @@ bool Set<T>::add(const std::shared_ptr<SetNode<T>> &node)
         std::shared_ptr<SetNode<T>> after_last, before_first;
         try
         {
-            after_last = std::make_shared<SetNode<T>>(std::move(SetNode<T>()));
-            before_first = std::make_shared<SetNode<T>>(std::move(SetNode<T>()));
+            after_last = std::make_shared<SetNode<T>>();
+            before_first = std::make_shared<SetNode<T>>();
         }
         catch (const std::bad_alloc &ex)
         {
@@ -97,10 +100,9 @@ bool Set<T>::add(const std::shared_ptr<SetNode<T>> &node)
     return true;
 }
 
-template <typename T>
-template <typename R>
-    requires std::same_as<std::decay_t<R>, T>
-bool Set<T>::add(R &&value)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::add(const U &value)
 {
     if (this->in(value))
         return false;
@@ -108,7 +110,7 @@ bool Set<T>::add(R &&value)
     std::shared_ptr<SetNode<T>> newNode;
     try
     {
-        newNode = std::make_shared<SetNode<T>>(std::forward<R>(value));
+        newNode = std::make_shared<SetNode<T>>(value);
     }
     catch (const std::bad_alloc &ex)
     {
@@ -118,12 +120,34 @@ bool Set<T>::add(R &&value)
     return add(newNode);
 }
 
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::add(U &&value)
+{
+    if (this->in(value))
+        return false;
+
+    std::shared_ptr<SetNode<T>> newNode;
+    try
+    {
+        newNode = std::make_shared<SetNode<T>>(std::move(value));
+    }
+    catch (const std::bad_alloc &ex)
+    {
+        throw MemoryException("Error allocating new node!");
+    }
+
+    return add(newNode);
+}
+
+
 #pragma endregion
 
 #pragma region Erase
 
-template <typename T>
-bool Set<T>::erase(ConstIterator<T> &pos)
+template <CopyMoveAssignable T>
+template <ConvertibleInputIterator<T> It>
+bool Set<T>::erase(It &pos)
 {
     if (this->head == this->tail)
     {
@@ -157,8 +181,9 @@ bool Set<T>::erase(ConstIterator<T> &pos)
     return true;
 }
 
-template <typename T>
-bool Set<T>::erase(const T &value)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::erase(const U &value)
 {
     ConstIterator<T> it = this->find(value);
     if (it == this->cend())
@@ -172,49 +197,49 @@ bool Set<T>::erase(const T &value)
 
 #pragma region Iterators
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::cbegin() const noexcept
 {
     return ConstIterator<T>(this->head);
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::cend() const noexcept
 {
     return this->tail ? ConstIterator<T>(this->tail->getNext()) : ConstIterator<T>();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::begin() const noexcept
 {
     return this->cbegin();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::end() const noexcept
 {
     return this->cend();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::crbegin() const noexcept
 {
     return this->cbegin();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::crend() const noexcept
 {
     return this->cend();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::rbegin() const noexcept
 {
     return this->begin();
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 ConstIterator<T> Set<T>::rend() const noexcept
 {
     return this->end();
@@ -224,13 +249,13 @@ ConstIterator<T> Set<T>::rend() const noexcept
 
 #pragma region Misc
 
-template <typename T>
+template <CopyMoveAssignable T>
 bool Set<T>::empty() const noexcept
 {
     return this->_size == 0;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 void Set<T>::clear()
 {
     while (this->head)
@@ -245,14 +270,15 @@ void Set<T>::clear()
     this->_size = 0;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 size_t Set<T>::size() const noexcept
 {
     return this->_size;
 }
 
-template <typename T>
-bool Set<T>::subsetOf(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::subsetOf(const Set<U> &other) const
 {
     for (const auto &el : *this)
         if (!other.in(el))
@@ -261,8 +287,9 @@ bool Set<T>::subsetOf(const Set<T> &other) const
     return true;
 }
 
-template <typename T>
-bool Set<T>::supersetOf(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::supersetOf(const Set<U> &other) const
 {
     return other.subsetOf(*this);
 }
@@ -271,8 +298,9 @@ bool Set<T>::supersetOf(const Set<T> &other) const
 
 #pragma region Find
 
-template <typename T>
-bool Set<T>::in(const T &value) const noexcept
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+bool Set<T>::in(const U &value) const noexcept
 {
     for (const auto &el : *this)
         if (el == value)
@@ -280,8 +308,9 @@ bool Set<T>::in(const T &value) const noexcept
     return false;
 }
 
-template <typename T>
-bool Set<T>::in(const ConstIterator<T> &it) const noexcept
+template <CopyMoveAssignable T>
+template <ConvertibleInputIterator<T> It>
+bool Set<T>::in(const It &it) const noexcept
 {
     for (const auto &el : *this)
         if (el == *it)
@@ -289,8 +318,9 @@ bool Set<T>::in(const ConstIterator<T> &it) const noexcept
     return false;
 }
 
-template <typename T>
-ConstIterator<T> Set<T>::find(const T &value) const noexcept
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+ConstIterator<T> Set<T>::find(const U &value) const noexcept
 {
     for (auto it = this->cbegin(); it != this->cend(); ++it)
         if (*it == value)
@@ -303,27 +333,29 @@ ConstIterator<T> Set<T>::find(const T &value) const noexcept
 
 #pragma region Operators
 
-template <typename T>
-Set<T> &Set<T>::assign(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::assign(const Set<U> &other)
 {
     if (&other == this)
         return *this;
 
     this->clear();
     for (const auto &el : other)
-        add(el);
+        this->add(el);
 
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 Set<T> &Set<T>::operator=(const Set<T> &other)
 {
     return this->assign(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::assign(Set<T> &&other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::assign(Set<U> &&other)
 {
     this->clear();
 
@@ -334,14 +366,15 @@ Set<T> &Set<T>::assign(Set<T> &&other)
     return *this;
 }
 
-template <typename T>
+template <CopyMoveAssignable T>
 Set<T> &Set<T>::operator=(Set<T> &&other)
 {
     return this->assign(std::forward<Set<T>>(other));
 }
 
-template <typename T>
-Set<T> Set<T>::make_union(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::make_union(const Set<U> &other) const
 {
     Set<T> set_union(*this);
     set_union.unite(other);
@@ -349,20 +382,23 @@ Set<T> Set<T>::make_union(const Set<T> &other) const
     return set_union;
 }
 
-template <typename T>
-Set<T> Set<T>::operator|(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::operator|(const Set<U> &other) const
 {
     return this->make_union(other);
 }
 
-template <typename T>
-Set<T> Set<T>::operator+(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::operator+(const Set<U> &other) const
 {
     return this->make_union(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::unite(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::unite(const Set<U> &other)
 {
     for (const auto &el : other)
         this->add(el);
@@ -370,20 +406,23 @@ Set<T> &Set<T>::unite(const Set<T> &other)
     return *this;
 }
 
-template <typename T>
-Set<T> &Set<T>::operator|=(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::operator|=(const Set<U> &other)
 {
     return this->unite(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::operator+=(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::operator+=(const Set<U> &other)
 {
     return this->unite(other);
 }
 
-template <typename T>
-Set<T> Set<T>::make_intersection(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::make_intersection(const Set<U> &other) const
 {
     Set<T> copy;
     for (const auto &el : *this)
@@ -393,14 +432,16 @@ Set<T> Set<T>::make_intersection(const Set<T> &other) const
     return copy;
 }
 
-template <typename T>
-Set<T> Set<T>::operator&(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::operator&(const Set<U> &other) const
 {
     return this->make_intersection(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::intersect(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::intersect(const Set<U> &other)
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
@@ -413,14 +454,16 @@ Set<T> &Set<T>::intersect(const Set<T> &other)
     return *this;
 }
 
-template <typename T>
-Set<T> &Set<T>::operator&=(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::operator&=(const Set<U> &other)
 {
     return this->intersect(other);
 }
 
-template <typename T>
-Set<T> Set<T>::make_difference(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::make_difference(const Set<U> &other) const
 {
     Set<T> copy(*this);
 
@@ -430,14 +473,16 @@ Set<T> Set<T>::make_difference(const Set<T> &other) const
     return copy;
 }
 
-template <typename T>
-Set<T> Set<T>::operator-(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::operator-(const Set<U> &other) const
 {
     return this->make_difference(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::subtract(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::subtract(const Set<U> &other)
 {
     for (const auto &el : other)
         this->erase(el);
@@ -445,28 +490,32 @@ Set<T> &Set<T>::subtract(const Set<T> &other)
     return *this;
 }
 
-template <typename T>
-Set<T> &Set<T>::operator-=(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::operator-=(const Set<U> &other)
 {
     return this->subtract(other);
 }
 
-template <typename T>
-Set<T> Set<T>::make_symm_difference(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::make_symm_difference(const Set<U> &other) const
 {
     Set<T> d1 = *this - other;
     Set<T> d2 = other - *this;
     return d1 + d2;
 }
 
-template <typename T>
-Set<T> Set<T>::operator^(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> Set<T>::operator^(const Set<U> &other) const
 {
     return this->make_symm_difference(other);
 }
 
-template <typename T>
-Set<T> &Set<T>::symm_subtract(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::symm_subtract(const Set<U> &other)
 {
     Set<T> intersection = *this & other;
     *this += other;
@@ -474,8 +523,9 @@ Set<T> &Set<T>::symm_subtract(const Set<T> &other)
     return *this;
 }
 
-template <typename T>
-Set<T> &Set<T>::operator^=(const Set<T> &other)
+template <CopyMoveAssignable T>
+template <Convertible<T> U>
+Set<T> &Set<T>::operator^=(const Set<U> &other)
 {
     return this->symm_subtract(other);
 }
@@ -484,32 +534,37 @@ Set<T> &Set<T>::operator^=(const Set<T> &other)
 
 #pragma region Compare
 
-template <typename T>
-bool Set<T>::equal(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::equal(const Set<U> &other) const
 {
     return this->_size == other._size && (*this - other).empty();
 }
 
-template <typename T>
-bool Set<T>::operator==(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::operator==(const Set<U> &other) const
 {
     return this->equal(other);
 }
 
-template <typename T>
-bool Set<T>::notEqual(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::notEqual(const Set<U> &other) const
 {
     return !this->equal(other);
 }
 
-template <typename T>
-bool Set<T>::operator!=(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::operator!=(const Set<U> &other) const
 {
     return this->notEqual(other);
 }
 
-template <typename T>
-std::partial_ordering Set<T>::operator<=>(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+std::partial_ordering Set<T>::operator<=>(const Set<U> &other) const
 {
     if (this->equal(other))
         return std::partial_ordering::equivalent;
@@ -523,48 +578,53 @@ std::partial_ordering Set<T>::operator<=>(const Set<T> &other) const
     return std::partial_ordering::unordered;
 }
 
-template <typename T>
-bool Set<T>::less(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::less(const Set<U> &other) const
 {
     return *this < other;
 }
 
-template <typename T>
-bool Set<T>::lessOrEqual(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::lessOrEqual(const Set<U> &other) const
 {
     return *this <= other;
 }
 
-template <typename T>
-bool Set<T>::greater(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::greater(const Set<U> &other) const
 {
     return *this > other;
 }
 
-template <typename T>
-bool Set<T>::greaterOrEqual(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::greaterOrEqual(const Set<U> &other) const
 {
     return *this >= other;
 }
 
-template <typename T>
-bool Set<T>::comparable(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::comparable(const Set<U> &other) const
 {
     return (*this <=> other) != std::partial_ordering::unordered;
 }
 
-template <typename T>
-bool Set<T>::nonComparable(const Set<T> &other) const
+template <CopyMoveAssignable T>
+template <EqualityComparable<T> U>
+bool Set<T>::nonComparable(const Set<U> &other) const
 {
     return (*this <=> other) == std::partial_ordering::unordered;
 }
-
 
 #pragma endregion
 
 #pragma region Destructor
 
-template <typename T>
+template <CopyMoveAssignable T>
 Set<T>::~Set()
 {
     this->clear();
