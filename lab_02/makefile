@@ -17,7 +17,7 @@ LDFLAGS := -lm
 
 all : app.exe
 
-debug: CFLAGS += -g3
+debug: CFLAGS += -g
 debug: app.exe 
 
 app.exe : $(OBJS)
