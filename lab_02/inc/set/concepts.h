@@ -43,30 +43,18 @@ concept Container =
         { c.empty() } noexcept -> std::same_as<bool>;
     };
 
-template <typename Container>
-concept ComparableContainer = requires(Container cont1, Container cont2) {
-    { cont1 == cont2 } noexcept -> std::same_as<bool>;
-    { cont1 != cont2 } noexcept -> std::same_as<bool>;
-};
-
 template <typename It>
 concept InputIterator = std::input_iterator<It>;
 
 template <typename It, typename T>
 concept ConvertibleInputIterator = InputIterator<It> && Convertible<typename It::value_type, T>;
 
-// template <typename It>
-// concept BidirectionalIterator = std::bidirectional_iterator<It>;
-
-// template <typename It, typename T>
-// concept ConvertibleBidirectionalIterator =
-//     BidirectionalIterator<It> && Convertible<typename It::value_type, T>;
-
 template <typename R>
 concept Range = std::ranges::input_range<R>;
 
 template <typename R, typename T>
-concept ConvertibleRange = Range<R> && Convertible<std::ranges::range_value_t<R>, T>;
+concept ConvertibleRange = Range<R> && Convertible<std::ranges::range_value_t<R>, T> && !Container<R>;
 
 template <typename C, typename T>
-concept ConvertibleContainer = Container<C> && Convertible<typename C::value_type, T> && ComparableContainer<C>;
+concept ConvertibleContainer = Container<C> && Convertible<typename C::value_type, T>;
+
