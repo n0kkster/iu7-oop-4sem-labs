@@ -46,7 +46,7 @@ public:
     // ================= Проверка итератора =================
     operator bool() const;
 
-    void checkExpired(int line) const;
+    void checkExpired() const;
     // ================= ================== =================
 
 #pragma region Operators
