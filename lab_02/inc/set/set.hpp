@@ -57,14 +57,7 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T>::Set(C &&container)
 {
-    std::ranges::for_each(std::forward<C>(container), [this](T &&value) { this->add(std::move(value)); });
-}
-
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T>::Set(R &&range)
-{
-    std::ranges::for_each(std::forward<R>(range), [this](T &&value) { this->add(std::move(value)); });
+    // std::ranges::for_each(std::forward<C>(container), [this](T &&value) { this->add(std::move(value)); });
 }
 
 template <CopyMoveAssignable T>
@@ -74,44 +67,52 @@ Set<T>::Set(const R &range)
     std::ranges::for_each(range, [this](const T &value) { this->add(value); });
 }
 
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T>::Set(R &&range)
+{
+    // std::ranges::for_each(std::forward<R>(range), [this](T &&value) { this->add(std::move(value)); });
+}
+
+
 #pragma endregion
 
 #pragma region Add
 
 template <CopyMoveAssignable T>
-bool Set<T>::add(const std::shared_ptr<SetNode<T>> &node)
+bool Set<T>::add(const std::shared_ptr<typename Set<T>::SetNode> &node)
 {
     if (this->in(node->value()))
         return false;
 
     if (this->empty())
     {
-        std::shared_ptr<SetNode<T>> after_last, before_first;
-        try
-        {
-            after_last = std::make_shared<SetNode<T>>();
-            before_first = std::make_shared<SetNode<T>>();
-        }
-        catch (const std::bad_alloc &ex)
-        {
-            throw MemoryException("Error allocating edge nodes!");
-        }
+        // std::shared_ptr<SetNode<T>> after_last, before_first;
+        // try
+        // {
+        //     after_last = std::make_shared<SetNode<T>>();
+        //     before_first = std::make_shared<SetNode<T>>();
+        // }
+        // catch (const std::bad_alloc &ex)
+        // {
+        //     throw MemoryException("Error allocating edge nodes!");
+        // }
 
         this->head = node;
         this->tail = node;
 
-        after_last->setPrev(this->tail);
-        this->tail->setNext(after_last);
+        // after_last->setPrev(this->tail);
+        // this->tail->setNext(after_last);
 
-        before_first->setNext(this->head);
-        this->head->setPrev(before_first);
+        // before_first->setNext(this->head);
+        // this->head->setPrev(before_first);
     }
     else
     {
-        node->setPrev(this->tail);
-        node->setNext(this->tail->getNext());
+        // node->setPrev(this->tail);
+        // node->setNext(this->tail->getNext());
 
-        this->tail->getNext()->setPrev(node);
+        // this->tail->getNext()->setPrev(node);
 
         this->tail->setNext(node);
         this->tail = node;
@@ -129,10 +130,10 @@ bool Set<T>::add(const U &value)
     if (this->in(value))
         return false;
 
-    std::shared_ptr<SetNode<T>> newNode;
+    std::shared_ptr<typename Set<T>::SetNode> newNode;
     try
     {
-        newNode = std::make_shared<SetNode<T>>(value);
+        newNode = std::make_shared<typename Set<T>::SetNode>(value);
     }
     catch (const std::bad_alloc &ex)
     {
@@ -149,10 +150,10 @@ bool Set<T>::add(U &&value)
     if (this->in(value))
         return false;
 
-    std::shared_ptr<SetNode<T>> newNode;
+    std::shared_ptr<typename Set<T>::SetNode> newNode;
     try
     {
-        newNode = std::make_shared<SetNode<T>>(std::move(value));
+        newNode = std::make_shared<typename Set<T>::SetNode>(std::move(value));
     }
     catch (const std::bad_alloc &ex)
     {
@@ -185,16 +186,21 @@ bool Set<T>::erase(It &pos)
     {
         auto temp = this->head;
         this->head = this->head->getNext();
-        temp->exclude();
-    }
-    else if (pos == this->cend() - 1)
-    {
-        auto temp = this->tail;
-        this->tail = this->tail->getPrev();
-        temp->exclude();
+        temp.reset();
     }
     else
-        pos.erase();
+    {
+        auto copy = head;
+        while (copy && copy->getNext())
+        {
+            if (copy->getNext() == pos.curr.lock())
+            {
+                copy->setNext(pos.curr.lock()->getNext());
+                break;
+            }
+            copy = copy->getNext();
+        }
+    }
 
     pos = it_copy;
     --_size;
@@ -277,14 +283,14 @@ bool Set<T>::empty() const noexcept
 }
 
 template <CopyMoveAssignable T>
-void Set<T>::clear()
+void Set<T>::clear() noexcept
 {
     while (this->head)
     {
         auto temp = this->head;
         this->head = this->head->getNext();
         temp->setNextNull();
-        temp->setPrevNull();
+        temp.reset();
     }
 
     this->tail.reset();
@@ -299,7 +305,7 @@ size_t Set<T>::size() const noexcept
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
-bool Set<T>::subsetOf(const Set<U> &other) const
+bool Set<T>::subsetOf(const Set<U> &other) const noexcept
 {
     auto cnt = std::ranges::count_if(*this, [&](const U &el) { return other.in(el); });
 
@@ -308,7 +314,7 @@ bool Set<T>::subsetOf(const Set<U> &other) const
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
-bool Set<T>::supersetOf(const Set<U> &other) const
+bool Set<T>::supersetOf(const Set<U> &other) const noexcept
 {
     return other.subsetOf(*this);
 }
@@ -362,7 +368,7 @@ Set<T> &Set<T>::operator=(const Set<T> &other)
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
-Set<T> &Set<T>::assign(Set<U> &&other)
+Set<T> &Set<T>::assign(Set<U> &&other) noexcept
 {
     this->clear();
 
@@ -376,7 +382,7 @@ Set<T> &Set<T>::assign(Set<U> &&other)
 }
 
 template <CopyMoveAssignable T>
-Set<T> &Set<T>::operator=(Set<T> &&other)
+Set<T> &Set<T>::operator=(Set<T> &&other) noexcept
 {
     return this->assign(std::forward<Set<T>>(other));
 }
@@ -648,9 +654,7 @@ std::ostream &operator<<(std::ostream &os, const Set<T> &set)
     std::ranges::for_each(set,
                           [&](const T &el)
                           {
-                              os << el;
-                              if (set.find(el) != set.cend() - 1)
-                                  os << ", ";
+                              os << el << ", ";
                           });
 
     os << "}";
