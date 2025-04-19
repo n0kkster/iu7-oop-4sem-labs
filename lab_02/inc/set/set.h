@@ -38,17 +38,20 @@ public:
     explicit Set(const Set<T> &other); // К-тор копирования. +
     Set(Set<T> &&other) noexcept;      // К-тор переноса. +
 
-    template <ConvertibleInputIterator<T> It>
-    Set(const It &begin, const It &end); // К-тор по двум итераторам +
+    template <ConvertibleInputIterator<T> It, Sentinel<It> S>
+    Set(const It &begin, const S &end); // К-тор по двум итераторам +
 
     template <ConvertibleContainer<T> C>
     Set(const C &container); // Конструктор от контейнера +
+    
+    template <ConvertibleContainer<T> C>
+    Set(C &&container);
 
     template <ConvertibleRange<T> R>
     Set(const R &range); // Конструктор от диапазона +
 
-
-    // Добавить конструктор от range и другого convetible container
+    template <ConvertibleRange<T> R>
+    Set(R &&range); 
     // ==================== ============ ====================
 #pragma endregion
 

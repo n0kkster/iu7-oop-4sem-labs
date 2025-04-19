@@ -40,8 +40,8 @@ Set<T>::Set(Set<T> &&other) noexcept
 }
 
 template <CopyMoveAssignable T>
-template <ConvertibleInputIterator<T> It>
-Set<T>::Set(const It &begin, const It &end)
+template <ConvertibleInputIterator<T> It, Sentinel<It> S>
+Set<T>::Set(const It &begin, const S &end)
 {
     std::ranges::for_each(begin, end, [this](const T &el) { this->add(el); });
 }
@@ -51,6 +51,20 @@ template <ConvertibleContainer<T> C>
 Set<T>::Set(const C &container)
 {
     std::ranges::for_each(container, [this](const T &value) { this->add(value); });
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T>::Set(C &&container)
+{
+    std::ranges::for_each(std::forward<C>(container), [this](T &&value) { this->add(std::move(value)); });
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T>::Set(R &&range)
+{
+    std::ranges::for_each(std::forward<R>(range), [this](T &&value) { this->add(std::move(value)); });
 }
 
 template <CopyMoveAssignable T>

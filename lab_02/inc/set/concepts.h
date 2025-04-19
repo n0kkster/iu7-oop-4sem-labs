@@ -49,6 +49,9 @@ concept InputIterator = std::input_iterator<It>;
 template <typename It, typename T>
 concept ConvertibleInputIterator = InputIterator<It> && Convertible<typename It::value_type, T>;
 
+template<typename S, typename It>
+concept Sentinel = std::sentinel_for<S, It>;
+
 template <typename R>
 concept Range = std::ranges::input_range<R>;
 
