@@ -3,7 +3,6 @@
 #include "base_container.h"
 #include "concepts.h"
 #include "const_iterator.h"
-#include "set_node.h"
 #include <initializer_list>
 
 #include <compare>
@@ -43,7 +42,7 @@ public:
 
     template <ConvertibleContainer<T> C>
     Set(const C &container); // Конструктор от контейнера +
-    
+
     template <ConvertibleContainer<T> C>
     Set(C &&container);
 
@@ -51,13 +50,13 @@ public:
     Set(const R &range); // Конструктор от диапазона +
 
     template <ConvertibleRange<T> R>
-    Set(R &&range); 
+    Set(R &&range);
     // ==================== ============ ====================
 #pragma endregion
 
 #pragma region Destructor
     // ===================== Деструктор =====================
-    ~Set(); // +
+    ~Set() override; // +
 // ===================== Деструктор =====================
 #pragma endregion
 
@@ -94,7 +93,7 @@ public:
     // ======== ============================== ========
 
     // ============== Очистка множества ===============
-    void clear() override; // +
+    void clear() noexcept override; // +
     // =============== ================ ===============
 
     // ========= Проверка множества на пустоту ========
@@ -102,10 +101,10 @@ public:
     // ========= ============================= ========
 
     template <Convertible<T> U>
-    bool subsetOf(const Set<U> &other) const; // +
+    bool subsetOf(const Set<U> &other) const noexcept; // +
 
     template <Convertible<T> U>
-    bool supersetOf(const Set<U> &other) const; // +
+    bool supersetOf(const Set<U> &other) const noexcept; // +
 #pragma endregion
 
 #pragma region Erase
@@ -144,8 +143,8 @@ public:
 
     // Перемещающий оператор присваивания
     template <Convertible<T> U>
-    Set<T> &assign(Set<U> &&other);    // +
-    Set<T> &operator=(Set<T> &&other); // +
+    Set<T> &assign(Set<U> &&other) noexcept;    // +
+    Set<T> &operator=(Set<T> &&other) noexcept; // +
     // ======= ============ =======
 
     // ======= Объединение =======
@@ -250,11 +249,59 @@ public:
 #pragma endregion
 
 protected:
-    bool add(const std::shared_ptr<SetNode<T>> &node); // +
+#pragma region SetNode
+    class SetNode
+    {
 
-public:
-    std::shared_ptr<SetNode<T>> head;
-    std::shared_ptr<SetNode<T>> tail;
+    private:
+        T data;
+        std::shared_ptr<SetNode> next;
+
+    public:
+        // ==================== Конструкторы ====================
+        SetNode() = delete;
+        explicit SetNode(const T &value) noexcept;
+        explicit SetNode(T &&value) noexcept;
+        explicit SetNode(const std::shared_ptr<SetNode> &pnode) noexcept;
+        // ==================== ============ ====================
+
+        // ===================== Деструктор =====================
+        ~SetNode() = default;
+        // ===================== ========== =====================
+
+        // ======================= Сеттеры ======================
+        void set(const T &value) noexcept;
+        void setNull() noexcept;
+
+        void setNext(const SetNode &node);
+        void setNext(const std::shared_ptr<SetNode> &pnode) noexcept;
+        void setNextNull() noexcept;
+        // ======================= ======= ======================
+
+        // ======================= Геттеры ======================
+        const T &value() const noexcept;
+
+        std::shared_ptr<SetNode> getNext() const noexcept;
+        // ======================= ======= ======================
+
+        // ===================== Операторы ======================
+        bool operator==(const std::shared_ptr<SetNode> &other) const noexcept;
+        bool operator!=(const std::shared_ptr<SetNode> &other) const noexcept;
+        // ===================== ========= ======================
+    };
+#pragma endregion
+
+    bool add(const std::shared_ptr<SetNode> &node); // +
+
+#pragma region Friends
+    friend class BaseIterator<T>;
+    friend class ConstIterator<T>;
+#pragma endregion
+
+private:
+    std::shared_ptr<SetNode> head;
+    std::shared_ptr<SetNode> tail;
 };
 
 #include "set.hpp"
+#include "set_node.hpp"
