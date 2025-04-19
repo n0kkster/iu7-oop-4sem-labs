@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <ranges>
 
 #pragma region Constructors
 
@@ -12,7 +13,6 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T>::Set(const size_t size, const U *array) : Set()
 {
-    // std::cout << "arr cctor called\n";
     std::ranges::for_each(array, array + size, [this](const U &el) { this->add(el); });
 }
 
@@ -20,22 +20,18 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T>::Set(std::initializer_list<U> ilist) : Set()
 {
-    // std::cout << "ilist cctor called\n";
     std::ranges::for_each(ilist, [this](const U &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
 Set<T>::Set(const Set<T> &other) : Set()
 {
-    // std::cout << "copy cctor called\n";
     std::ranges::for_each(other, [this](const T &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
 Set<T>::Set(Set<T> &&other) noexcept
 {
-    // std::cout << "move cctor called\n";
-
     this->_size = other._size;
     this->head = std::move(other.head);
     this->tail = std::move(other.tail);
@@ -47,7 +43,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleInputIterator<T> It>
 Set<T>::Set(const It &begin, const It &end)
 {
-    // std::cout << "iter cctor called\n";
     std::ranges::for_each(begin, end, [this](const T &el) { this->add(el); });
 }
 
@@ -55,7 +50,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T>::Set(const C &container)
 {
-    std::cout << "called container cctor\n";
     std::ranges::for_each(container, [this](const T &value) { this->add(value); });
 }
 
@@ -63,7 +57,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T>::Set(const R &range)
 {
-    std::cout << "called range cctor\n";
     std::ranges::for_each(range, [this](const T &value) { this->add(value); });
 }
 
@@ -294,11 +287,9 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 bool Set<T>::subsetOf(const Set<U> &other) const
 {
-    for (const auto &el : *this)
-        if (!other.in(el))
-            return false;
+    auto cnt = std::ranges::count_if(*this, [&](const U &el) { return other.in(el); });
 
-    return true;
+    return cnt == _size;
 }
 
 template <CopyMoveAssignable T>
@@ -344,9 +335,6 @@ Set<T> &Set<T>::assign(const Set<U> &other)
     if (&other == this)
         return *this;
 
-    // this->clear();
-    // for (const auto &el : other)
-    // this->add(el);
     std::ranges::for_each(other, [this](const U &el) { this->add(el); });
 
     return *this;
@@ -407,8 +395,7 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::unite(const Set<U> &other)
 {
-    for (const auto &el : other)
-        this->add(el);
+    std::ranges::for_each(other, [this](const U &el) { this->add(el); });
 
     return *this;
 }
@@ -432,9 +419,9 @@ template <Convertible<T> U>
 Set<T> Set<T>::make_intersection(const Set<U> &other) const
 {
     Set<T> copy;
-    for (const auto &el : *this)
-        if (other.in(el))
-            copy.add(el);
+
+    auto filtered = *this | std::views::filter([&](const U &el) { return other.in(el); });
+    std::ranges::for_each(filtered, [&](const U &el) { copy.add(el); });
 
     return copy;
 }
@@ -474,8 +461,7 @@ Set<T> Set<T>::make_difference(const Set<U> &other) const
 {
     Set<T> copy(*this);
 
-    for (const auto &el : other)
-        copy.erase(el);
+    std::ranges::for_each(other, [&](const U &el) { copy.erase(el); });
 
     return copy;
 }
@@ -491,8 +477,7 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::subtract(const Set<U> &other)
 {
-    for (const auto &el : other)
-        this->erase(el);
+    std::ranges::for_each(other, [this](const U &el) { this->erase(el); });
 
     return *this;
 }
@@ -646,12 +631,13 @@ std::ostream &operator<<(std::ostream &os, const Set<T> &set)
 {
     os << "{";
 
-    for (const auto &el : set)
-    {
-        os << el;
-        if (set.find(el) != set.cend() - 1)
-            os << ", ";
-    }
+    std::ranges::for_each(set,
+                          [&](const T &el)
+                          {
+                              os << el;
+                              if (set.find(el) != set.cend() - 1)
+                                  os << ", ";
+                          });
 
     os << "}";
     os << " (" << set.size() << ")";
