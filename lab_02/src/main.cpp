@@ -1,6 +1,8 @@
 #include "set.h"
 
 #include <iostream>
+#include <ranges>
+#include <vector>
 
 void test_cctors()
 {
@@ -41,6 +43,16 @@ void test_cctors()
     Set<int> is6(is2.cbegin(), is2.cend());
     std::cout << "6. Конструктор от итераторов: ";
     std::cout << is6 << std::endl;
+
+    std::vector<int> vec{1, 2, 3, 4, 4, 3, 2, 1};
+
+    Set<int> vs(vec);
+    std::cout << "7. Конструктор от контейнера: ";
+    std::cout << vs << std::endl;
+
+    Set<int> vr(std::ranges::subrange(vec.begin() + 1, vec.end() - 1));
+    std::cout << "7. Конструктор от диапазона: ";
+    std::cout << vr << std::endl;
 
     delete[] arr;
 
@@ -101,6 +113,7 @@ void test_assign()
     // ================================================
 
     std::cout << "2. Присваивание rvalue" << std::endl;
+
     is1.clear();
 
     std::cout << "\tМножество до присваивания: ";
@@ -126,7 +139,7 @@ void test_assign()
     std::cout << "\tМножество до присваивания: ";
     std::cout << "\t" << is1 << std::endl;
 
-    is1.assign({ 1, 2, 3, 4, 5, 6 });
+    is1.assign<int>({ 1, 2, 3, 4, 5, 6 });
 
     std::cout << "\tassign: ";
     std::cout << "\t" << is1 << std::endl;
@@ -226,7 +239,7 @@ void test_erase()
 {
     std::cout << "=====================================\n";
 
-    Set<int> is({1, 2, 3, 4});
+    Set<int> is({ 1, 2, 3, 4 });
     std::cout << "1. Удаление произвольного элемента из мн-ва " << is << " по значению (3): ";
     is.erase(3);
     std::cout << is << std::endl;
@@ -236,7 +249,7 @@ void test_erase()
     std::cout << "2. Удаление первого элемента из мн-ва " << is << " по значению (1): ";
     is.erase(1);
     std::cout << is << std::endl;
-    
+
     is.add(5);
 
     std::cout << "3. Удаление последнего элемента из мн-ва " << is << " по значению (5): ";
@@ -255,8 +268,8 @@ void test_subtract()
 {
     std::cout << "=====================================\n";
 
-    Set<int> is1({1, 2, 3, 4});
-    Set<int> is2({3, 4, 5, 6});
+    Set<int> is1({ 1, 2, 3, 4 });
+    Set<int> is2({ 3, 4, 5, 6 });
 
     std::cout << "1. Вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
     std::cout << "\tmake_difference: " << is1.make_difference(is2) << std::endl;
@@ -264,19 +277,19 @@ void test_subtract()
 
     is1.subtract(is2);
     std::cout << "\tsubtract: " << is1 << std::endl;
-    is1 = {1, 2, 3, 4};
+    is1 = { 1, 2, 3, 4 };
     is1 -= is2;
     std::cout << "\toperator -=: " << is1 << std::endl;
 
-    is1 = {1, 2, 3, 4};
-    is2 = {5, 6, 7, 8};
+    is1 = { 1, 2, 3, 4 };
+    is2 = { 5, 6, 7, 8 };
     std::cout << "2. Вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
     std::cout << "\tmake_difference: " << is1.make_difference(is2) << std::endl;
     std::cout << "\toperator -: " << is1 - is2 << std::endl;
 
     is1.subtract(is2);
     std::cout << "\tsubtract: " << is1 << std::endl;
-    is1 = {1, 2, 3, 4};
+    is1 = { 1, 2, 3, 4 };
     is1 -= is2;
     std::cout << "\toperator -=: " << is1 << std::endl;
 
@@ -287,7 +300,7 @@ void test_subtract()
 
     is1.subtract(is2);
     std::cout << "\tsubtract: " << is1 << std::endl;
-    is1 = {1, 2, 3, 4};
+    is1 = { 1, 2, 3, 4 };
     is1 -= is2;
     std::cout << "\toperator -=: " << is1 << std::endl;
 
@@ -298,8 +311,8 @@ void test_xor()
 {
     std::cout << "=====================================\n";
 
-    Set<int> is1({1, 2, 3, 4});
-    Set<int> is2({3, 4, 5, 6});
+    Set<int> is1({ 1, 2, 3, 4 });
+    Set<int> is2({ 3, 4, 5, 6 });
 
     std::cout << "1. Симметрическое вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
     std::cout << "\tmake_symm_difference: " << is1.make_symm_difference(is2) << std::endl;
@@ -307,19 +320,19 @@ void test_xor()
 
     is1.symm_subtract(is2);
     std::cout << "\tsymm_subtract: " << is1 << std::endl;
-    is1 = {1, 2, 3, 4};
+    is1 = { 1, 2, 3, 4 };
     is1 ^= is2;
     std::cout << "\toperator ^=: " << is1 << std::endl;
 
-    is1 = {1, 2, 3, 4};
-    is2 = {5, 6, 7, 8};
+    is1 = { 1, 2, 3, 4 };
+    is2 = { 5, 6, 7, 8 };
     std::cout << "2. Симметрическое вычитание мн-ва " << is2 << " из мн-ва " << is1 << ": \n";
     std::cout << "\tmake_symm_difference: " << is1.make_symm_difference(is2) << std::endl;
     std::cout << "\toperator ^: " << (is1 ^ is2) << std::endl;
 
     is1.symm_subtract(is2);
     std::cout << "\tsymm_subtract: " << is1 << std::endl;
-    is1 = {1, 2, 3, 4};
+    is1 = { 1, 2, 3, 4 };
     is1 ^= is2;
     std::cout << "\toperator ^=: " << is1 << std::endl;
 
@@ -334,10 +347,41 @@ void test_xor()
     is1 ^= is2;
     std::cout << "\toperator ^=: " << is1 << std::endl;
 
-    std::cout << "=====================================\n";   
+    std::cout << "=====================================\n";
 }
 
-// #include <vector>
+void test_comparison()
+{
+    std::cout << "=====================================\n";
+
+    Set<int> is1{ 1, 2, 3, 4, 5, 6, 7 };
+    Set<int> is2{ 2, 3, 4, 5 };
+    Set<int> is3(is1);
+    Set<int> is4{ 5, 6, 7, 8 };
+    Set<int> is5{};
+
+    std::cout << is1 << " < " << is2 << " : " << (is1 < is2) << std::endl;
+    std::cout << is1 << " > " << is2 << " : " << (is1 > is2) << std::endl;
+    std::cout << is1 << " <= " << is3 << " : " << (is1 <= is2) << std::endl;
+    std::cout << is1 << " >= " << is3 << " : " << (is1 <= is3) << std::endl;
+    std::cout << is1 << " < " << is4 << " : " << (is1 < is4) << std::endl;
+    std::cout << is1 << " > " << is4 << " : " << (is1 > is4) << std::endl;
+    std::cout << is1 << " == " << is3 << " : " << (is1 == is3) << std::endl;
+    std::cout << is1 << " == " << is2 << " : " << (is1 == is2) << std::endl;
+    std::cout << is1 << " != " << is2 << " : " << (is1 != is2) << std::endl;
+    std::cout << is1 << " != " << is3 << " : " << (is1 != is3) << std::endl;
+
+    std::cout << is1 << " сравнимо с " << is2 << " : " << is1.comparable(is2) << std::endl;
+    std::cout << is1 << " сравнимо с " << is4 << " : " << is1.comparable(is4) << std::endl;
+
+    std::cout << is5 << " < " << is1 << " : " << (is5 < is1) << std::endl;
+    std::cout << is5 << " < " << is4 << " : " << (is5 < is4) << std::endl;
+    std::cout << is5 << " сравнимо с " << is1 << " : " << is5.comparable(is1) << std::endl;
+    std::cout << is1 << " сравнимо с " << is5 << " : " << is1.comparable(is5) << std::endl;
+
+    std::cout << "=====================================\n";
+}
+
 
 int main()
 {
@@ -350,7 +394,9 @@ int main()
     test_erase();
     test_subtract();
     test_xor();
-    // ==================== ТЕСТЫ ==================
 
+    test_comparison();
+    // ==================== ТЕСТЫ ==================
+    
     return 0;
 }
