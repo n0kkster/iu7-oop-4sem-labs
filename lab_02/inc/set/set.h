@@ -36,11 +36,17 @@ public:
     Set(std::initializer_list<U> ilist); // К-тор на основе списка инициализации. +
 
     explicit Set(const Set<T> &other); // К-тор копирования. +
-
-    Set(Set<T> &&other) noexcept; // К-тор переноса. +
+    Set(Set<T> &&other) noexcept;      // К-тор переноса. +
 
     template <ConvertibleInputIterator<T> It>
     Set(const It &begin, const It &end); // К-тор по двум итераторам +
+
+    template <ConvertibleContainer<T> C>
+    Set(const C &container); // Конструктор от контейнера +
+
+    template <ConvertibleRange<T> R>
+    Set(const R &range); // Конструктор от диапазона +
+
 
     // Добавить конструктор от range и другого convetible container
     // ==================== ============ ====================

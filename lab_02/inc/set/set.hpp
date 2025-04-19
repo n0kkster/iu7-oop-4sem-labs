@@ -3,6 +3,7 @@
 #include "exception.h"
 #include "set.h"
 
+#include <algorithm>
 #include <iostream>
 
 #pragma region Constructors
@@ -12,8 +13,7 @@ template <Convertible<T> U>
 Set<T>::Set(const size_t size, const U *array) : Set()
 {
     // std::cout << "arr cctor called\n";
-    for (size_t i = 0; i < size; ++i)
-        this->add(array[i]);
+    std::ranges::for_each(array, array + size, [this](const U &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
@@ -21,16 +21,14 @@ template <Convertible<T> U>
 Set<T>::Set(std::initializer_list<U> ilist) : Set()
 {
     // std::cout << "ilist cctor called\n";
-    for (const T &el : ilist)
-        this->add(el);
+    std::ranges::for_each(ilist, [this](const U &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
 Set<T>::Set(const Set<T> &other) : Set()
 {
     // std::cout << "copy cctor called\n";
-    for (const auto &el : other)
-        this->add(el);
+    std::ranges::for_each(other, [this](const T &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
@@ -41,6 +39,8 @@ Set<T>::Set(Set<T> &&other) noexcept
     this->_size = other._size;
     this->head = std::move(other.head);
     this->tail = std::move(other.tail);
+
+    other._size = 0;
 }
 
 template <CopyMoveAssignable T>
@@ -48,8 +48,23 @@ template <ConvertibleInputIterator<T> It>
 Set<T>::Set(const It &begin, const It &end)
 {
     // std::cout << "iter cctor called\n";
-    for (auto it = begin; it != end; ++it)
-        this->add(*it);
+    std::ranges::for_each(begin, end, [this](const T &el) { this->add(el); });
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T>::Set(const C &container)
+{
+    std::cout << "called container cctor\n";
+    std::ranges::for_each(container, [this](const T &value) { this->add(value); });
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T>::Set(const R &range)
+{
+    std::cout << "called range cctor\n";
+    std::ranges::for_each(range, [this](const T &value) { this->add(value); });
 }
 
 #pragma endregion
@@ -139,7 +154,6 @@ bool Set<T>::add(U &&value)
 
     return add(newNode);
 }
-
 
 #pragma endregion
 
@@ -302,31 +316,21 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 bool Set<T>::in(const U &value) const noexcept
 {
-    for (const auto &el : *this)
-        if (el == value)
-            return true;
-    return false;
+    return this->find(value) != this->cend();
 }
 
 template <CopyMoveAssignable T>
 template <ConvertibleInputIterator<T> It>
 bool Set<T>::in(const It &it) const noexcept
 {
-    for (const auto &el : *this)
-        if (el == *it)
-            return true;
-    return false;
+    return this->in(*it);
 }
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
 ConstIterator<T> Set<T>::find(const U &value) const noexcept
 {
-    for (auto it = this->cbegin(); it != this->cend(); ++it)
-        if (*it == value)
-            return it;
-
-    return this->cend();
+    return std::ranges::find(*this, value);
 }
 
 #pragma endregion
@@ -340,9 +344,10 @@ Set<T> &Set<T>::assign(const Set<U> &other)
     if (&other == this)
         return *this;
 
-    this->clear();
-    for (const auto &el : other)
-        this->add(el);
+    // this->clear();
+    // for (const auto &el : other)
+    // this->add(el);
+    std::ranges::for_each(other, [this](const U &el) { this->add(el); });
 
     return *this;
 }
@@ -362,6 +367,8 @@ Set<T> &Set<T>::assign(Set<U> &&other)
     this->_size = other._size;
     this->head = std::move(other.head);
     this->tail = std::move(other.tail);
+
+    other._size = 0;
 
     return *this;
 }
