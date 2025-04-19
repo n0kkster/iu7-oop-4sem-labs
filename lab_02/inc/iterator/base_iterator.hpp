@@ -2,5 +2,5 @@
 
 #include "base_iterator.h"
 
-template <typename T>
+template <CopyMoveAssignable T>
 BaseIterator<T>::~BaseIterator() { }

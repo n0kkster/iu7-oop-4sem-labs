@@ -1,10 +1,13 @@
 #pragma once
 
-#include "set_node.h"
+#include "concepts.h"
 
 #include <memory>
 
-template <typename T>
+template <CopyMoveAssignable>
+class Set;
+
+template <CopyMoveAssignable T>
 class BaseIterator
 {
 public:
@@ -12,7 +15,8 @@ public:
     virtual ~BaseIterator() = 0;
 
 protected:
-    std::weak_ptr<SetNode<T>> curr;
+    std::weak_ptr<typename Set<T>::SetNode> curr;
+    friend class Set<T>;
 };
 
 #include "base_iterator.hpp"

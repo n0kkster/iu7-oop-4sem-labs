@@ -10,100 +10,53 @@ ConstIterator<T>::ConstIterator() noexcept
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T>::ConstIterator(const std::shared_ptr<SetNode<T>> &pnode)
+ConstIterator<T>::ConstIterator(const std::shared_ptr<typename Set<T>::SetNode> &pnode) noexcept
 {
     this->curr = pnode;
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter)
+ConstIterator<T>::ConstIterator(const ConstIterator<T> &other)
 {
-    checkExpired();
-
-    this->curr = iter.curr.lock();
+    other.checkExpired();
+    this->curr = other.curr.lock();
 }
 
 template <CopyMoveAssignable T>
-SetNode<T> &ConstIterator<T>::getCurr() const
+typename Set<T>::SetNode &ConstIterator<T>::getCurr() const noexcept
 {
-    checkExpired();
-
+    // if (!this->curr.expired() && this->curr.lock() != nullptr)
     return *this->curr.lock();
+    // return nullptr;
 }
 
 template <CopyMoveAssignable T>
-void ConstIterator<T>::erase() const
-{
-    this->curr.lock()->exclude();
-}
-
-template <CopyMoveAssignable T>
-void ConstIterator<T>::next()
-{
-    checkExpired();
-
-    if (getCurr().getNext() == nullptr)
-        throw OutOfRangeException("The iterator went out of bounds while trying to increment.");
-
-    this->curr = getCurr().getNext();
-}
-
-template <CopyMoveAssignable T>
-void ConstIterator<T>::prev()
-{
-    checkExpired();
-
-    if (getCurr().getPrev() == nullptr)
-        throw OutOfRangeException("The iterator went out of bounds while trying to decrement.");
-
-    this->curr = getCurr().getPrev();
+void ConstIterator<T>::next() noexcept
+{    
+    if (!this->curr.expired() && this->curr.lock() != nullptr)
+        this->curr = this->getCurr().getNext();
 }
 
 #pragma region Operators
 
 template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator++()
+ConstIterator<T> &ConstIterator<T>::operator++() noexcept
 {
-    checkExpired();
-
-    next();
+    this->next();
     return *this;
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T> ConstIterator<T>::operator++(int)
+ConstIterator<T> ConstIterator<T>::operator++(int) noexcept
 {
-    checkExpired();
-
     auto copy = *this;
-    next();
+    this->next();
     return copy;
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator--()
+ConstIterator<T> ConstIterator<T>::operator+(int n) const noexcept
 {
-    checkExpired();
-
-    prev();
-    return *this;
-}
-
-template <CopyMoveAssignable T>
-ConstIterator<T> ConstIterator<T>::operator--(int)
-{
-    checkExpired();
-
-    auto copy = *this;
-    prev();
-    return copy;
-}
-
-template <CopyMoveAssignable T>
-ConstIterator<T> ConstIterator<T>::operator+(int n) const
-{
-    checkExpired();
-
     auto copy = *this;
     while (n-- > 0)
         ++copy;
@@ -112,49 +65,15 @@ ConstIterator<T> ConstIterator<T>::operator+(int n) const
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator+=(int n)
+ConstIterator<T>::operator bool() const noexcept
 {
-    checkExpired();
-
-    *this = *this + n;
-
-    return *this;
-}
-
-template <CopyMoveAssignable T>
-ConstIterator<T> ConstIterator<T>::operator-(int n) const
-{
-    checkExpired();
-
-    auto copy = *this;
-    while (n-- > 0)
-        --copy;
-
-    return copy;
-}
-
-template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator-=(int n)
-{
-    checkExpired();
-
-    *this = *this - n;
-
-    return *this;
-}
-
-template <CopyMoveAssignable T>
-ConstIterator<T>::operator bool() const
-{
-    checkExpired();
-
-    return this->curr.lock() != nullptr;
+    return !this->curr.expired() && this->curr.lock() != nullptr;
 }
 
 template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
 {
-    checkExpired();
+    this->checkExpired();
     other.checkExpired();
 
     this->curr = other.curr.lock();
@@ -164,7 +83,7 @@ ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
 template <CopyMoveAssignable T>
 ConstIterator<T> &ConstIterator<T>::operator=(ConstIterator<T> &&other)
 {
-    checkExpired();
+    this->checkExpired();
     other.checkExpired();
 
     this->curr = std::move(other.curr.lock());
@@ -174,43 +93,28 @@ ConstIterator<T> &ConstIterator<T>::operator=(ConstIterator<T> &&other)
 template <CopyMoveAssignable T>
 const T &ConstIterator<T>::operator*() const
 {
-    checkExpired();
+    this->checkExpired();
 
     return getCurr().value();
 }
 
 template <CopyMoveAssignable T>
-const T *ConstIterator<T>::operator->() const
+const std::shared_ptr<T> ConstIterator<T>::operator->() const
 {
-    checkExpired();
+    this->checkExpired();
 
-    return &getCurr().value();
+    return std::make_shared(getCurr().value());
 }
 
 template <CopyMoveAssignable T>
-const T &ConstIterator<T>::operator[](size_t offset) const
+bool ConstIterator<T>::operator==(const ConstIterator<T> &other) const noexcept
 {
-    checkExpired();
-    auto it = this + offset;
-
-    return it.getCurr().value();
-}
-
-template <CopyMoveAssignable T>
-bool ConstIterator<T>::operator==(const ConstIterator<T> &other) const
-{
-    checkExpired();
-    other.checkExpired();
-
     return this->curr.lock() == other.curr.lock();
 }
 
 template <CopyMoveAssignable T>
-bool ConstIterator<T>::operator!=(const ConstIterator<T> &other) const
+bool ConstIterator<T>::operator!=(const ConstIterator<T> &other) const noexcept
 {
-    checkExpired();
-    other.checkExpired();
-
     return this->curr.lock() != other.curr.lock();
 }
 
