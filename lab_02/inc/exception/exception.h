@@ -15,16 +15,11 @@ public:
     SetException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
-class MemoryException : public BaseException
+class MemoryException : public SetException
 {
 public:
     MemoryException(const char *info, const std::source_location &loc = std::source_location::current());
 };
 
-class OutOfRangeException : public BaseException
-{
-public:
-    OutOfRangeException(const char *info, const std::source_location &loc = std::source_location::current());
-};
 
 #include "exception.hpp"
