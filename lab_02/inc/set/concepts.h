@@ -5,7 +5,10 @@
 #include <iterator>
 
 template <typename From, typename To>
-concept Convertible = std::same_as<From, To> || std::convertible_to<From, To>;
+concept Convertible = (std::same_as<From, To> || std::convertible_to<From, To>);
+
+template <typename T, typename U>
+concept HasCommon =  requires { typename std::common_type_t<T, U>; };
 
 template <typename T>
 concept Assignable = requires(T &lv, T &rv) { lv = rv; };
@@ -15,10 +18,10 @@ concept CopyMoveAssignable = std::copy_constructible<T> && std::move_constructib
 
 template <typename T, typename U>
 concept EqualityComparable = requires(T t, U u) {
-    {t == u} noexcept -> std::same_as<bool>;
-    {t != u} noexcept -> std::same_as<bool>;
-    {u == t} noexcept -> std::same_as<bool>;
-    {u != t} noexcept -> std::same_as<bool>;
+    { t == u } noexcept -> std::same_as<bool>;
+    { t != u } noexcept -> std::same_as<bool>;
+    { u == t } noexcept -> std::same_as<bool>;
+    { u != t } noexcept -> std::same_as<bool>;
 };
 
 template <typename C>
@@ -49,7 +52,7 @@ concept InputIterator = std::input_iterator<It>;
 template <typename It, typename T>
 concept ConvertibleInputIterator = InputIterator<It> && Convertible<typename It::value_type, T>;
 
-template<typename S, typename It>
+template <typename S, typename It>
 concept Sentinel = std::sentinel_for<S, It>;
 
 template <typename R>
@@ -60,4 +63,3 @@ concept ConvertibleRange = Range<R> && Convertible<std::ranges::range_value_t<R>
 
 template <typename C, typename T>
 concept ConvertibleContainer = Container<C> && Convertible<typename C::value_type, T>;
-
