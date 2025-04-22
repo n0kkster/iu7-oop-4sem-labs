@@ -14,6 +14,7 @@ class Set : public BaseContainer
 {
 
 public:
+// Алиасы для концептов
 #pragma region Aliases
     using value_type = T;
     using reference = T &;
@@ -24,6 +25,7 @@ public:
     using size_type = size_t;
 #pragma endregion
 
+// Конструкторы класса
 #pragma region Constructors
     // ==================== Конструкторы ====================
     Set() = default;
@@ -54,15 +56,34 @@ public:
     // ==================== ============ ====================
 #pragma endregion
 
+// Функции и операторы присваивания
+#pragma region Assignment
+    // ======= Присваивание =======
+    // Копирующий оператор присваивания
+    template <Convertible<T> U>
+    Set<T> &assign(const Set<U> &other);    // +
+    Set<T> &operator=(const Set<T> &other); // +
+
+    // Перемещающий оператор присваивания
+    template <Convertible<T> U>
+    Set<T> &assign(Set<U> &&other) noexcept;    // +
+    Set<T> &operator=(Set<T> &&other) noexcept; // +
+    // ======= ============ =======
+#pragma endregion
+
+// Деструктор класса
 #pragma region Destructor
     // ===================== Деструктор =====================
     ~Set() override; // +
 // ===================== Деструктор =====================
 #pragma endregion
 
-    // ================== Основные функции ==================
+// Функции, принимающие один элемент
+#pragma region SingleElementFunctions
 
+// Добавление элемента в множества
 #pragma region Add
+
     // ======= Добавление элемента в множество =======
     template <Convertible<T> U>
     bool add(const U &value); // +
@@ -71,7 +92,7 @@ public:
     bool add(U &&value); // +
 // ======= ================================ =======
 #pragma endregion
-
+// Поиск элемента в множестве
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
     template <Convertible<T> U>
@@ -86,27 +107,7 @@ public:
     ConstIterator<T> find(const U &value) const noexcept; // +
     // ================ ============== ================
 #pragma endregion
-
-#pragma region Misc
-    // ======== Получение количества элементов ========
-    size_t size() const noexcept override; // +
-    // ======== ============================== ========
-
-    // ============== Очистка множества ===============
-    void clear() noexcept override; // +
-    // =============== ================ ===============
-
-    // ========= Проверка множества на пустоту ========
-    bool empty() const noexcept override; // +
-    // ========= ============================= ========
-
-    template <Convertible<T> U>
-    bool subsetOf(const Set<U> &other) const noexcept; // +
-
-    template <Convertible<T> U>
-    bool supersetOf(const Set<U> &other) const noexcept; // +
-#pragma endregion
-
+// Удаление элемента из множества
 #pragma region Erase
     // ============== Удаление элемента ===============
     template <Convertible<T> U>
@@ -117,8 +118,27 @@ public:
     // ============== ================= ===============
 #pragma endregion
 
-    // ================== ============== ====================
+#pragma endregion
 
+// Получение информации о текущем множестве
+#pragma region SetInfo
+    // ======== Получение количества элементов ========
+    size_t size() const noexcept override; // +
+    // ======== ============================== ========
+
+    // ========= Проверка множества на пустоту ========
+    bool empty() const noexcept override; // +
+    // ========= ============================= ========
+#pragma endregion
+
+// Очистка множества
+#pragma region Clear
+    // ============== Очистка множества ===============
+    void clear() noexcept override; // +
+    // =============== ================ ===============
+#pragma endregion
+
+// Функции для получения итераторов
 #pragma region Iterators
     // ===================== Итераторы ======================
     ConstIterator<T> begin() const noexcept;   // +
@@ -132,33 +152,55 @@ public:
 // ===================== ========= ======================
 #pragma endregion
 
-#pragma region Operators
-    // ===================== Операторы ======================
+// Математические операции с множествами
+#pragma region MathFunctions
 
-    // ======= Присваивание =======
-    // Копирующий оператор присваивания
-    template <Convertible<T> U>
-    Set<T> &assign(const Set<U> &other);    // +
-    Set<T> &operator=(const Set<T> &other); // +
-
-    // Перемещающий оператор присваивания
-    template <Convertible<T> U>
-    Set<T> &assign(Set<U> &&other) noexcept;    // +
-    Set<T> &operator=(Set<T> &&other) noexcept; // +
-    // ======= ============ =======
-
-    // ======= Объединение =======
-    template <Convertible<T> U>
-    Set<T> make_union(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> operator|(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> operator+(const Set<U> &other) const; // +
+// Объединение двух множеств
+#pragma region Union
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> make_union(const Set<U> &other) const; // +
 
     template <Convertible<T> U>
     Set<T> &unite(const Set<U> &other); // +
+#pragma endregion
+// Перемечение двух множеств
+#pragma region Intersection
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> make_intersection(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &intersect(const Set<U> &other); // +
+#pragma endregion
+// Разность двух множеств
+#pragma region Difference
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> make_difference(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &subtract(const Set<U> &other); // +
+#pragma endregion
+// Симметрическая разность
+#pragma region SymmDifference
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> make_symm_difference(const Set<U> &other) const; // +
+
+    template <Convertible<T> U>
+    Set<T> &symm_subtract(const Set<U> &other); // +
+#pragma endregion
+
+#pragma endregion
+
+// Операторы для математических операций
+#pragma region MathOperators
+
+// Операторы объединения. + += | |=
+#pragma region Union
+    // ======= Объединение =======
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> operator|(const Set<U> &other) const; // +
+
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> operator+(const Set<U> &other) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator|=(const Set<U> &other); // +
@@ -166,54 +208,60 @@ public:
     template <Convertible<T> U>
     Set<T> &operator+=(const Set<U> &other); // +
     // ======= =========== =======
-
+#pragma endregion
+// Операторы пересечения. & &=
+#pragma region Intersection
     // ======= Пересечение =======
-    template <Convertible<T> U>
-    Set<T> make_intersection(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> operator&(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> &intersect(const Set<U> &other); // +
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> operator&(const Set<U> &other) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator&=(const Set<U> &other); // +
     // ======= =========== =======
-
+#pragma endregion
+// Операторы разности. - -=
+#pragma region Difference
     // ======= Разность =======
-    template <Convertible<T> U>
-    Set<T> make_difference(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> operator-(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> &subtract(const Set<U> &other); // +
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> operator-(const Set<U> &other) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator-=(const Set<U> &other); // +
     // ======= ======== =======
-
+#pragma endregion
+// Операторы симметрической разности. ^ ^=
+#pragma region SymmDifference
     // ======= Симметрическая разность =======
-    template <Convertible<T> U>
-    Set<T> make_symm_difference(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> operator^(const Set<U> &other) const; // +
-
-    template <Convertible<T> U>
-    Set<T> &symm_subtract(const Set<U> &other); // +
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> operator^(const Set<U> &other) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator^=(const Set<U> &other); // +
     // ======= =========== =======
 #pragma endregion
 
-#pragma region Compare
-    // ======== Сравнение ========
+#pragma endregion
+
+// Операторы сравнения
+#pragma region CompareOperators
     template <EqualityComparable<T> U>
     std::partial_ordering operator<=>(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool operator==(const Set<U> &other) const; // +
+
+    template <EqualityComparable<T> U>
+    bool operator!=(const Set<U> &other) const; // +
+#pragma endregion
+
+// Функции сравнения
+#pragma region CompareFunctions
+    // ======== Сравнение ========
+    template <Convertible<T> U>
+    bool subsetOf(const Set<U> &other) const noexcept; // +
+
+    template <Convertible<T> U>
+    bool supersetOf(const Set<U> &other) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool less(const Set<U> &other) const; // +
@@ -231,13 +279,7 @@ public:
     bool equal(const Set<U> &other) const; // +
 
     template <EqualityComparable<T> U>
-    bool operator==(const Set<U> &other) const; // +
-
-    template <EqualityComparable<T> U>
     bool notEqual(const Set<U> &other) const; // +
-
-    template <EqualityComparable<T> U>
-    bool operator!=(const Set<U> &other) const; // +
 
     template <EqualityComparable<T> U>
     bool comparable(const Set<U> &other) const;
@@ -249,7 +291,9 @@ public:
 #pragma endregion
 
 protected:
+// Класс ноды
 #pragma region SetNode
+
     class SetNode
     {
 
@@ -289,10 +333,12 @@ protected:
         bool operator!=(const std::shared_ptr<SetNode> &other) const noexcept;
         // ===================== ========= ======================
     };
+
 #pragma endregion
 
     bool add(const std::shared_ptr<SetNode> &node); // +
 
+// Друзья друзьяшки
 #pragma region Friends
     friend class BaseIterator<T>;
     friend class ConstIterator<T>;
