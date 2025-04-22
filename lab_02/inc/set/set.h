@@ -40,34 +40,64 @@ public:
     Set(Set<T> &&other) noexcept;      // К-тор переноса. +
 
     template <ConvertibleInputIterator<T> It, Sentinel<It> S>
-    Set(const It &begin, const S &end); // К-тор по двум итераторам +
+    explicit Set(const It &begin, const S &end); // К-тор по двум итераторам +
 
     template <ConvertibleContainer<T> C>
-    Set(const C &container); // Конструктор от контейнера +
+    explicit Set(const C &container); // Конструктор от контейнера +
 
     template <ConvertibleContainer<T> C>
-    Set(C &&container);
+    explicit Set(C &&container);
 
     template <ConvertibleRange<T> R>
-    Set(const R &range); // Конструктор от диапазона +
+    explicit Set(const R &range); // Конструктор от диапазона +
 
     template <ConvertibleRange<T> R>
-    Set(R &&range);
+    explicit Set(R &&range);
     // ==================== ============ ====================
 #pragma endregion
 
 // Функции и операторы присваивания
 #pragma region Assignment
     // ======= Присваивание =======
-    // Копирующий оператор присваивания
+    // Копирующий оператор присваивания от множества
     template <Convertible<T> U>
     Set<T> &assign(const Set<U> &other);    // +
     Set<T> &operator=(const Set<T> &other); // +
 
-    // Перемещающий оператор присваивания
+    // Перемещающий оператор присваивания от множемтва
     template <Convertible<T> U>
     Set<T> &assign(Set<U> &&other) noexcept;    // +
     Set<T> &operator=(Set<T> &&other) noexcept; // +
+
+    // Копирующий оператор присваивания от списка инициализации
+    template <Convertible<T> U>
+    Set<T> &assign(std::initializer_list<U> ilist);
+    template <Convertible<T> U>
+    Set<T> &operator=(std::initializer_list<U> ilist);
+
+    // Копирующий оператор присваивания от контейнера
+    template <ConvertibleContainer<T> C>
+    Set<T> &assign(const C &container); // +
+    template <ConvertibleContainer<T> C>
+    Set<T> &operator=(const C &container); // +
+
+    // Перемещающий оператор присваивания от контейнера
+    template <ConvertibleContainer<T> C>
+    Set<T> &assign(C &&container); // +
+    template <ConvertibleContainer<T> C>
+    Set<T> &operator=(C &&container); // +
+
+    // Копирующий оператор присваивания от диапазона
+    template <ConvertibleRange<T> R>
+    Set<T> &assign(const R &range); // +
+    template <ConvertibleRange<T> R>
+    Set<T> &operator=(const R &range); // +
+
+    // Перемещающий оператор присваивания от диапазона
+    template <ConvertibleRange<T> R>
+    Set<T> &assign(R &&range); // +
+    template <ConvertibleRange<T> R>
+    Set<T> &operator=(R &&range); // +
     // ======= ============ =======
 #pragma endregion
 
