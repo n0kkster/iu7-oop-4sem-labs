@@ -65,7 +65,17 @@ template <typename R>
 concept Range = std::ranges::input_range<R>;
 
 template <typename R, typename T>
-concept ConvertibleRange = Range<R> && Convertible<std::ranges::range_value_t<R>, T> && !IsSet<R> && !Container<R>;
+concept ConvertibleRange =
+    !IsSet<R> && Range<R> && Convertible<std::ranges::range_value_t<R>, T> && !Container<R>;
 
 template <typename C, typename T>
-concept ConvertibleContainer = !IsSet<C> && Container<C> && Convertible<typename std::remove_reference_t<C>::value_type, T>;
+concept ConvertibleContainer =
+    !IsSet<C> && Container<C> && Convertible<typename std::remove_reference_t<C>::value_type, T>;
+
+template <typename C, typename T>
+concept CommonContainer =
+    !IsSet<C> && Container<C> && HasCommon<typename std::remove_reference_t<C>::value_type, T>;
+
+template <typename R, typename T>
+concept CommonRange =
+    !IsSet<R> && Range<R> && HasCommon<typename std::remove_reference_t<R>::value_type, T>;
