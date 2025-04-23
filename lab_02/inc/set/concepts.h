@@ -58,6 +58,9 @@ concept InputIterator = std::input_iterator<It>;
 template <typename It, typename T>
 concept ConvertibleInputIterator = InputIterator<It> && Convertible<typename It::value_type, T>;
 
+template <typename It, typename T>
+concept EqualityComparableInputIterator = InputIterator<It> && EqualityComparable<typename It::value_type, T>;
+
 template <typename S, typename It>
 concept Sentinel = std::sentinel_for<S, It>;
 
@@ -71,6 +74,14 @@ concept ConvertibleRange =
 template <typename C, typename T>
 concept ConvertibleContainer =
     !IsSet<C> && Container<C> && Convertible<typename std::remove_reference_t<C>::value_type, T>;
+
+template <typename R, typename T>
+concept EqualityComparableRange =
+    !IsSet<R> && Range<R> && EqualityComparable<std::ranges::range_value_t<R>, T> && !Container<R>;
+
+template <typename C, typename T>
+concept EqualityComparableContainer =
+    !IsSet<C> && Container<C> && EqualityComparable<typename std::remove_reference_t<C>::value_type, T>;
 
 template <typename C, typename T>
 concept CommonContainer =
