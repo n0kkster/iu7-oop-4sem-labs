@@ -17,6 +17,7 @@ LDFLAGS := -lm
 
 all : app.exe
 
+debug: CC = g++
 debug: CFLAGS += -g
 debug: app.exe 
 
