@@ -3,6 +3,7 @@
 #include "const_iterator.h"
 #include "exception.h"
 
+#pragma region Constructors
 template <CopyMoveAssignable T>
 ConstIterator<T>::ConstIterator() noexcept
 {
@@ -21,18 +22,19 @@ ConstIterator<T>::ConstIterator(const ConstIterator<T> &other)
     other.checkExpired();
     this->curr = other.curr.lock();
 }
+#pragma endregion
 
 template <CopyMoveAssignable T>
-typename Set<T>::SetNode &ConstIterator<T>::getCurr() const noexcept
+typename Set<T>::SetNode &ConstIterator<T>::getCurr() const
 {
-    // if (!this->curr.expired() && this->curr.lock() != nullptr)
+    this->checkExpired();
+    
     return *this->curr.lock();
-    // return nullptr;
 }
 
 template <CopyMoveAssignable T>
 void ConstIterator<T>::next() noexcept
-{    
+{
     if (!this->curr.expired() && this->curr.lock() != nullptr)
         this->curr = this->getCurr().getNext();
 }
@@ -71,21 +73,15 @@ ConstIterator<T>::operator bool() const noexcept
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other)
+ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &other) noexcept
 {
-    this->checkExpired();
-    other.checkExpired();
-
     this->curr = other.curr.lock();
     return *this;
 }
 
 template <CopyMoveAssignable T>
-ConstIterator<T> &ConstIterator<T>::operator=(ConstIterator<T> &&other)
+ConstIterator<T> &ConstIterator<T>::operator=(ConstIterator<T> &&other) noexcept
 {
-    this->checkExpired();
-    other.checkExpired();
-
     this->curr = std::move(other.curr.lock());
     return *this;
 }

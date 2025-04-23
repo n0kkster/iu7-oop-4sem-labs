@@ -50,8 +50,8 @@ public:
     bool operator==(const ConstIterator<T> &other) const noexcept;
     bool operator!=(const ConstIterator<T> &other) const noexcept;
 
-    ConstIterator<T> &operator=(const ConstIterator<T> &other);
-    ConstIterator<T> &operator=(ConstIterator<T> &&other);
+    ConstIterator<T> &operator=(const ConstIterator<T> &other) noexcept;
+    ConstIterator<T> &operator=(ConstIterator<T> &&other) noexcept;
 
     const T &operator*() const;
     const std::shared_ptr<T> operator->() const;
@@ -64,7 +64,7 @@ public:
 
 private:
     // ======================= Геттеры ======================
-    typename Set<T>::SetNode &getCurr() const noexcept;
+    typename Set<T>::SetNode &getCurr() const;
     // ================= =================== ================
 };
 
