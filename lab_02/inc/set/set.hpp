@@ -577,7 +577,7 @@ Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_intersection(con
 {
     Set<std::common_type_t<T, typename C::value_type>> copy;
     auto filtered =
-        *this | std::views::filter([&](const auto &el) { return container.find(el) != container.cend(); });
+        *this | std::views::filter([&](const auto &el) { return std::ranges::find(container, el) != container.cend(); });
     std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
@@ -589,7 +589,7 @@ Set<T> &Set<T>::intersect(const C &container)
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
-        if (container.find(*it) == container.cend())
+        if (std::ranges::find(container, *it) == container.cend())
             this->erase(it);
         else
             ++it;
@@ -604,7 +604,7 @@ Set<std::common_type_t<T, typename R::value_type>> Set<T>::make_intersection(con
 {
     Set<std::common_type_t<T, typename R::value_type>> copy;
     auto filtered =
-        *this | std::views::filter([&](const auto &el) { return range.find(el) != range.cend(); });
+        *this | std::views::filter([&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
     std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
@@ -616,7 +616,7 @@ Set<T> &Set<T>::intersect(const R &range)
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
-        if (range.find(*it) == range.cend())
+        if (std::ranges::find(range, *it) == range.cend())
             this->erase(it);
         else
             ++it;
@@ -756,10 +756,38 @@ Set<std::common_type_t<T, U>> Set<T>::operator|(const Set<U> &other) const
 }
 
 template <CopyMoveAssignable T>
+template <CommonContainer<T> C>
+Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator|(const C &container) const
+{ 
+    return this->make_union(container);
+}
+
+template <CopyMoveAssignable T>
+template <CommonRange<T> R>
+Set<std::common_type_t<T, typename R::value_type>> Set<T>::operator|(const R &range) const
+{ 
+    return this->make_union(range);
+}
+
+template <CopyMoveAssignable T>
 template <HasCommon<T> U>
 Set<std::common_type_t<T, U>> Set<T>::operator+(const Set<U> &other) const
 {
     return this->make_union(other);
+}
+
+template <CopyMoveAssignable T>
+template <CommonContainer<T> C>
+Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator+(const C &container) const
+{ 
+    return this->make_union(container);
+}
+
+template <CopyMoveAssignable T>
+template <CommonRange<T> R>
+Set<std::common_type_t<T, typename R::value_type>> Set<T>::operator+(const R &range) const
+{ 
+    return this->make_union(range);
 }
 
 template <CopyMoveAssignable T>
@@ -770,6 +798,20 @@ Set<T> &Set<T>::operator|=(const Set<U> &other)
 }
 
 template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T> &Set<T>::operator|=(const C &container)
+{
+    return this->unite(container);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T> &Set<T>::operator|=(const R &range)
+{
+    return this->unite(range);
+}
+
+template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::operator+=(const Set<U> &other)
 {
@@ -777,9 +819,18 @@ Set<T> &Set<T>::operator+=(const Set<U> &other)
 }
 
 template <CopyMoveAssignable T>
-template <CommonContainer<T> C>
-Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator|(const C &container) const
-{ }
+template <ConvertibleContainer<T> C>
+Set<T> &Set<T>::operator+=(const C &container)
+{
+    return this->unite(container);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T> &Set<T>::operator+=(const R &range)
+{
+    return this->unite(range);
+}
 
 #pragma endregion
 #pragma region Intersection
@@ -792,10 +843,38 @@ Set<std::common_type_t<T, U>> Set<T>::operator&(const Set<U> &other) const
 }
 
 template <CopyMoveAssignable T>
+template <CommonContainer<T> C>
+Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator&(const C &container) const
+{
+    return this->make_intersection(container);
+}
+
+template <CopyMoveAssignable T>
+template <CommonRange<T> R>
+Set<std::common_type_t<T, typename R::value_type>> Set<T>::operator&(const R &range) const
+{
+    return this->make_intersection(range);
+}
+
+template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::operator&=(const Set<U> &other)
 {
     return this->intersect(other);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T> &Set<T>::operator&=(const C &container)
+{
+    return this->intersect(container);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T> &Set<T>::operator&=(const R &range)
+{
+    return this->intersect(range);
 }
 
 #pragma endregion
@@ -809,10 +888,38 @@ Set<std::common_type_t<T, U>> Set<T>::operator-(const Set<U> &other) const
 }
 
 template <CopyMoveAssignable T>
+template <CommonContainer<T> C>
+Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator-(const C &container) const
+{
+    return this->make_difference(container);
+}
+
+template <CopyMoveAssignable T>
+template <CommonRange<T> R>
+Set<std::common_type_t<T, typename R::value_type>> Set<T>::operator-(const R &range) const
+{
+    return this->make_difference(range);
+}
+
+template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::operator-=(const Set<U> &other)
 {
     return this->subtract(other);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T> &Set<T>::operator-=(const C &container)
+{
+    return this->subtract(container);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T> &Set<T>::operator-=(const R &range)
+{
+    return this->subtract(range);
 }
 
 #pragma endregion
@@ -826,10 +933,38 @@ Set<std::common_type_t<T, U>> Set<T>::operator^(const Set<U> &other) const
 }
 
 template <CopyMoveAssignable T>
+template <CommonContainer<T> C>
+Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator^(const C &container) const
+{
+    return this->make_symm_difference(container);
+}
+
+template <CopyMoveAssignable T>
+template <CommonRange<T> R>
+Set<std::common_type_t<T, typename R::value_type>> Set<T>::operator^(const R &range) const
+{
+    return this->make_symm_difference(range);
+}
+
+template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::operator^=(const Set<U> &other)
 {
     return this->symm_subtract(other);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleContainer<T> C>
+Set<T> &Set<T>::operator^=(const C &container)
+{
+    return this->symm_subtract(container);
+}
+
+template <CopyMoveAssignable T>
+template <ConvertibleRange<T> R>
+Set<T> &Set<T>::operator^=(const R &range)
+{
+    return this->symm_subtract(range);
 }
 
 #pragma endregion

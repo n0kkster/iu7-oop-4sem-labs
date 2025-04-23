@@ -261,30 +261,30 @@ public:
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator|(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
-    Set<std::common_type_t<T, typename C::value_type>> operator|(const C &container) const;
+    Set<std::common_type_t<T, typename C::value_type>> operator|(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator|(const R &range) const;
+    Set<std::common_type_t<T, typename R::value_type>> operator|(const R &range) const; // +
 
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator+(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
-    Set<std::common_type_t<T, typename C::value_type>> operator+(const C &container) const;
+    Set<std::common_type_t<T, typename C::value_type>> operator+(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator+(const R &range) const;
+    Set<std::common_type_t<T, typename R::value_type>> operator+(const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator|=(const Set<U> &other); // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator|=(const C &container);
+    Set<T> &operator|=(const C &container); // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator|=(const R &range);
+    Set<T> &operator|=(const R &range); // +
 
     template <Convertible<T> U>
     Set<T> &operator+=(const Set<U> &other); // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator+=(const C &container);
+    Set<T> &operator+=(const C &container); // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator+=(const R &range);
+    Set<T> &operator+=(const R &range); // +
     // ======= =========== =======
 #pragma endregion
 // Операторы пересечения. & &=
@@ -293,17 +293,16 @@ public:
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator&(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
-    Set<std::common_type_t<T, typename C::value_type>> operator&(const C &container) const;
+    Set<std::common_type_t<T, typename C::value_type>> operator&(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator&(const R &range) const;
-
+    Set<std::common_type_t<T, typename R::value_type>> operator&(const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator&=(const Set<U> &other); // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator&=(const C &container);
+    Set<T> &operator&=(const C &container); // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator&=(const R &range);
+    Set<T> &operator&=(const R &range); // +
     // ======= =========== =======
 #pragma endregion
 // Операторы разности. - -=
