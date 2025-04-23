@@ -15,7 +15,6 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T>::Set(const size_t size, const U *array) : Set()
 {
-    std::cout << "called cctor from array\n";
     std::ranges::for_each(array, array + size, [this](const U &el) { this->add(el); });
 }
 
@@ -23,21 +22,18 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T>::Set(std::initializer_list<U> ilist) : Set()
 {
-    std::cout << "called cctor from ilist\n";
     std::ranges::for_each(ilist, [this](const U &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
 Set<T>::Set(const Set<T> &other) : Set()
 {
-    std::cout << "called cctor from set lref\n";
     std::ranges::for_each(other, [this](const T &el) { this->add(el); });
 }
 
 template <CopyMoveAssignable T>
 Set<T>::Set(Set<T> &&other) noexcept
 {
-    std::cout << "called cctor from set rref\n";
     this->_size = other._size;
     this->head = std::move(other.head);
     this->tail = std::move(other.tail);
@@ -49,7 +45,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleInputIterator<T> It, Sentinel<It> S>
 Set<T>::Set(const It &begin, const S &end)
 {
-    std::cout << "called cctor from iters\n";
     std::ranges::for_each(begin, end, [this](const T &el) { this->add(el); });
 }
 
@@ -57,7 +52,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T>::Set(const C &container)
 {
-    std::cout << "called cctor from container lref\n";
     std::ranges::for_each(container, [this](const T &value) { this->add(value); });
 }
 
@@ -65,7 +59,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T>::Set(C &&container)
 {
-    std::cout << "called cctor from container rref\n";
     std::ranges::for_each(container, [this](const T &value) { this->add(std::move(value)); });
 }
 
@@ -73,7 +66,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T>::Set(const R &range)
 {
-    std::cout << "called cctor from range lref\n";
     std::ranges::for_each(range, [this](const T &value) { this->add(value); });
 }
 
@@ -81,7 +73,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T>::Set(R &&range)
 {
-    std::cout << "called cctor from range rref\n";
     std::ranges::for_each(range, [this](auto &&value) { this->add(std::move(value)); });
 }
 
@@ -94,8 +85,6 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::assign(const Set<U> &other)
 {
-    std::cout << "assign from set lref\n";
-
     if (&other == this)
         return *this;
 
@@ -116,8 +105,6 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::assign(Set<U> &&other) noexcept
 {
-    std::cout << "assign from set rref\n";
-
     this->clear();
 
     this->_size = other._size;
@@ -139,8 +126,6 @@ template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::assign(std::initializer_list<U> ilist)
 {
-    std::cout << "assign from ilist\n";
-
     this->clear();
     std::ranges::for_each(ilist, [this](const T &el) { this->add(el); });
     return *this;
@@ -157,8 +142,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T> &Set<T>::assign(const C &container)
 {
-    std::cout << "assign from container lref\n";
-
     this->clear();
     std::ranges::for_each(container, [this](const T &el) { this->add(el); });
     return *this;
@@ -175,7 +158,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T> &Set<T>::assign(C &&container)
 {
-    std::cout << "assign from container rref\n";
     this->clear();
     std::ranges::for_each(container, [this](const T &el) { this->add(std::move(el)); });
     return *this;
@@ -192,8 +174,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T> &Set<T>::assign(const R &range)
 {
-    std::cout << "assign from range lref\n";
-
     this->clear();
     std::ranges::for_each(range, [this](const T &el) { this->add(el); });
     return *this;
@@ -210,8 +190,6 @@ template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T> &Set<T>::assign(R &&range)
 {
-    std::cout << "assign from range rref\n";
-
     this->clear();
     std::ranges::for_each(range, [this](const T &el) { this->add(std::move(el)); });
     return *this;
