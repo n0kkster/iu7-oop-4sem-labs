@@ -78,4 +78,4 @@ concept CommonContainer =
 
 template <typename R, typename T>
 concept CommonRange =
-    !IsSet<R> && Range<R> && HasCommon<typename std::remove_reference_t<R>::value_type, T>;
+    !IsSet<R> && !Container<R> && Range<R> && HasCommon<typename std::remove_reference_t<R>::value_type, T>;
