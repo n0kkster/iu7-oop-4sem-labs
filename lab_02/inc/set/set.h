@@ -208,7 +208,8 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> make_intersection(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_intersection(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_intersection(
+        const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &intersect(const Set<U> &other) noexcept; // +
@@ -418,7 +419,7 @@ public:
     template <EqualityComparable<T> U>
     bool greater(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool greater(const C &container) const noexcept; // + 
+    bool greater(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
     bool greater(const R &range) const noexcept; // +
 
@@ -450,21 +451,26 @@ protected:
 // Класс ноды
 #pragma region SetNode
 
-    class SetNode
+    class SetNode : public std::enable_shared_from_this<SetNode>
     {
 
     private:
         T data;
         std::shared_ptr<SetNode> next;
 
+        explicit SetNode(const T &value) noexcept;
+        explicit SetNode(T &&value) noexcept;
+        SetNode(const std::shared_ptr<SetNode> next, const T &value) noexcept;
+
     public:
         // ==================== Конструкторы ====================
         SetNode() = delete;
-        explicit SetNode(const T &value) noexcept;
-        explicit SetNode(T &&value) noexcept;
-        explicit SetNode(const SetNode &other) noexcept;
-        explicit SetNode(SetNode &&other) noexcept;
-        explicit SetNode(const std::shared_ptr<SetNode> &pnode) noexcept;
+        SetNode(const SetNode &other) = delete;
+        SetNode(SetNode &&other) = delete;
+
+        // Фабрика
+        template <typename... Args>
+        static std::shared_ptr<SetNode> create(Args &&...params);
         // ==================== ============ ====================
 
         // ===================== Деструктор =====================
@@ -482,6 +488,7 @@ protected:
 
         // ======================= Геттеры ======================
         const T &value() const noexcept;
+        std::shared_ptr<T> get();
 
         std::shared_ptr<SetNode> getNext() const noexcept;
         // ======================= ======= ======================
