@@ -2,12 +2,11 @@
 
 #include "exception.h"
 
-IteratorException::IteratorException(const char *info, const std::source_location &loc) :
+IteratorException::IteratorException(const char *info, const std::source_location &loc) noexcept :
     BaseException(info, loc) { };
 
-SetException::SetException(const char *info, const std::source_location &loc) : 
+SetException::SetException(const char *info, const std::source_location &loc) noexcept :
     BaseException(info, loc) { };
 
-MemoryException::MemoryException(const char *info, const std::source_location &loc) :
+MemoryException::MemoryException(const char *info, const std::source_location &loc) noexcept :
     SetException(info, loc) { };
-    
