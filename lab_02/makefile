@@ -1,4 +1,4 @@
-CC := g++
+CC := clang++
 
 HEADERS_DIR := inc
 SRC_DIR := src
