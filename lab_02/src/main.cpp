@@ -44,14 +44,14 @@ void test_cctors()
     std::cout << "6. Конструктор от итераторов: ";
     std::cout << is6 << std::endl;
 
-    std::vector<int> vec{1, 2, 3, 4, 4, 3, 2, 1};
+    std::vector<int> vec{ 1, 2, 3, 4, 4, 3, 2, 1 };
 
     Set<int> vs(vec);
     std::cout << "7. Конструктор от контейнера: ";
     std::cout << vs << std::endl;
 
     Set<int> vr(std::ranges::subrange(vec.begin() + 1, vec.end() - 1));
-    std::cout << "7. Конструктор от диапазона: ";
+    std::cout << "8. Конструктор от диапазона: ";
     std::cout << vr << std::endl;
 
     delete[] arr;
@@ -382,9 +382,15 @@ void test_comparison()
     std::cout << "=====================================\n";
 }
 
-
 int main()
 {
+    static_assert(std::forward_iterator<ConstIterator<int>>,
+                  "Iterator does not satisfy std::forward_iterator");
+
+    static_assert(Container<Set<int>>, "Set does not satisfy Container");
+    static_assert(Container<std::vector<int>>, "Vector does not satisfy Container");
+    static_assert(std::ranges::input_range<Set<int>>, "Set does not satisfy input range");
+
     // ==================== ТЕСТЫ ==================
     test_cctors();
     test_addition();
@@ -397,6 +403,69 @@ int main()
 
     test_comparison();
     // ==================== ТЕСТЫ ==================
-    
+
+    // Set<int> is1 = { 1, 2, 3, 4, 5 };
+    // Set<double> ds1 = { 1.0, 3.4, 5.6, 7.8 };
+
+    // auto res = is1 ^ ds1;
+    // auto res2 = ds1 ^ is1;
+    // std::cout << is1 << " & " << ds1 << " = " << res << std::endl;
+    // std::cout << ds1 << " & " << is1 << " = " << res2 << std::endl;
+
+    // std::vector<int> ivec = { 1, 2, 3, 4, 5 };
+    // std::ranges::for_each(ivec, [](const auto &el) { std::cout << el << " "; });
+    // std::cout << std::endl;
+
+    // Set<int> isvec(ivec);
+
+    // Set<int> istvec(std::vector<int>{ 1, 2, 3 });
+
+    // Set<int> is1;
+    // Set<int> is2 = {1, 2, 3, 4};
+
+    // std::cout << "calling copy lref\n";
+    // is1 = is2;
+
+    // std::cout << "calling copy rref\n";
+    // is1 = Set<int>{1, 2, 3, 4};
+
+    // std::cout << "calling ilist\n";
+    // is1 = {1, 2, 3, 4};
+
+    // std::cout << "calling container lref\n";
+    // std::vector<int> vec;
+    // vec.push_back(1);
+    // is1 = vec;
+
+    // std::cout << "calling container rref\n";
+    // is1 = std::vector<int>{1, 2, 3, 4};
+
+    // Set<int> is1 = {1, 2, 3, 4, 5};
+    // std::vector<int> iv1 = {5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7};
+    // std::cout << is1 + iv1 << std::endl;
+
+    // Set<int> is1 = {};
+    // Set<int> is2 = {0, 1, 2, 3, 4, 5, 6, 7};
+
+    // std::cout << is1.subsetOf(is2) << std::endl;
+
+    Set<int> is1 = { 1, 2, 3, 4 };
+    std::vector<double> vec = { 1, 1, 1, 2.0, 3, 4 };
+    std::cout << (is1 == vec) << std::endl;
+    std::cout << (vec <= is1) << std::endl;
+
+    std::cout << "\n";
+
     return 0;
 }
+
+// TODO
+// 1. сделать форвард итератор и проверить его статик ассертом +
+// 2. разобраться с конструктором ноды (вроде разобрался ?) +
+// 6. чето решить с конвертацией типов (например set<int> + set<double> должно быть set<double>) +
+// 7. перегруппировать функции в регионах +
+// 4. разобраться с конструкторами от rvalue контейнера и диапазона +
+// 8. сделать чуть более сложную иерархию наследования эксепшенов +
+// 5. сделать оператор присваивания от инит листа, range, container +
+// сделать остальные операторы от range и контейнера +
+// 3. разобраться со стрелочкой в итераторе +
