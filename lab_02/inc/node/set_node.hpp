@@ -1,8 +1,7 @@
 #pragma once
 
-#include "set.h"
 #include "concepts.h"
-
+#include "set.h"
 
 template <CopyMoveAssignable T>
 Set<T>::SetNode::SetNode(const T &value) noexcept : data(value), next(nullptr)
@@ -13,7 +12,16 @@ Set<T>::SetNode::SetNode(T &&value) noexcept : data(std::move(value)), next(null
 { }
 
 template <CopyMoveAssignable T>
-Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> &pnode) noexcept : data(pnode.value), next(pnode.next)
+Set<T>::SetNode::SetNode(const Set<T>::SetNode &other) noexcept : data(other.data), next(other.getNext())
+{ }
+
+template <CopyMoveAssignable T>
+Set<T>::SetNode::SetNode(Set<T>::SetNode &&other) noexcept : data(std::move(other.data)), next(std::move(other.getNext()))
+{ }
+
+template <CopyMoveAssignable T>
+Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> &pnode) noexcept :
+    data(pnode.value), next(pnode.next)
 { }
 
 template <CopyMoveAssignable T>
@@ -43,7 +51,14 @@ void Set<T>::SetNode::setNull() noexcept
 template <CopyMoveAssignable T>
 void Set<T>::SetNode::setNext(const typename Set<T>::SetNode &node)
 {
-    this->next = std::make_shared<typename Set<T>::SetNode>(node);
+    try
+    {
+        this->next = std::make_shared<typename Set<T>::SetNode>(node);
+    }
+    catch (const std::bad_alloc &ex)
+    {
+        throw MemoryException("Error allocating memory for next!");
+    }
 }
 
 template <CopyMoveAssignable T>
