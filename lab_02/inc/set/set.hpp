@@ -566,7 +566,8 @@ Set<T> &Set<T>::intersect(const Set<U> &other) noexcept
     }
 
     // auto to_erase = other | std::views::filter([&](const T &elem) { return !other.in(elem); });
-    // std::ranges::for_each(to_erase, [this](const T &el) { this->erase(el); std::cout << "erasing " << el << " "; });
+    // std::ranges::for_each(to_erase, [this](const T &el) { this->erase(el); std::cout << "erasing " << el <<
+    // " "; });
 
     return *this;
 }
@@ -576,8 +577,9 @@ template <CommonContainer<T> C>
 Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_intersection(const C &container) const
 {
     Set<std::common_type_t<T, typename C::value_type>> copy;
-    auto filtered =
-        *this | std::views::filter([&](const auto &el) { return std::ranges::find(container, el) != container.cend(); });
+    auto filtered = *this
+                  | std::views::filter([&](const auto &el)
+                                       { return std::ranges::find(container, el) != container.cend(); });
     std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
@@ -600,11 +602,13 @@ Set<T> &Set<T>::intersect(const C &container) noexcept
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
-Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_intersection(const R &range) const
+Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_intersection(
+    const R &range) const
 {
     Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> copy;
     auto filtered =
-        *this | std::views::filter([&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
+        *this
+        | std::views::filter([&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
     std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
@@ -668,7 +672,8 @@ Set<T> &Set<T>::subtract(const C &container) noexcept
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
-Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_difference(const R &range) const
+Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_difference(
+    const R &range) const
 {
     Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> copy(*this);
     std::ranges::for_each(range, [&](const auto &el) { copy.erase(el); });
@@ -724,7 +729,8 @@ Set<T> &Set<T>::symm_subtract(const C &container)
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
-Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_symm_difference(const R &range) const
+Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_symm_difference(
+    const R &range) const
 {
     return *this + range - (*this & range);
 }
@@ -758,14 +764,14 @@ Set<std::common_type_t<T, U>> Set<T>::operator|(const Set<U> &other) const
 template <CopyMoveAssignable T>
 template <CommonContainer<T> C>
 Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator|(const C &container) const
-{ 
+{
     return this->make_union(container);
 }
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
 Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::operator|(const R &range) const
-{ 
+{
     return this->make_union(range);
 }
 
@@ -779,14 +785,14 @@ Set<std::common_type_t<T, U>> Set<T>::operator+(const Set<U> &other) const
 template <CopyMoveAssignable T>
 template <CommonContainer<T> C>
 Set<std::common_type_t<T, typename C::value_type>> Set<T>::operator+(const C &container) const
-{ 
+{
     return this->make_union(container);
 }
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
 Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::operator+(const R &range) const
-{ 
+{
     return this->make_union(range);
 }
 
@@ -991,6 +997,38 @@ std::partial_ordering Set<T>::operator<=>(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+std::partial_ordering Set<T>::operator<=>(const C &container) const noexcept
+{
+    if (this->equal(container))
+        return std::partial_ordering::equivalent;
+
+    if (this->subsetOf(container))
+        return std::partial_ordering::less;
+
+    if (this->supersetOf(container))
+        return std::partial_ordering::greater;
+
+    return std::partial_ordering::unordered;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+std::partial_ordering Set<T>::operator<=>(const R &range) const noexcept
+{
+    if (this->equal(range))
+        return std::partial_ordering::equivalent;
+
+    if (this->subsetOf(range))
+        return std::partial_ordering::less;
+
+    if (this->supersetOf(range))
+        return std::partial_ordering::greater;
+
+    return std::partial_ordering::unordered;
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::operator==(const Set<U> &other) const noexcept
 {
@@ -998,10 +1036,38 @@ bool Set<T>::operator==(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::operator==(const C &container) const noexcept
+{
+    return this->equal(container);
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::operator==(const R &range) const noexcept
+{
+    return this->equal(range);
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::operator!=(const Set<U> &other) const noexcept
 {
     return this->notEqual(other);
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::operator!=(const C &container) const noexcept
+{
+    return this->notEqual(container);
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::operator!=(const R &range) const noexcept
+{
+    return this->notEqual(range);
 }
 
 #pragma endregion
@@ -1023,6 +1089,12 @@ bool Set<T>::comparable(const C &container) const noexcept
     return (*this <=> container) != std::partial_ordering::unordered;
 }
 
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::comparable(const R &range) const noexcept
+{
+    return (*this <=> range) != std::partial_ordering::unordered;
+}
 
 template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
@@ -1032,12 +1104,40 @@ bool Set<T>::nonComparable(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::nonComparable(const C &container) const noexcept
+{
+    return (*this <=> container) == std::partial_ordering::unordered;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::nonComparable(const R &range) const noexcept
+{
+    return (*this <=> range) == std::partial_ordering::unordered;
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::subsetOf(const Set<U> &other) const noexcept
 {
-    auto cnt = std::ranges::count_if(*this, [&](const U &el) { return other.in(el); });
+    return std::ranges::all_of(*this, [&](const auto &el) { return other.in(el); });
+}
 
-    return cnt == _size;
+template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::subsetOf(const C &container) const noexcept
+{
+    return std::ranges::all_of(*this, [&](const auto &el)
+                               { return std::ranges::find(container, el) != container.cend(); });
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::subsetOf(const R &range) const noexcept
+{
+    return std::ranges::all_of(*this,
+                               [&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
 }
 
 template <CopyMoveAssignable T>
@@ -1048,10 +1148,43 @@ bool Set<T>::supersetOf(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::supersetOf(const C &container) const noexcept
+{
+    return std::ranges::all_of(container, [this](const auto &el) { return this->in(el); });
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::supersetOf(const R &range) const noexcept
+{
+    return std::ranges::all_of(range, [this](const auto &el) { return this->in(el); });
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::equal(const Set<U> &other) const noexcept
 {
-    return this->_size == other._size && (*this - other).empty();
+    if (this->_size != other._size)
+        return false;
+
+    return this->subsetOf(other) && other.subsetOf(*this);
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::equal(const C &container) const noexcept
+{
+    return this->subsetOf(container)
+        && std::ranges::all_of(container, [this](const auto &el) { return this->in(el); });
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::equal(const R &range) const noexcept
+{
+    return this->subsetOf(range)
+        && std::ranges::all_of(range, [this](const auto &el) { return this->in(el); });
 }
 
 template <CopyMoveAssignable T>
@@ -1062,10 +1195,38 @@ bool Set<T>::notEqual(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::notEqual(const C &container) const noexcept
+{
+    return !this->equal(container);
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::notEqual(const R &range) const noexcept
+{
+    return !this->equal(range);
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::less(const Set<U> &other) const noexcept
 {
     return *this < other;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::less(const C &container) const noexcept
+{
+    return *this < container;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::less(const R &range) const noexcept
+{
+    return *this < range;
 }
 
 template <CopyMoveAssignable T>
@@ -1076,6 +1237,20 @@ bool Set<T>::lessOrEqual(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::lessOrEqual(const C &container) const noexcept
+{
+    return *this <= container;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::lessOrEqual(const R &range) const noexcept
+{
+    return *this <= range;
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::greater(const Set<U> &other) const noexcept
 {
@@ -1083,10 +1258,38 @@ bool Set<T>::greater(const Set<U> &other) const noexcept
 }
 
 template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::greater(const C &container) const noexcept
+{
+    return *this > container;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::greater(const R &range) const noexcept
+{
+    return *this > range;
+}
+
+template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::greaterOrEqual(const Set<U> &other) const noexcept
 {
     return *this >= other;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableContainer<T> C>
+bool Set<T>::greaterOrEqual(const C &container) const noexcept
+{
+    return *this >= container;
+}
+
+template <CopyMoveAssignable T>
+template <EqualityComparableRange<T> R>
+bool Set<T>::greaterOrEqual(const R &range) const noexcept
+{
+    return *this >= range;
 }
 
 #pragma endregion

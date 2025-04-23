@@ -350,12 +350,24 @@ public:
 #pragma region CompareOperators
     template <EqualityComparable<T> U>
     std::partial_ordering operator<=>(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    std::partial_ordering operator<=>(const C &container) const noexcept; // +
+    template <EqualityComparableRange<T> R>
+    std::partial_ordering operator<=>(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool operator==(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool operator==(const C &container) const noexcept; // +
+    template <EqualityComparableRange<T> R>
+    bool operator==(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool operator!=(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool operator!=(const C &container) const noexcept; // +
+    template <EqualityComparableRange<T> R>
+    bool operator!=(const R &range) const noexcept; // +
 #pragma endregion
 
 // Функции сравнения
@@ -364,72 +376,72 @@ public:
     template <EqualityComparable<T> U>
     bool comparable(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool comparable(const C &other) const noexcept;
+    bool comparable(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool comparable(const R &other) const noexcept;
+    bool comparable(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool nonComparable(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool nonComparable(const C &other) const noexcept;
+    bool nonComparable(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool nonComparable(const R &other) const noexcept;
+    bool nonComparable(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool subsetOf(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool subsetOf(const C &other) const noexcept;
+    bool subsetOf(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool subsetOf(const R &other) const noexcept;
+    bool subsetOf(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool supersetOf(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool supersetOf(const C &other) const noexcept;
+    bool supersetOf(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool supersetOf(const R &other) const noexcept;
+    bool supersetOf(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool less(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool less(const C &other) const noexcept;
+    bool less(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool less(const R &other) const noexcept;
+    bool less(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool lessOrEqual(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool lessOrEqual(const C &other) const noexcept;
+    bool lessOrEqual(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool lessOrEqual(const R &other) const noexcept;
+    bool lessOrEqual(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool greater(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool greater(const C &other) const noexcept;
+    bool greater(const C &container) const noexcept; // + 
     template <EqualityComparableRange<T> R>
-    bool greater(const R &other) const noexcept;
+    bool greater(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool greaterOrEqual(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool greaterorEqual(const C &other) const noexcept;
+    bool greaterOrEqual(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool greaterorEqual(const R &other) const noexcept;
+    bool greaterOrEqual(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool equal(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool equal(const C &other) const noexcept;
+    bool equal(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool equal(const R &other) const noexcept;
+    bool equal(const R &range) const noexcept; // +
 
     template <EqualityComparable<T> U>
     bool notEqual(const Set<U> &other) const noexcept; // +
     template <EqualityComparableContainer<T> C>
-    bool notEqual(const C &other) const noexcept;
+    bool notEqual(const C &container) const noexcept; // +
     template <EqualityComparableRange<T> R>
-    bool notEqual(const R &other) const noexcept;
+    bool notEqual(const R &range) const noexcept; // +
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion
