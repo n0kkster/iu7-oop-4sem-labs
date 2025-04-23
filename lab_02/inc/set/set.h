@@ -125,26 +125,26 @@ public:
 // Поиск элемента в множестве
 #pragma region Find
     // ======== Проверка элемента на вхождение ========
-    template <Convertible<T> U>
+    template <EqualityComparable<T> U>
     bool in(const U &value) const noexcept; // +
 
-    template <ConvertibleInputIterator<T> It>
+    template <EqualityComparableInputIterator<T> It>
     bool in(const It &it) const noexcept; // +
     // ======== ============================== ========
 
     // ================ Поиск элемента ================
-    template <Convertible<T> U>
+    template <EqualityComparable<T> U>
     ConstIterator<T> find(const U &value) const noexcept; // +
     // ================ ============== ================
 #pragma endregion
 // Удаление элемента из множества
 #pragma region Erase
     // ============== Удаление элемента ===============
-    template <Convertible<T> U>
-    bool erase(const U &value); // +
+    template <EqualityComparable<T> U>
+    bool erase(const U &value) noexcept; // +
 
-    template <ConvertibleInputIterator<T> It>
-    bool erase(It &pos); // +
+    template <EqualityComparableInputIterator<T> It>
+    bool erase(It &pos) noexcept; // +
     // ============== ================= ===============
 #pragma endregion
 
@@ -192,7 +192,7 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> make_union(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> make_union(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_union(const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &unite(const Set<U> &other); // +
@@ -208,14 +208,14 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> make_intersection(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> make_intersection(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_intersection(const R &range) const; // +
 
     template <Convertible<T> U>
-    Set<T> &intersect(const Set<U> &other); // +
+    Set<T> &intersect(const Set<U> &other) noexcept; // +
     template <ConvertibleContainer<T> C>
-    Set<T> &intersect(const C &container); // +
+    Set<T> &intersect(const C &container) noexcept; // +
     template <ConvertibleRange<T> R>
-    Set<T> &intersect(const R &range); // +
+    Set<T> &intersect(const R &range) noexcept; // +
 #pragma endregion
 // Разность двух множеств
 #pragma region Difference
@@ -224,14 +224,15 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> make_difference(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> make_difference(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_difference(
+        const R &range) const; // +
 
     template <Convertible<T> U>
-    Set<T> &subtract(const Set<U> &other); // +
+    Set<T> &subtract(const Set<U> &other) noexcept; // +
     template <ConvertibleContainer<T> C>
-    Set<T> &subtract(const C &container); // +
+    Set<T> &subtract(const C &container) noexcept; // +
     template <ConvertibleRange<T> R>
-    Set<T> &subtract(const R &range); // +
+    Set<T> &subtract(const R &range) noexcept; // +
 #pragma endregion
 // Симметрическая разность
 #pragma region SymmDifference
@@ -240,7 +241,8 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> make_symm_difference(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> make_symm_difference(const R &range) const;
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_symm_difference(
+        const R &range) const;
 
     template <Convertible<T> U>
     Set<T> &symm_subtract(const Set<U> &other); // +
@@ -263,14 +265,14 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> operator|(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator|(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> operator|(const R &range) const; // +
 
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator+(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> operator+(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator+(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> operator+(const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator|=(const Set<U> &other); // +
@@ -295,14 +297,14 @@ public:
     template <CommonContainer<T> C>
     Set<std::common_type_t<T, typename C::value_type>> operator&(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator&(const R &range) const; // +
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> operator&(const R &range) const; // +
 
     template <Convertible<T> U>
-    Set<T> &operator&=(const Set<U> &other); // +
+    Set<T> &operator&=(const Set<U> &other) noexcept; // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator&=(const C &container); // +
+    Set<T> &operator&=(const C &container) noexcept; // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator&=(const R &range); // +
+    Set<T> &operator&=(const R &range) noexcept; // +
     // ======= =========== =======
 #pragma endregion
 // Операторы разности. - -=
@@ -311,16 +313,16 @@ public:
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator-(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
-    Set<std::common_type_t<T, typename C::value_type>> operator-(const C &container) const;
+    Set<std::common_type_t<T, typename C::value_type>> operator-(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator-(const R &range) const;
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> operator-(const R &range) const; // +
 
     template <Convertible<T> U>
-    Set<T> &operator-=(const Set<U> &other); // +
+    Set<T> &operator-=(const Set<U> &other) noexcept; // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator-=(const C &container);
+    Set<T> &operator-=(const C &container) noexcept; // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator-=(const R &range);
+    Set<T> &operator-=(const R &range) noexcept; // +
     // ======= ======== =======
 #pragma endregion
 // Операторы симметрической разности. ^ ^=
@@ -329,16 +331,16 @@ public:
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> operator^(const Set<U> &other) const; // +
     template <CommonContainer<T> C>
-    Set<std::common_type_t<T, typename C::value_type>> operator^(const C &container) const;
+    Set<std::common_type_t<T, typename C::value_type>> operator^(const C &container) const; // +
     template <CommonRange<T> R>
-    Set<std::common_type_t<T, typename R::value_type>> operator^(const R &range) const;
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> operator^(const R &range) const; // +
 
     template <Convertible<T> U>
     Set<T> &operator^=(const Set<U> &other); // +
     template <ConvertibleContainer<T> C>
-    Set<T> &operator^=(const C &container);
+    Set<T> &operator^=(const C &container); // +
     template <ConvertibleRange<T> R>
-    Set<T> &operator^=(const R &range);
+    Set<T> &operator^=(const R &range); // +
     // ======= =========== =======
 #pragma endregion
 
@@ -347,47 +349,87 @@ public:
 // Операторы сравнения
 #pragma region CompareOperators
     template <EqualityComparable<T> U>
-    std::partial_ordering operator<=>(const Set<U> &other) const; // +
+    std::partial_ordering operator<=>(const Set<U> &other) const noexcept; // +
 
     template <EqualityComparable<T> U>
-    bool operator==(const Set<U> &other) const; // +
+    bool operator==(const Set<U> &other) const noexcept; // +
 
     template <EqualityComparable<T> U>
-    bool operator!=(const Set<U> &other) const; // +
+    bool operator!=(const Set<U> &other) const noexcept; // +
 #pragma endregion
 
 // Функции сравнения
 #pragma region CompareFunctions
     // ======== Сравнение ========
-    template <Convertible<T> U>
+    template <EqualityComparable<T> U>
+    bool comparable(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool comparable(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool comparable(const R &other) const noexcept;
+
+    template <EqualityComparable<T> U>
+    bool nonComparable(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool nonComparable(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool nonComparable(const R &other) const noexcept;
+
+    template <EqualityComparable<T> U>
     bool subsetOf(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool subsetOf(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool subsetOf(const R &other) const noexcept;
 
-    template <Convertible<T> U>
+    template <EqualityComparable<T> U>
     bool supersetOf(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool supersetOf(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool supersetOf(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool less(const Set<U> &other) const; // +
+    bool less(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool less(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool less(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool lessOrEqual(const Set<U> &other) const; // +
+    bool lessOrEqual(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool lessOrEqual(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool lessOrEqual(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool greater(const Set<U> &other) const; // +
+    bool greater(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool greater(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool greater(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool greaterOrEqual(const Set<U> &other) const; // +
+    bool greaterOrEqual(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool greaterorEqual(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool greaterorEqual(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool equal(const Set<U> &other) const; // +
+    bool equal(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool equal(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool equal(const R &other) const noexcept;
 
     template <EqualityComparable<T> U>
-    bool notEqual(const Set<U> &other) const; // +
-
-    template <EqualityComparable<T> U>
-    bool comparable(const Set<U> &other) const;
-
-    template <EqualityComparable<T> U>
-    bool nonComparable(const Set<U> &other) const;
+    bool notEqual(const Set<U> &other) const noexcept; // +
+    template <EqualityComparableContainer<T> C>
+    bool notEqual(const C &other) const noexcept;
+    template <EqualityComparableRange<T> R>
+    bool notEqual(const R &other) const noexcept;
     // ======== ========= ========
     // ===================== ========= ======================
 #pragma endregion
@@ -408,6 +450,8 @@ protected:
         SetNode() = delete;
         explicit SetNode(const T &value) noexcept;
         explicit SetNode(T &&value) noexcept;
+        explicit SetNode(const SetNode &other) noexcept;
+        explicit SetNode(SetNode &&other) noexcept;
         explicit SetNode(const std::shared_ptr<SetNode> &pnode) noexcept;
         // ==================== ============ ====================
 
