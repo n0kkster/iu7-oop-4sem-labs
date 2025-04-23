@@ -12,22 +12,33 @@ Set<T>::SetNode::SetNode(T &&value) noexcept : data(std::move(value)), next(null
 { }
 
 template <CopyMoveAssignable T>
-Set<T>::SetNode::SetNode(const Set<T>::SetNode &other) noexcept : data(other.data), next(other.getNext())
+Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> curr, const T &value) noexcept :
+    next(curr), data(value)
 { }
 
 template <CopyMoveAssignable T>
-Set<T>::SetNode::SetNode(Set<T>::SetNode &&other) noexcept : data(std::move(other.data)), next(std::move(other.getNext()))
-{ }
+template <typename... Args>
+std::shared_ptr<typename Set<T>::SetNode> Set<T>::SetNode::create(Args &&...params)
+{
+    struct Enable_make_shared : public Set<T>::SetNode
+    {
+        Enable_make_shared(Args &&...args) : Set<T>::SetNode(std::forward<Args>(args)...) { }
+    };
 
-template <CopyMoveAssignable T>
-Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> &pnode) noexcept :
-    data(pnode.value), next(pnode.next)
-{ }
+    return std::make_shared<Enable_make_shared>(std::forward<Args>(params)...);
+}
 
 template <CopyMoveAssignable T>
 const T &Set<T>::SetNode::value() const noexcept
 {
     return this->data;
+}
+
+template <CopyMoveAssignable T>
+std::shared_ptr<T> Set<T>::SetNode::get()
+{
+    std::shared_ptr<SetNode> tmp = this->shared_from_this();
+    return { tmp, &tmp->data };
 }
 
 template <CopyMoveAssignable T>

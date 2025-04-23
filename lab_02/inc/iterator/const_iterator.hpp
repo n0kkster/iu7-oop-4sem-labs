@@ -4,6 +4,7 @@
 #include "exception.h"
 
 #pragma region Constructors
+
 template <CopyMoveAssignable T>
 ConstIterator<T>::ConstIterator() noexcept
 {
@@ -22,13 +23,14 @@ ConstIterator<T>::ConstIterator(const ConstIterator<T> &other)
     other.checkExpired();
     this->curr = other.curr.lock();
 }
+
 #pragma endregion
 
 template <CopyMoveAssignable T>
 typename Set<T>::SetNode &ConstIterator<T>::getCurr() const
 {
     this->checkExpired();
-    
+
     return *this->curr.lock();
 }
 
@@ -99,7 +101,7 @@ const std::shared_ptr<T> ConstIterator<T>::operator->() const
 {
     this->checkExpired();
 
-    return std::make_shared(getCurr().value());
+    return this->curr.lock()->get();
 }
 
 template <CopyMoveAssignable T>

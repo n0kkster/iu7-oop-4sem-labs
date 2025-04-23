@@ -274,7 +274,7 @@ bool Set<T>::add(const U &value)
     std::shared_ptr<typename Set<T>::SetNode> newNode;
     try
     {
-        newNode = std::make_shared<typename Set<T>::SetNode>(value);
+        newNode = Set<T>::SetNode::create(value);
     }
     catch (const std::bad_alloc &ex)
     {
@@ -294,7 +294,7 @@ bool Set<T>::add(U &&value)
     std::shared_ptr<typename Set<T>::SetNode> newNode;
     try
     {
-        newNode = std::make_shared<typename Set<T>::SetNode>(std::move(value));
+        newNode = Set<T>::SetNode::create(std::move(value));
     }
     catch (const std::bad_alloc &ex)
     {
