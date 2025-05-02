@@ -6,23 +6,22 @@ UI_DIR := ui
 OUT_DIR := out
 
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
-# INCS := $(find $(HEADERS_DIR) -iregex ".+\.h\(pp\)?")
+INCS := $(wildcard $(HEADERS_DIR)/*.h)
 
 DEPS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.d)
+DEPS += $(INCS:$(HEADERS_DIR)/%.h=$(OUT_DIR)/moc_%.d)
 
 OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
+OBJS += $(INCS:$(HEADERS_DIR)/%.h=$(OUT_DIR)/moc_%.o)
 
-CFLAGS := -std=c++20 -O0 -Wall -Wextra -Wpedantic -Wfloat-equal -Wno-unknown-pragmas -Wno-pessimizing-move $(shell for f in inc/*; do echo -I $$f; done) 
-LDFLAGS := -lm
+CFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wfloat-equal -I$(HEADERS_DIR) -I. $(shell pkgconf --cflags Qt6Widgets)
+LFLAGS := $(shell pkgconf --libs Qt6Widgets)
 
 all : app.exe
 
-debug: CC = g++
-debug: CFLAGS += -g
-debug: app.exe 
-
 app.exe : $(OBJS)
-	$(CC) $^ $(LDFLAGS) -o ./app.exe
+	$(CC) $^ $(LFLAGS) -o ./app.exe
+
 
 $(OUT_DIR)/%.o : $(SRC_DIR)/%.cpp | $(OUT_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -31,10 +30,17 @@ $(OUT_DIR)/%.o : $(OUT_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OUT_DIR)/%.d : $(SRC_DIR)/%.cpp | $(OUT_DIR)
-	$(CC) $(CFLAGS) -MM -MF $@ -MT $(OUT_DIR)/$*.o $<
+	$(CC) $(CFLAGS) -MM -MG -MF $@ -MT $(OUT_DIR)/$*.o $<
 
 $(OUT_DIR)/%.d : $(OUT_DIR)/%.cpp
-	$(CC) $(CFLAGS) -MM -MF $@ -MT $(OUT_DIR)/$*.o $<
+	$(CC) $(CFLAGS) -MM -MG -MF $@ -MT $(OUT_DIR)/$*.o $<
+
+$(OUT_DIR)/ui_%.h : $(UI_DIR)/%.ui | $(OUT_DIR)
+	/usr/lib/qt6/libexec/uic -o $@ $<
+
+$(OUT_DIR)/moc_%.cpp : $(HEADERS_DIR)/%.h | $(OUT_DIR)
+	/usr/lib/qt6/libexec/moc -I$(HEADERS_DIR) -I. -o $@ $<
+
 
 ifneq (clean, $(MAKECMDGOALS))
   include $(DEPS)
@@ -47,3 +53,4 @@ clean :
 	$(RM) $(OUT_DIR)/* ./*.exe
 
 .PHONY : clean
+.PRECIOUS : $(OUT_DIR)/moc_%.cpp
