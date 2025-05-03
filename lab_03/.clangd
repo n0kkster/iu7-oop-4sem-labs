@@ -1,15 +1,14 @@
 CompileFlags:
   Add: [
-    -I../, 
-    -I../exception, 
-    -I../iterator, 
-    -I../node, 
-    -I../set, 
-    -I../inc/set,
-    -I../inc/exception,
-    -I../inc/iterator,
-    -I../inc/node,
+    -I.,
+    -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets,
+    -I/usr/include/x86_64-linux-gnu/qt6,
+    -I/usr/include/x86_64-linux-gnu/qt6/QtCore,
+    -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++,
+    -I/usr/include/x86_64-linux-gnu/qt6/QtGui,
+    -I../qt/inc,
+    -I../inc,
     -std=c++20
   ]
 Diagnostics:
-  Suppress: ["misc-definitions-in-headers", "constraint_depends_on_self", "ovl_no_viable_function_in_init"]
+  Suppress: ["misc-definitions-in-headers"]
