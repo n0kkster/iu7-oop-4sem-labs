@@ -32,10 +32,10 @@ public:
 
 #pragma region Operators
     bool operator==(const Vertex &other) const noexcept;
-    bool isEqual(const Vertex &other) const noexcept;
+    bool equal(const Vertex &other) const noexcept;
 
     bool operator!=(const Vertex &other) const noexcept;
-    bool isNotEqual(const Vertex &other) const noexcept;
+    bool notEqual(const Vertex &other) const noexcept;
 
     Vertex &add(const Vertex &other) noexcept;
     Vertex &operator+=(const Vertex &other) noexcept;
