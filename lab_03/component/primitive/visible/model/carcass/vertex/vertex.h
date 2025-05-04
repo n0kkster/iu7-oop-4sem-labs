@@ -9,7 +9,7 @@ private:
 
 public:
 #pragma region Constructors
-    Vertex() = default;
+    Vertex() noexcept = default;
     Vertex(const double x, const double y, const double z) noexcept;
 
     Vertex(const Vertex &other) = default;
