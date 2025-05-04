@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../../../../../matrix/matrix.h"
+
 class Vertex
 {
 private:
@@ -8,27 +10,35 @@ private:
 public:
 #pragma region Constructors
     Vertex() = default;
-    Vertex(const double x, const double y, const double z);
+    Vertex(const double x, const double y, const double z) noexcept;
+
+    Vertex(const Vertex &other) = default;
+    Vertex(Vertex &&other) = default;
 #pragma endregion
 
 #pragma region Destructor
     ~Vertex() = default;
 #pragma endregion
 
+#pragma region Assignment
+    Vertex &operator=(const Vertex &other) = default;
+    Vertex &operator=(Vertex &&other) = default;
+#pragma endregion
+
 #pragma region Getters
-    double getX() const;
-    double getY() const;
-    double getZ() const;
+    double getX() const noexcept;
+    double getY() const noexcept;
+    double getZ() const noexcept;
 #pragma endregion
 
 #pragma region Setters
-    void setX(const double x);
-    void setY(const double y);
-    void setZ(const double z);
+    void setX(const double x) noexcept;
+    void setY(const double y) noexcept;
+    void setZ(const double z) noexcept;
 #pragma endregion
 
     double calcDistance(const Vertex &other) const noexcept;
-    void transform(const auto &matrix) noexcept;
+    void transform(const Matrix<double> &matrix);
 
 #pragma region Operators
     bool operator==(const Vertex &other) const noexcept;
