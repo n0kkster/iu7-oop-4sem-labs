@@ -1,4 +1,5 @@
 #include "ScaleAction.h"
+
 #include "../move/MoveAction.h"
 
 ScaleAction::ScaleAction(const ScaleParams &params) : TransformAction()
@@ -41,4 +42,7 @@ ScaleAction::ScaleAction(const Vertex &vertex, const double k) : TransformAction
     m_matrix *= from_center.getMatrix();
 }
 
-bool ScaleAction::isMoveAction() const noexcept { return false; }
+bool ScaleAction::isMoveAction() const noexcept
+{
+    return false;
+}

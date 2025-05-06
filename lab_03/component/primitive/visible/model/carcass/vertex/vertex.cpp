@@ -10,21 +10,39 @@ Vertex::Vertex(const double x, const double y, const double z) noexcept : m_x(x)
 
 #pragma region Getters
 
-double Vertex::getX() const noexcept { return this->m_x; }
+double Vertex::getX() const noexcept
+{
+    return this->m_x;
+}
 
-double Vertex::getY() const noexcept { return this->m_y; }
+double Vertex::getY() const noexcept
+{
+    return this->m_y;
+}
 
-double Vertex::getZ() const noexcept { return this->m_z; }
+double Vertex::getZ() const noexcept
+{
+    return this->m_z;
+}
 
 #pragma endregion
 
 #pragma region Setters
 
-void Vertex::setX(const double x) noexcept { this->m_x = x; }
+void Vertex::setX(const double x) noexcept
+{
+    this->m_x = x;
+}
 
-void Vertex::setY(const double y) noexcept { this->m_y = y; }
+void Vertex::setY(const double y) noexcept
+{
+    this->m_y = y;
+}
 
-void Vertex::setZ(const double z) noexcept { this->m_z = z; }
+void Vertex::setZ(const double z) noexcept
+{
+    this->m_z = z;
+}
 
 #pragma endregion
 
@@ -53,11 +71,20 @@ bool Vertex::operator==(const Vertex &other) const noexcept
     return (this->m_x == other.m_x) && (this->m_y == other.m_y) && (this->m_z == other.m_z);
 }
 
-bool Vertex::equal(const Vertex &other) const noexcept { return *this == other; }
+bool Vertex::equal(const Vertex &other) const noexcept
+{
+    return *this == other;
+}
 
-bool Vertex::operator!=(const Vertex &other) const noexcept { return !(*this == other); }
+bool Vertex::operator!=(const Vertex &other) const noexcept
+{
+    return !(*this == other);
+}
 
-bool Vertex::notEqual(const Vertex &other) const noexcept { return *this != other; }
+bool Vertex::notEqual(const Vertex &other) const noexcept
+{
+    return *this != other;
+}
 
 Vertex &Vertex::add(const Vertex &other) noexcept
 {
@@ -81,7 +108,10 @@ Vertex Vertex::make_sum(const Vertex &other) const
     return res;
 }
 
-Vertex Vertex::operator+(const Vertex &other) const { return this->make_sum(other); }
+Vertex Vertex::operator+(const Vertex &other) const
+{
+    return this->make_sum(other);
+}
 
 Vertex &Vertex::subtract(const Vertex &other) noexcept
 {
@@ -105,6 +135,9 @@ Vertex Vertex::make_diff(const Vertex &other) const
     return res;
 }
 
-Vertex Vertex::operator-(const Vertex &other) const { return this->make_diff(other); }
+Vertex Vertex::operator-(const Vertex &other) const
+{
+    return this->make_diff(other);
+}
 
 #pragma endregion

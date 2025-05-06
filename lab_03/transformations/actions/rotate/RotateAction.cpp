@@ -45,4 +45,7 @@ RotateAction::RotateAction(const Vertex &vertex, const RotationParams &params) :
     m_matrix *= from_center.getMatrix();
 }
 
-bool RotateAction::isMoveAction() const noexcept { return false; }
+bool RotateAction::isMoveAction() const noexcept
+{
+    return false;
+}

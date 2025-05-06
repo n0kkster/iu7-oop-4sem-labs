@@ -1,5 +1,3 @@
-#pragma once
-
 #include "BaseException.h"
 
 #include <cstdio>
@@ -10,4 +8,7 @@ BaseException::BaseException(const char *info, const std::source_location &loc) 
              loc.column(), loc.function_name(), info);
 }
 
-const char *BaseException::what() const noexcept { return message; }
+const char *BaseException::what() const noexcept
+{
+    return message;
+}

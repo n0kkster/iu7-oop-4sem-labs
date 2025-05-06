@@ -16,7 +16,7 @@ public:
 
     BaseObject() = default;
     virtual ~BaseObject() = default;
-    
+
     virtual iterator begin();
     virtual iterator end();
 
@@ -26,8 +26,7 @@ public:
 
     // virtual void accept(/* visitor */) = 0;
 
-    virtual Vertex getCenter() const noexcept = 0;
+    virtual Vertex getCenter() const noexcept;
     virtual bool isComposite() const noexcept = 0;
     virtual bool isVisible() const noexcept = 0;
-
 };
