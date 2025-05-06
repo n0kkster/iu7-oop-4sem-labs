@@ -29,3 +29,10 @@ public:
     IncompatibleDimensionsException(
         const char *info, const std::source_location &loc = std::source_location::current()) noexcept;
 };
+
+class MatrixOutOfRangeException : public MatrixException
+{
+public:
+    MatrixOutOfRangeException(const char *info,
+                              const std::source_location &loc = std::source_location::current()) noexcept;
+};

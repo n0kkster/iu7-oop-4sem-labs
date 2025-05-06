@@ -13,3 +13,7 @@ InvalidInitListSizeException::InvalidInitListSizeException(const char *info,
 IncompatibleDimensionsException::IncompatibleDimensionsException(const char *info,
                                                                  const std::source_location &loc) noexcept :
     MatrixException(info, loc) { };
+
+MatrixOutOfRangeException::MatrixOutOfRangeException(const char *info,
+                                                     const std::source_location &loc) noexcept :
+    MatrixException(info, loc) { };
