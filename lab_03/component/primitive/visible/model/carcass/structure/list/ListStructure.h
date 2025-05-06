@@ -2,15 +2,15 @@
 
 #include "../BaseStructure.h"
 
-class ListStructure : public BaseStructure
+class ListStructure final : public BaseStructure
 {
 private:
     std::vector<Vertex> m_vertices;
     std::vector<Edge> m_edges;
-    Vertex m_center;
 
 public:
     ListStructure();
+    ~ListStructure() override = default;
 
     void addVertex(const Vertex &vertex) override;
     void addEdge(const Edge &edge) override;
@@ -25,5 +25,4 @@ public:
     const Vertex &getCenter() const noexcept override;
 
     void transform(std::shared_ptr<TransformAction> action) override;
-
 };

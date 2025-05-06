@@ -9,8 +9,12 @@
 
 class BaseStructure
 {
+protected:
+    Vertex m_center;
+
 public:
     BaseStructure() = default;
+    virtual ~BaseStructure() = default;
 
     virtual void addVertex(const Vertex &vertex) = 0;
     virtual void addEdge(const Edge &edge) = 0;
@@ -25,5 +29,4 @@ public:
     virtual const std::vector<Vertex> &getVertices() const noexcept = 0;
     virtual const std::vector<Edge> &getEdges() const noexcept = 0;
     virtual const Vertex &getCenter() const noexcept = 0;
-
 };
