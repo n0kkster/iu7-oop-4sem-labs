@@ -17,13 +17,13 @@ protected:
     class MatrixRow
     {
     private:
-        std::shared_ptr<T[]> row;
-        size_t size;
+        std::shared_ptr<T[]> m_row;
+        size_t m_size;
 
     public:
-        MatrixRow(T *row, const size_t size) : row(row), size(size) { }
+        MatrixRow(T *row, const size_t size) : m_row(row), m_size(size) { }
 
-        MatrixRow() : row(nullptr), size(0) { }
+        MatrixRow() : m_row(nullptr), m_size(0) { }
 
         T &operator[](size_t index);
         const T &operator[](size_t index) const;

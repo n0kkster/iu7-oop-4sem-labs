@@ -3,6 +3,8 @@
 #include "../exceptions/matrix/MatrixException.h"
 #include "matrix.h"
 
+#pragma region MatrixRow
+
 template <ConvertibleToDouble T>
 std::shared_ptr<typename Matrix<T>::MatrixRow[]> Matrix<T>::allocMatrix(size_t rows, size_t cols)
 {
@@ -18,6 +20,40 @@ std::shared_ptr<typename Matrix<T>::MatrixRow[]> Matrix<T>::allocMatrix(size_t r
     }
     return matrix;
 }
+
+template <ConvertibleToDouble T>
+T &Matrix<T>::MatrixRow::operator[](size_t index)
+{
+    if (index >= m_size)
+        throw MatrixOutOfRangeException("Column index out of range!");
+
+    return m_row[index];
+}
+
+template <ConvertibleToDouble T>
+const T &Matrix<T>::MatrixRow::operator[](size_t index) const
+{
+    if (index >= m_size)
+        throw MatrixOutOfRangeException("Column index out of range!");
+
+    return m_row[index];
+}
+
+template <ConvertibleToDouble T>
+void Matrix<T>::MatrixRow::reset(T *row, const size_t size)
+{
+    this->m_size = size;
+    this->m_row.reset(row);
+}
+
+template <ConvertibleToDouble T>
+void Matrix<T>::MatrixRow::reset()
+{
+    m_size = 0;
+    m_row.reset();
+}
+
+#pragma endregion
 
 #pragma region Constructors
 
@@ -111,7 +147,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &matrix)
 {
     this->m_rows = matrix.m_rows;
     this->m_cols = matrix.m_cols;
-    this->m_matrix = allocMatrix(matrix->m_rows, matrix->m_cols);
+    this->m_matrix = allocMatrix(matrix.m_rows, matrix.m_cols);
     for (size_t i = 0; i < m_rows; ++i)
         for (size_t j = 0; j < m_cols; ++j)
             m_matrix[i][j] = matrix[i][j];
@@ -138,15 +174,22 @@ Matrix<T> &Matrix<T>::operator=(std::initializer_list<std::initializer_list<T>> 
 #pragma endregion
 
 #pragma region Operators
+
 template <ConvertibleToDouble T>
 typename Matrix<T>::MatrixRow &Matrix<T>::operator[](size_t row)
 {
+    if (row >= m_rows)
+        throw MatrixOutOfRangeException("Row index out of range!");
+
     return m_matrix[row];
 }
 
 template <ConvertibleToDouble Type>
 const typename Matrix<Type>::MatrixRow &Matrix<Type>::operator[](size_t row) const
 {
+    if (row >= m_rows)
+        throw MatrixOutOfRangeException("Row index out of range!");
+    
     return m_matrix[row];
 }
 
