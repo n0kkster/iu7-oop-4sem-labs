@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../../../matrix/matrix.h"
+#include "../../../../../matrix/matrix.h"
 
 class Vertex
 {

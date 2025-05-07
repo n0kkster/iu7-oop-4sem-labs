@@ -1,6 +1,6 @@
 #pragma once
 
-#include "primitive/visible/model/carcass/vertex/vertex.h"
+#include "primitive/visible/model/vertex/vertex.h"
 
 #include <cstddef>
 #include <map>
