@@ -13,7 +13,7 @@ public:
     DefaultCamera(const Vertex &viewpoint);
     DefaultCamera(const Vertex &viewpoint, const Matrix<double> orientation);
 
-    ~DefaultCamera() override = default;
+    virtual ~DefaultCamera() override = default;
 
     const Matrix<double> &getOrientation() const noexcept override;
     void setOrientation(const Matrix<double> &orientation) override;

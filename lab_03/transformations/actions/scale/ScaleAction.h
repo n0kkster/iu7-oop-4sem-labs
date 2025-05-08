@@ -8,7 +8,7 @@ class ScaleAction : public TransformAction
 {
 public:
     ScaleAction() = default;
-    ~ScaleAction() override = default;
+    virtual ~ScaleAction() override = default;
 
     ScaleAction(const ScaleParams &params);
     ScaleAction(const double k);

@@ -10,7 +10,7 @@ class BaseCamera : public InvisibleObject
 {
 public:
     BaseCamera() = default;
-    virtual ~BaseCamera() = default;
+    virtual ~BaseCamera() override = default;
 
     virtual const Matrix<double> &getOrientation() const noexcept = 0;
     virtual void setOrientation(const Matrix<double> &orientation) = 0;

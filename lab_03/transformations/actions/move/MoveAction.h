@@ -7,7 +7,7 @@ class MoveAction : public TransformAction
 {
 public:
     MoveAction() = default;
-    ~MoveAction() override = default;
+    virtual ~MoveAction() override = default;
 
     MoveAction(const MoveParams &params) noexcept;
 

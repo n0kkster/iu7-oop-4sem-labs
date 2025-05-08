@@ -10,7 +10,7 @@ private:
 
 public:
     ListStructure();
-    ~ListStructure() override = default;
+    virtual ~ListStructure() override = default;
 
     void addVertex(const Vertex &vertex) override;
     void addEdge(const Edge &edge) override;

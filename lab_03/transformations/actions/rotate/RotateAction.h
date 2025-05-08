@@ -7,7 +7,7 @@ class RotateAction : public TransformAction
 {
 public:
     RotateAction() = default;
-    ~RotateAction() override = default;
+    virtual ~RotateAction() override = default;
 
     RotateAction(const RotationParams &params);
     RotateAction(const Vertex &vertex, const RotationParams &params);

@@ -2,7 +2,7 @@
 
 #include "../BaseModel.h"
 #include "structure/BaseStructure.h"
-#include "vertex/vertex.h"
+#include "../vertex/vertex.h"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ public:
     CarcassModel() = default;
     explicit CarcassModel(std::shared_ptr<BaseStructure> structure);
 
-    ~CarcassModel() override = default;
+    virtual ~CarcassModel() override = default;
 
     Vertex getCenter() const noexcept override;
 

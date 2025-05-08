@@ -6,5 +6,5 @@ class BaseModel : public VisibleObject
 {
 public:
     BaseModel() = default;
-    virtual ~BaseModel() = default;
+    virtual ~BaseModel() override = default;
 };
