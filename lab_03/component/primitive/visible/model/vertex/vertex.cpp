@@ -68,7 +68,8 @@ void Vertex::transform(const Matrix<double> &matrix)
 
 bool Vertex::operator==(const Vertex &other) const noexcept
 {
-    return (this->m_x == other.m_x) && (this->m_y == other.m_y) && (this->m_z == other.m_z);
+    const double eps = 1e-9;
+    return (std::abs(this->m_x - other.m_x) <= eps) && (std::abs(this->m_y - other.m_y) <= eps) && (std::abs(this->m_z - other.m_z) <= eps);
 }
 
 bool Vertex::equal(const Vertex &other) const noexcept
