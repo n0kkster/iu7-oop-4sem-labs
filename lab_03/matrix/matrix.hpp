@@ -42,8 +42,8 @@ const T &Matrix<T>::MatrixRow::operator[](size_t index) const
 template <ConvertibleToDouble T>
 void Matrix<T>::MatrixRow::reset(T *row, const size_t size)
 {
-    this->m_size = size;
-    this->m_row.reset(row);
+    m_size = size;
+    m_row.reset(row);
 }
 
 template <ConvertibleToDouble T>
@@ -60,17 +60,17 @@ void Matrix<T>::MatrixRow::reset()
 template <ConvertibleToDouble T>
 Matrix<T>::Matrix(size_t rows, size_t columns)
 {
-    this->m_rows = rows;
-    this->m_cols = columns;
-    this->m_matrix = this->allocMatrix(rows, columns);
+    m_rows = rows;
+    m_cols = columns;
+    m_matrix = allocMatrix(rows, columns);
 }
 
 template <ConvertibleToDouble T>
 Matrix<T>::Matrix(size_t rows, size_t columns, const T &filler)
 {
-    this->m_rows = rows;
-    this->m_cols = columns;
-    this->m_matrix = allocMatrix(rows, columns);
+    m_rows = rows;
+    m_cols = columns;
+    m_matrix = allocMatrix(rows, columns);
 
     for (size_t i = 0; i < rows; ++i)
         for (size_t j = 0; j < columns; ++j)
@@ -92,15 +92,15 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> ilist)
         }
     }
 
-    this->m_rows = rows_cnt;
-    this->m_cols = cols_cnt;
-    this->m_matrix = allocMatrix(this->m_rows, this->m_cols);
+    m_rows = rows_cnt;
+    m_cols = cols_cnt;
+    m_matrix = allocMatrix(m_rows, m_cols);
     size_t i = 0;
     for (const auto &row : ilist)
     {
         for (const auto &elem : row)
         {
-            m_matrix[i / this->m_cols][i % this->m_cols] = elem;
+            m_matrix[i / m_cols][i % m_cols] = elem;
             i++;
         }
     }
@@ -109,17 +109,17 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> ilist)
 template <ConvertibleToDouble T>
 Matrix<T>::Matrix(const Matrix &other) : Matrix(other.m_rows, other.m_cols)
 {
-    for (size_t i = 0; i < this->m_rows; ++i)
-        for (size_t j = 0; j < this->m_cols; ++j)
+    for (size_t i = 0; i < m_rows; ++i)
+        for (size_t j = 0; j < m_cols; ++j)
             m_matrix[i][j] = other[i][j];
 }
 
 template <ConvertibleToDouble Type>
 Matrix<Type>::Matrix(Matrix &&matrix) noexcept
 {
-    this->m_rows = matrix.m_rows;
-    this->m_cols = matrix.m_cols;
-    this->m_matrix = std::move(matrix.m_matrix);
+    m_rows = matrix.m_rows;
+    m_cols = matrix.m_cols;
+    m_matrix = std::move(matrix.m_matrix);
 }
 
 #pragma endregion
@@ -129,13 +129,13 @@ Matrix<Type>::Matrix(Matrix &&matrix) noexcept
 template <ConvertibleToDouble T>
 size_t Matrix<T>::getColsCount() const noexcept
 {
-    return this->m_cols;
+    return m_cols;
 }
 
 template <ConvertibleToDouble T>
 size_t Matrix<T>::getRowsCount() const noexcept
 {
-    return this->m_rows;
+    return m_rows;
 }
 
 #pragma endregion
@@ -145,9 +145,9 @@ size_t Matrix<T>::getRowsCount() const noexcept
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator=(const Matrix &matrix)
 {
-    this->m_rows = matrix.m_rows;
-    this->m_cols = matrix.m_cols;
-    this->m_matrix = allocMatrix(matrix.m_rows, matrix.m_cols);
+    m_rows = matrix.m_rows;
+    m_cols = matrix.m_cols;
+    m_matrix = allocMatrix(matrix.m_rows, matrix.m_cols);
     for (size_t i = 0; i < m_rows; ++i)
         for (size_t j = 0; j < m_cols; ++j)
             m_matrix[i][j] = matrix[i][j];
@@ -157,9 +157,9 @@ Matrix<T> &Matrix<T>::operator=(const Matrix &matrix)
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator=(Matrix<T> &&matrix) noexcept
 {
-    this->m_rows = matrix.m_rows;
-    this->m_cols = matrix.m_cols;
-    this->m_matrix = matrix.m_matrix;
+    m_rows = matrix.m_rows;
+    m_cols = matrix.m_cols;
+    m_matrix = matrix.m_matrix;
     return *this;
 }
 
@@ -196,14 +196,14 @@ const typename Matrix<Type>::MatrixRow &Matrix<Type>::operator[](size_t row) con
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::add(const Matrix<T> &other)
 {
-    if (other.m_rows != this->m_rows || other.m_cols != this->m_cols)
+    if (other.m_rows != m_rows || other.m_cols != m_cols)
     {
         throw IncompatibleDimensionsException("Can't add two matrices: sizes are different!");
     }
 
     for (size_t i = 0; i < other.m_rows; i++)
         for (size_t j = 0; j < other.m_cols; j++)
-            this->m_matrix[i][j] += other[i][j];
+            m_matrix[i][j] += other[i][j];
 
     return *this;
 }
@@ -211,7 +211,7 @@ Matrix<T> &Matrix<T>::add(const Matrix<T> &other)
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator+=(const Matrix<T> &other)
 {
-    this->add(other);
+    add(other);
     return *this;
 }
 
@@ -226,18 +226,18 @@ Matrix<T> Matrix<T>::make_sum(const Matrix<T> &other) const
 template <ConvertibleToDouble T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T> &other) const
 {
-    return this->make_sum(other);
+    return make_sum(other);
 }
 
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::subtract(const Matrix<T> &other)
 {
-    if (other.m_rows != this->m_rows || other.m_cols != this->m_cols)
+    if (other.m_rows != m_rows || other.m_cols != m_cols)
         throw IncompatibleDimensionsException("Can't subtract two matrices: sizes are different!");
 
     for (size_t i = 0; i < other.m_rows; i++)
         for (size_t j = 0; j < other.m_cols; j++)
-            this->m_matrix[i][j] -= other[i][j];
+            m_matrix[i][j] -= other[i][j];
 
     return *this;
 }
@@ -245,7 +245,7 @@ Matrix<T> &Matrix<T>::subtract(const Matrix<T> &other)
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator-=(const Matrix<T> &other)
 {
-    this->subtract(other);
+    subtract(other);
     return *this;
 }
 
@@ -260,7 +260,7 @@ Matrix<T> Matrix<T>::make_diff(const Matrix<T> &other) const
 template <ConvertibleToDouble T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T> &other) const
 {
-    return this->make_diff(other);
+    return make_diff(other);
 }
 
 template <ConvertibleToDouble Type>
@@ -275,7 +275,7 @@ Matrix<Type> Matrix<Type>::make_product(const Matrix<Type> &other) const
         for (size_t k = 0; k < other.m_cols; k++)
         {
             result[i][k] = 0;
-            for (size_t j = 0; j < this->m_cols; j++)
+            for (size_t j = 0; j < m_cols; j++)
                 result[i][k] += m_matrix[i][j] * other[j][k];
         }
     }
@@ -285,20 +285,20 @@ Matrix<Type> Matrix<Type>::make_product(const Matrix<Type> &other) const
 template <ConvertibleToDouble T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T> &other) const
 {
-    return this->make_product(other);
+    return make_product(other);
 }
 
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::multiply(const Matrix<T> &other)
 {
-    *this = this->make_product(other);
+    *this = make_product(other);
     return *this;
 }
 
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator*=(const Matrix<T> &other)
 {
-    this->multiply(other);
+    multiply(other);
     return *this;
 }
 
@@ -317,15 +317,15 @@ Matrix<T> Matrix<T>::make_product(const T &elem) const
 template <ConvertibleToDouble T>
 Matrix<T> Matrix<T>::operator*(const T &elem) const
 {
-    return this->make_product(elem);
+    return make_product(elem);
 }
 
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::multiply(const T &elem) noexcept
 {
-    for (size_t i = 0; i < this->m_rows; i++)
-        for (size_t j = 0; j < this->m_cols; j++)
-            this->m_matrix[i][j] *= elem;
+    for (size_t i = 0; i < m_rows; i++)
+        for (size_t j = 0; j < m_cols; j++)
+            m_matrix[i][j] *= elem;
 
     return *this;
 }
@@ -333,7 +333,7 @@ Matrix<T> &Matrix<T>::multiply(const T &elem) noexcept
 template <ConvertibleToDouble T>
 Matrix<T> &Matrix<T>::operator*=(const T &elem) noexcept
 {
-    return this->multiply(elem);
+    return multiply(elem);
 }
 
 #pragma endregion
