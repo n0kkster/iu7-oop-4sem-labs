@@ -6,8 +6,8 @@ MoveParams::MoveParams(const Vertex &vertex) noexcept :
     m_dx(vertex.getX()), m_dy(vertex.getY()), m_dz(vertex.getZ())
 { }
 
-double MoveParams::getOffsetX() const noexcept { return this->m_dx; }
+double MoveParams::getOffsetX() const noexcept { return m_dx; }
 
-double MoveParams::getOffsetY() const noexcept { return this->m_dy; }
+double MoveParams::getOffsetY() const noexcept { return m_dy; }
 
-double MoveParams::getOffsetZ() const noexcept { return this->m_dz; }
+double MoveParams::getOffsetZ() const noexcept { return m_dz; }

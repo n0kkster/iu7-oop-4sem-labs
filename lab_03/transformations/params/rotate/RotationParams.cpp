@@ -8,8 +8,8 @@ RotationParams::RotationParams(const Vertex &vertex) noexcept :
     m_angX(vertex.getX()), m_angY(vertex.getY()), m_angZ(vertex.getZ())
 { }
 
-double RotationParams::getAngleX() const noexcept { return this->m_angX; }
+double RotationParams::getAngleX() const noexcept { return m_angX; }
 
-double RotationParams::getAngleY() const noexcept { return this->m_angY; }
+double RotationParams::getAngleY() const noexcept { return m_angY; }
 
-double RotationParams::getAngleZ() const noexcept { return this->m_angZ; }
+double RotationParams::getAngleZ() const noexcept { return m_angZ; }

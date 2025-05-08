@@ -3,18 +3,18 @@
 
 DefaultCamera::DefaultCamera() : m_orientation(4, 4, 0), m_viewpoint(0, 0, 0)
 {
-    this->m_orientation[0][0] = 1;
-    this->m_orientation[1][1] = 1;
-    this->m_orientation[2][2] = 1;
-    this->m_orientation[3][3] = 1;
+    m_orientation[0][0] = 1;
+    m_orientation[1][1] = 1;
+    m_orientation[2][2] = 1;
+    m_orientation[3][3] = 1;
 }
 
 DefaultCamera::DefaultCamera(const Vertex &viewpoint) : m_orientation(4, 4, 0), m_viewpoint(viewpoint)
 {
-    this->m_orientation[0][0] = 1;
-    this->m_orientation[1][1] = 1;
-    this->m_orientation[2][2] = 1;
-    this->m_orientation[3][3] = 1;
+    m_orientation[0][0] = 1;
+    m_orientation[1][1] = 1;
+    m_orientation[2][2] = 1;
+    m_orientation[3][3] = 1;
 }
 
 DefaultCamera::DefaultCamera(const Vertex &viewpoint, const Matrix<double> orientation) :
@@ -23,7 +23,7 @@ DefaultCamera::DefaultCamera(const Vertex &viewpoint, const Matrix<double> orien
 
 const Matrix<double> &DefaultCamera::getOrientation() const noexcept
 {
-    return this->m_orientation;
+    return m_orientation;
 }
 
 void DefaultCamera::setOrientation(const Matrix<double> &orientation)

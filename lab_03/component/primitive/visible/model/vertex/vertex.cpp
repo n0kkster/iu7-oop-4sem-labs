@@ -12,17 +12,17 @@ Vertex::Vertex(const double x, const double y, const double z) noexcept : m_x(x)
 
 double Vertex::getX() const noexcept
 {
-    return this->m_x;
+    return m_x;
 }
 
 double Vertex::getY() const noexcept
 {
-    return this->m_y;
+    return m_y;
 }
 
 double Vertex::getZ() const noexcept
 {
-    return this->m_z;
+    return m_z;
 }
 
 #pragma endregion
@@ -31,37 +31,37 @@ double Vertex::getZ() const noexcept
 
 void Vertex::setX(const double x) noexcept
 {
-    this->m_x = x;
+    m_x = x;
 }
 
 void Vertex::setY(const double y) noexcept
 {
-    this->m_y = y;
+    m_y = y;
 }
 
 void Vertex::setZ(const double z) noexcept
 {
-    this->m_z = z;
+    m_z = z;
 }
 
 #pragma endregion
 
 double Vertex::calcDistance(const Vertex &other) const noexcept
 {
-    return std::sqrt(std::pow(other.m_x - this->m_x, 2) + std::pow(other.m_y - this->m_y, 2)
-                     + std::pow(other.m_z - this->m_z, 2));
+    return std::sqrt(std::pow(other.m_x - m_x, 2) + std::pow(other.m_y - m_y, 2)
+                     + std::pow(other.m_z - m_z, 2));
 }
 
 void Vertex::transform(const Matrix<double> &matrix)
 {
     Matrix<double> curr = {
-        { this->m_x, this->m_y, this->m_z, 1 }
+        { m_x, m_y, m_z, 1 }
     };
     Matrix<double> new_pos = curr * matrix;
 
-    this->m_x = new_pos[0][0];
-    this->m_y = new_pos[0][1];
-    this->m_z = new_pos[0][2];
+    m_x = new_pos[0][0];
+    m_y = new_pos[0][1];
+    m_z = new_pos[0][2];
 }
 
 #pragma region Operators
@@ -69,7 +69,7 @@ void Vertex::transform(const Matrix<double> &matrix)
 bool Vertex::operator==(const Vertex &other) const noexcept
 {
     const double eps = 1e-9;
-    return (std::abs(this->m_x - other.m_x) <= eps) && (std::abs(this->m_y - other.m_y) <= eps) && (std::abs(this->m_z - other.m_z) <= eps);
+    return (std::abs(m_x - other.m_x) <= eps) && (std::abs(m_y - other.m_y) <= eps) && (std::abs(m_z - other.m_z) <= eps);
 }
 
 bool Vertex::equal(const Vertex &other) const noexcept
@@ -89,16 +89,16 @@ bool Vertex::notEqual(const Vertex &other) const noexcept
 
 Vertex &Vertex::add(const Vertex &other) noexcept
 {
-    this->m_x += other.m_x;
-    this->m_y += other.m_y;
-    this->m_z += other.m_z;
+    m_x += other.m_x;
+    m_y += other.m_y;
+    m_z += other.m_z;
 
     return *this;
 }
 
 Vertex &Vertex::operator+=(const Vertex &other) noexcept
 {
-    this->add(other);
+    add(other);
     return *this;
 }
 
@@ -111,21 +111,21 @@ Vertex Vertex::make_sum(const Vertex &other) const
 
 Vertex Vertex::operator+(const Vertex &other) const
 {
-    return this->make_sum(other);
+    return make_sum(other);
 }
 
 Vertex &Vertex::subtract(const Vertex &other) noexcept
 {
-    this->m_x -= other.m_x;
-    this->m_y -= other.m_y;
-    this->m_z -= other.m_z;
+    m_x -= other.m_x;
+    m_y -= other.m_y;
+    m_z -= other.m_z;
 
     return *this;
 }
 
 Vertex &Vertex::operator-=(const Vertex &other) noexcept
 {
-    this->subtract(other);
+    subtract(other);
     return *this;
 }
 
@@ -138,7 +138,7 @@ Vertex Vertex::make_diff(const Vertex &other) const
 
 Vertex Vertex::operator-(const Vertex &other) const
 {
-    return this->make_diff(other);
+    return make_diff(other);
 }
 
 #pragma endregion

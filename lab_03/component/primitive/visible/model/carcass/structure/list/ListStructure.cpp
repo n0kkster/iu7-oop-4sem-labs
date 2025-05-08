@@ -4,53 +4,53 @@ ListStructure::ListStructure() : m_vertices(std::vector<Vertex>()), m_edges(std:
 
 void ListStructure::addVertex(const Vertex &vertex)
 {
-    this->m_vertices.push_back(vertex);
+    m_vertices.push_back(vertex);
 }
 
 void ListStructure::addEdge(const Edge &edge)
 {
-    this->m_edges.push_back(edge);
+    m_edges.push_back(edge);
 }
 
 void ListStructure::setCenter(const Vertex &vertex) noexcept
 {
-    this->m_center = vertex;
+    m_center = vertex;
 }
 
 const std::vector<Vertex> &ListStructure::getVertices() const noexcept
 {
-    return this->m_vertices;
+    return m_vertices;
 }
 
 std::vector<Vertex> ListStructure::getVertices() noexcept
 {
-    return this->m_vertices;
+    return m_vertices;
 }
 
 const std::vector<Edge> &ListStructure::getEdges() const noexcept
 {
-    return this->m_edges;
+    return m_edges;
 }
 
 std::vector<Edge> ListStructure::getEdges() noexcept
 {
-    return this->m_edges;
+    return m_edges;
 }
 
 const Vertex &ListStructure::getCenter() const noexcept
 {
-    return this->m_center;
+    return m_center;
 }
 
 Vertex ListStructure::getCenter() noexcept
 {
-    return this->m_center;
+    return m_center;
 }
 
 void ListStructure::transform(std::shared_ptr<TransformAction> action)
 {
-    for (auto v : this->m_vertices)
+    for (auto v : m_vertices)
         action->transform(v);
 
-    action->transform(this->m_center);
+    action->transform(m_center);
 }

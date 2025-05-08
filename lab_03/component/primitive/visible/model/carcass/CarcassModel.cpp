@@ -9,5 +9,5 @@ Vertex CarcassModel::getCenter() const noexcept
 
 std::shared_ptr<BaseStructure> CarcassModel::getStructure() const
 {
-    return this->m_structure;
+    return m_structure;
 }

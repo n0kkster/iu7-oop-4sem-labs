@@ -6,8 +6,8 @@ ScaleParams::ScaleParams(const Vertex &vertex) noexcept :
     m_kx(vertex.getX()), m_ky(vertex.getY()), m_kz(vertex.getZ())
 { }
 
-double ScaleParams::getKx() const noexcept { return this->m_kx; }
+double ScaleParams::getKx() const noexcept { return m_kx; }
 
-double ScaleParams::getKy() const noexcept { return this->m_ky; }
+double ScaleParams::getKy() const noexcept { return m_ky; }
 
-double ScaleParams::getKz() const noexcept { return this->m_kz; }
+double ScaleParams::getKz() const noexcept { return m_kz; }
