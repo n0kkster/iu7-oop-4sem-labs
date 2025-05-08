@@ -8,8 +8,8 @@ public:
     ObjCarcassReader() = delete;
     ObjCarcassReader(const std::string &filename);
 
-    std::shared_ptr<std::vector<Vertex>> readVertices() override;
-    std::shared_ptr<std::vector<Edge>> readEdges() override;
+    std::vector<Vertex> readVertices() override;
+    std::vector<Edge> readEdges() override;
 
-    ~ObjCarcassReader() override;
+    virtual ~ObjCarcassReader() override;
 };

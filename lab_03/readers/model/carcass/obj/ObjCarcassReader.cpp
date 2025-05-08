@@ -4,19 +4,19 @@
 
 ObjCarcassReader::ObjCarcassReader(const std::string &filename) : CarcassReader(filename)
 {
-    this->m_file.open(this->m_filename, std::ios::in);
+    m_file.open(m_filename, std::ios::in);
 }
 
-std::shared_ptr<std::vector<Vertex>> ObjCarcassReader::readVertices()
+std::vector<Vertex> ObjCarcassReader::readVertices()
 {
     std::cout << "in ObjCarcassReader::readVertices()\n";
-    return nullptr;
+    return {};
 }
 
-std::shared_ptr<std::vector<Edge>> ObjCarcassReader::readEdges()
+std::vector<Edge> ObjCarcassReader::readEdges()
 {
     std::cout << "in ObjCarcassReader::readEdges()\n";
-    return nullptr;
+    return {};
 }
 
 ObjCarcassReader::~ObjCarcassReader()

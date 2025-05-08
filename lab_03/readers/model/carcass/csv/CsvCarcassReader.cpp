@@ -4,19 +4,19 @@
 
 CsvCarcassReader::CsvCarcassReader(const std::string &filename) : CarcassReader(filename)
 {
-    this->m_file.open(this->m_filename, std::ios::in);
+    m_file.open(m_filename, std::ios::in);
 }
 
-std::shared_ptr<std::vector<Vertex>> CsvCarcassReader::readVertices()
+std::vector<Vertex> CsvCarcassReader::readVertices()
 {
     std::cout << "in CsvCarcassReader::readVertices()\n";
-    return nullptr;
+    return {};
 }
 
-std::shared_ptr<std::vector<Edge>> CsvCarcassReader::readEdges()
+std::vector<Edge> CsvCarcassReader::readEdges()
 {
     std::cout << "in CsvCarcassReader::readEdges()\n";
-    return nullptr;
+    return {};
 }
 
 CsvCarcassReader::~CsvCarcassReader()
