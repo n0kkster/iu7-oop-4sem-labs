@@ -8,5 +8,5 @@ public:
     CarcassReader() = delete;
     CarcassReader(const std::string &filename) : ModelReader(filename) { };
 
-    virtual ~CarcassReader() = default;
+    virtual ~CarcassReader() override = default;
 };
