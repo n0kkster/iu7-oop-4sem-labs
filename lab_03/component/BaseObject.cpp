@@ -25,5 +25,5 @@ std::shared_ptr<BaseObject> BaseObject::getObject(size_t id) const
 
 Vertex BaseObject::getCenter() const noexcept
 {
-    return { 0, 0, 0 };
+    return { 0, 0, 0 }; 
 }
