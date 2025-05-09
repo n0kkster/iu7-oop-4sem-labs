@@ -10,5 +10,5 @@ public:
     BaseDrawFactory() = default;
     virtual ~BaseDrawFactory() = default;
 
-    virtual std::unique_ptr<BasePainter> createPainter() = 0;
+    virtual std::shared_ptr<BasePainter> createPainter() = 0;
 };

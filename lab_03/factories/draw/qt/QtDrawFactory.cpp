@@ -4,7 +4,7 @@
 
 QtDrawFactory::QtDrawFactory(std::unique_ptr<QGraphicsScene> scene) : m_scene(std::move(scene)) { }
 
-std::unique_ptr<BasePainter> QtDrawFactory::createPainter()
+std::shared_ptr<BasePainter> QtDrawFactory::createPainter()
 {
-    return std::make_unique<QtPainter>(std::move(m_scene));
+    return std::make_shared<QtPainter>(std::move(m_scene));
 }

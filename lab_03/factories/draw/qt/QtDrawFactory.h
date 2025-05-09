@@ -15,5 +15,5 @@ public:
     QtDrawFactory(std::unique_ptr<QGraphicsScene> scene);
     virtual ~QtDrawFactory() override = default;
 
-    std::unique_ptr<BasePainter> createPainter() override;
+    std::shared_ptr<BasePainter> createPainter() override;
 };
