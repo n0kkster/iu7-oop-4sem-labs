@@ -1,16 +1,14 @@
 #pragma once
 
 #include "products/BasePainter.h"
-#include "products/BaseScene.h"
 
 #include <memory>
 
-class BaseDrawerFactory
+class BaseDrawFactory
 {
 public:
-    BaseDrawerFactory() = default;
-    virtual ~BaseDrawerFactory() = default;
+    BaseDrawFactory() = default;
+    virtual ~BaseDrawFactory() = default;
 
-    virtual std::unique_ptr<BaseScene> createScene() = 0;
     virtual std::unique_ptr<BasePainter> createPainter() = 0;
 };

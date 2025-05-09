@@ -1,17 +1,17 @@
 #pragma once
 
 #include "../../products/BasePainter.h"
-#include "../../products/BaseScene.h"
+#include <QGraphicsScene>
 #include <memory>
 
 class QtPainter : public BasePainter
 {
 private:
-    std::weak_ptr<BaseScene> m_scene;
+    std::unique_ptr<QGraphicsScene> m_scene;
 
 public:
     QtPainter() = delete;
-    explicit QtPainter(std::shared_ptr<BaseScene> scene);
+    explicit QtPainter(std::unique_ptr<QGraphicsScene> scene);
 
     virtual ~QtPainter() override = default;
 
