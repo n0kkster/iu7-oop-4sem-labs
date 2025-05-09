@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ConcreteVisitorCreator.h"
 
 template <typename BaseVisitor, typename DerivedVisitor, typename... Args>

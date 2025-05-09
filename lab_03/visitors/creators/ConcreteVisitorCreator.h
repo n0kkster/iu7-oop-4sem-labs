@@ -1,19 +1,17 @@
-#ifndef CONCRETE_VISITOR_CREATOR
-#define CONCRETE_VISITOR_CREATOR
+#pragma once
 
+#include "../../strategies/projection/BaseProjectionStrategy.h"
+#include "../draw/DrawVisitor.h"
 #include "../transform/move/MoveVisitor.h"
 #include "../transform/rotate/RotateVisitor.h"
 #include "../transform/scale/ScaleVisitor.h"
-#include "../draw/DrawVisitor.h"
 #include "BaseVisitorCreator.h"
-
 
 template <typename Derived, typename Base>
 concept Derivative = std::is_base_of_v<Base, Derived>;
 
 template <typename T, typename... Args>
 concept ConstructibleWith = requires(Args &&...args) { T{ std::forward<Args>(args)... }; };
-
 
 template <typename BaseVisitor, typename DerivedVisitor, typename... Args>
     requires Derivative<DerivedVisitor, BaseVisitor> && ConstructibleWith<DerivedVisitor, Args...>
@@ -34,7 +32,6 @@ using TransponseVisitorCreator = ConcreteVisitorCreator<TransformVisitor, MoveVi
 
 using ScaleVisitorCreator = ConcreteVisitorCreator<TransformVisitor, ScaleVisitor, ScaleParams>;
 
-// using DrawVisitorCreator = ConcreteVisitorCreator<BaseVisitor, DrawVisitor, std::shared_ptr<BaseDrawer>,
-//                                                   std::shared_ptr<BaseCamera>>;
-
-#endif
+using DrawVisitorCreator =
+    ConcreteVisitorCreator<BaseVisitor, DrawVisitor, std::shared_ptr<BaseProjectionStrategy>,
+                           std::shared_ptr<BasePainter>, std::shared_ptr<BaseCamera>>;
