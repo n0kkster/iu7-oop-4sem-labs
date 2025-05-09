@@ -1,4 +1,4 @@
-#include "../../../component/primitive/visible/model/carcass/structure/BaseStructure.h"
+#include "../../../component/primitive/visible/model/structure/BaseStructure.h"
 #include "../BaseModelBuilder.h"
 #include "../../../readers/model/ModelReader.h"
 
