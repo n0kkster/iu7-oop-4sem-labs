@@ -450,7 +450,7 @@
    <string>ЛР3 ООП. Диваев ИУ7-42</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="Plane" name="planeWidget">
+   <widget class="QGraphicsView" name="planeWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -1267,13 +1267,6 @@ QComboBox QAbstractItemView {
    <zorder>label_3</zorder>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Plane</class>
-   <extends>QGraphicsView</extends>
-   <header>plane.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>planeWidget</tabstop>
   <tabstop>loadModelBtn</tabstop>
