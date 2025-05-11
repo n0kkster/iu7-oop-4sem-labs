@@ -35,5 +35,14 @@ bool CarcassModelBuilder::buildCenter()
 
 std::shared_ptr<BaseObject> CarcassModelBuilder::createProduct()
 {
+    if (!this->buildVertices())
+        return nullptr;
+
+    if (!this->buildEdges())
+        return nullptr;
+
+    if (!buildCenter())
+        return nullptr;
+
     return std::make_shared<CarcassModel>(m_structure);
 }
