@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../../component/primitive/visible/model/BaseModel.h"
 #include "../../readers/model/ModelReader.h"
 #include "../BaseBuilder.h"
