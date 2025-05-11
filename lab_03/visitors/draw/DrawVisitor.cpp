@@ -1,4 +1,7 @@
 #include "DrawVisitor.h"
+
+#include "../../component/primitive/visible/model/carcass/CarcassModel.h"
+
 #include <memory>
 
 DrawVisitor::DrawVisitor(std::shared_ptr<BaseProjectionStrategy> strategy,
@@ -8,7 +11,7 @@ DrawVisitor::DrawVisitor(std::shared_ptr<BaseProjectionStrategy> strategy,
 
 void DrawVisitor::visit(CarcassModel &model) const
 {
-    m_strategy->prepare(std::make_shared<const BaseModel>(model), m_camera);
+    m_strategy->prepare(std::make_shared<CarcassModel>(model), m_camera);
 
     const auto vertices = m_strategy->getVertices();
     const auto edges = m_strategy->getEdges();
