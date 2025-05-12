@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../directors/DirectorSolution.h"
-#include "../../factories/read/ReaderSolution.h"
+#include "../../readers/ReaderSolution.h"
 #include "../BaseManager.h"
 
 #include <cstddef>
@@ -18,5 +18,5 @@ public:
     LoadManager();
     virtual ~LoadManager() override = default;
 
-    void load(size_t readerId, size_t directorId, const std::string &filename);
+    std::shared_ptr<BaseObject> load(size_t readerId, size_t directorId, const std::string &filename);
 };
