@@ -1,5 +1,8 @@
 #include "CarcassModelBuilder.h"
+
 #include "../../../component/primitive/visible/model/carcass/CarcassModel.h"
+
+CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<CarcassReader> reader) : BaseModelBuilder(reader) { }
 
 bool CarcassModelBuilder::buildVertices()
 {
@@ -31,7 +34,6 @@ bool CarcassModelBuilder::buildCenter()
     m_part = VERTICES;
     return true;
 }
-
 
 std::shared_ptr<BaseObject> CarcassModelBuilder::createProduct()
 {
