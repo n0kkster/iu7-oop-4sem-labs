@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../concepts/concepts.h"
+#include "../ids/ids.h"
 #include "../readers/model/carcass/CarcassReader.h"
 #include "BaseDirector.h"
-#include "../ids/ids.h"
 
 #include <cstddef>
 #include <functional>
