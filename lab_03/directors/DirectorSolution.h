@@ -11,15 +11,27 @@
 #include <memory>
 #include <utility>
 
+// class DirectorCreatorMaker
+// {
+// public:
+//     template <Derivative<BaseDirector> ConcreteDirector, typename... Args>
+//     static std::unique_ptr<BaseDirectorCreator> createDirectorCreator()
+//         requires Derivative<ConcreteDirector, BaseDirector> && NotAbstract<ConcreteDirector>
+//               && ConstructibleWith<ConcreteDirector, Args...>
+//     {
+//         return std::make_unique<ConcreteDirectorCreator<BaseDirector, ConcreteDirector, Args...>>();
+//     }
+// };
+
 class DirectorCreatorMaker
 {
 public:
-    template <Derivative<BaseDirector> ConcreteDirector, typename... Args>
+    template <Derivative<BaseDirector> ConcreteDirector>
     static std::unique_ptr<BaseDirectorCreator> createDirectorCreator()
         requires Derivative<ConcreteDirector, BaseDirector> && NotAbstract<ConcreteDirector>
-              && ConstructibleWith<ConcreteDirector, Args...>
+              /* && ConstructibleWith<ConcreteDirector> */
     {
-        return std::make_unique<ConcreteDirectorCreator<BaseDirector, ConcreteDirector, Args...>>();
+        return std::make_unique<ConcreteDirectorCreator<BaseDirector, ConcreteDirector>>();
     }
 };
 
@@ -29,6 +41,9 @@ public:
     using DirectorCreator = std::unique_ptr<BaseDirectorCreator> (&)();
     using CallbackMap = std::map<size_t, DirectorCreator>;
 
+private:
+    CallbackMap m_callbacks;
+
 public:
     DirectorSolution() = default;
     DirectorSolution(std::initializer_list<std::pair<size_t, DirectorCreator>> ilist);
@@ -37,7 +52,4 @@ public:
 
     bool registrate(size_t id, DirectorCreator creatorFunc);
     std::unique_ptr<BaseDirectorCreator> create(size_t id) const;
-
-private:
-    CallbackMap m_callbacks;
 };
