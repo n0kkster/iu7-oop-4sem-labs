@@ -11,7 +11,7 @@
 class LoadManager : public BaseManager
 {
 private:
-    std::shared_ptr<ReaderSolution> m_readerSolution;
+    std::shared_ptr<BaseReaderSolution> m_readerSolution;
     std::shared_ptr<BaseDirectorSolution> m_directorSolution;
 
 public:

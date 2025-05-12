@@ -1,41 +1,36 @@
 #pragma once
 
-#include "../../concepts/concepts.h"
-#include "creators/BaseReaderCreator.h"
-#include "creators/ConcreteReaderCreator.h"
-#include <initializer_list>
+#include "../concepts/concepts.h"
+#include "../ids/ids.h"
+#include "../readers/model/carcass/CarcassReader.h"
+#include "BaseReader.h"
 
 #include <cstddef>
+#include <functional>
 #include <map>
 #include <memory>
+#include <string>
 
-class ReaderCreatorMaker
-{
-public:
-    template <Derivative<BaseReader> ConcreteReader>
-    static std::unique_ptr<BaseReaderCreator> createReaderCreator()
-        requires Derivative<ConcreteReader, BaseReader> && NotAbstract<ConcreteReader>
-              /* && ConstructibleWith<ConcreteReader> */
-    {
-        return std::make_unique<ConcreteReaderCreator<BaseReader, ConcreteReader>>();
-    }
-};
-
+template <typename... SupportedArgs>
 class ReaderSolution
 {
-public:
-    using ReaderCreator = std::unique_ptr<BaseReaderCreator> (&)();
-    using CallbackMap = std::map<size_t, ReaderCreator>;
+    using CreatorFunc = std::function<std::shared_ptr<BaseReader>(const std::tuple<SupportedArgs...> &)>;
+    std::map<size_t, CreatorFunc> creators;
 
 public:
     ReaderSolution() = default;
-    ReaderSolution(std::initializer_list<std::pair<size_t, ReaderCreator>> ilist);
-
     ~ReaderSolution() = default;
 
-    bool registrate(size_t id, ReaderCreator creatorFunc);
-    std::unique_ptr<BaseReaderCreator> create(size_t id) const;
+    template <typename Derived, typename... Args>
+        requires(IsSupportedArg<Args, SupportedArgs...> && ...)
+             && Derivative<Derived, BaseReader> && ConstructibleWith<Derived, Args...>
+    void registrate(size_t id);
 
-private:
-    CallbackMap m_callbacks;
+    template <typename... Args>
+        requires(IsSupportedArg<Args, SupportedArgs...> && ...)
+    std::shared_ptr<BaseReader> create(size_t id, Args &&...args);
 };
+
+using BaseReaderSolution = ReaderSolution<const std::string &>;
+
+#include "ReaderSolution.hpp"
