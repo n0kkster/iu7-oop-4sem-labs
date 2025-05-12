@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../concepts/concepts.h"
+#include "BaseDirector.h"
+#include "creators/ConcreteDirectorCreator.h"
 #include "creators/DirectorCreator.h"
 #include <initializer_list>
 
@@ -8,31 +11,22 @@
 #include <memory>
 #include <utility>
 
-
-template <typename Derived, typename Base>
-concept Derivative = std::is_abstract_v<Base> && std::is_base_of_v<Base, Derived>;
-
-template <typename Type>
-concept NotAbstract = !std::is_abstract_v<Type>;
-
-template <typename Type>
-concept DefaultConstructible = std::is_default_constructible_v<Type>;
-
 class DirectorCreatorMaker
 {
 public:
-    template <Derivative<BaseDirectorCreator> ConcreteDirectorCreator>
+    template <Derivative<BaseDirector> ConcreteDirector, typename... Args>
     static std::unique_ptr<BaseDirectorCreator> createDirectorCreator()
-        requires NotAbstract<ConcreteDirectorCreator>
+        requires Derivative<ConcreteDirector, BaseDirector> && NotAbstract<ConcreteDirector>
+              && ConstructibleWith<ConcreteDirector, Args...>
     {
-        return std::make_unique<ConcreteDirectorCreator>();
+        return std::make_unique<ConcreteDirectorCreator<BaseDirector, ConcreteDirector, Args...>>();
     }
 };
 
 class DirectorSolution
 {
 public:
-    using DirectorCreator = std::unique_ptr<BaseDirectorCreator>(&)();
+    using DirectorCreator = std::unique_ptr<BaseDirectorCreator> (&)();
     using CallbackMap = std::map<size_t, DirectorCreator>;
 
 public:
