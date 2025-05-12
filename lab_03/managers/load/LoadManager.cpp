@@ -14,9 +14,8 @@ LoadManager::LoadManager()
     m_directorSolution = std::make_shared<BaseDirectorSolution>();
     m_readerSolution = std::make_shared<BaseReaderSolution>();
 
-    m_directorSolution
-        ->template registrate<CarcassDirector, std::shared_ptr<CarcassReader>, InternalRepresentation>(
-            DirectorIds::CarcassDirectorId);
+    m_directorSolution->registrate<CarcassDirector, std::shared_ptr<CarcassReader>, InternalRepresentation>(
+        DirectorIds::CarcassDirectorId);
 
     m_readerSolution->registrate<TxtCarcassReader, const std::string &>(ReaderIds::CarcassTxtReaderId);
     m_readerSolution->registrate<ObjCarcassReader, const std::string &>(ReaderIds::CarcassObjReaderId);
