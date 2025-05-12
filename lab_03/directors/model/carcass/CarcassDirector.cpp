@@ -2,9 +2,9 @@
 #include <memory>
 #include "../../../builders/model/carcass/CarcassModelBuilder.h"
 
-CarcassDirector::CarcassDirector(std::shared_ptr<CarcassReader> reader)
+CarcassDirector::CarcassDirector(std::shared_ptr<BaseReader> reader, InternalRepresentation repr)
 {
-    m_builder = std::make_shared<CarcassModelBuilder>(reader);
+    m_builder = std::make_shared<CarcassModelBuilder>(reader, repr);
 }
 
 std::shared_ptr<BaseObject> CarcassDirector::create() const
