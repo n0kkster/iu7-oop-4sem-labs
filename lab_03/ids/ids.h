@@ -11,7 +11,11 @@ enum DirectorIds : size_t
 
 enum ReaderIds : size_t
 {
-    CarcassReaderId = 0,
-    CameraReaderId,
-    CompositeReaderId
+    CarcassTxtReaderId = 0,
+    CarcassObjReaderId,
+    CarcassCsvReaderId,
+    CameraTxtReaderId,
+    CameraObjReaderId,
+    CompositeTxtReaderId,
+    CompositeObjReaderId
 };
