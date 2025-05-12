@@ -17,3 +17,6 @@ concept ConstructibleWith = requires(Args &&...args) { T{ std::forward<Args>(arg
 
 template <typename T>
 concept ConvertibleToDouble = (std::same_as<T, double> || std::convertible_to<T, double>);
+
+template <typename T, typename... Supported>
+concept IsSupportedArg = (std::is_convertible_v<T, Supported> || ...);;
