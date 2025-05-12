@@ -1,6 +1,6 @@
 #include "../../../component/primitive/visible/model/structure/BaseStructure.h"
 #include "../BaseModelBuilder.h"
-#include "../../../readers/model/ModelReader.h"
+#include "../../../readers/model/carcass/CarcassReader.h"
 
 #include <memory>
 
@@ -12,7 +12,7 @@ private:
 
 public:
     CarcassModelBuilder() = delete;
-    explicit CarcassModelBuilder(std::shared_ptr<ModelReader> reader);
+    explicit CarcassModelBuilder(std::shared_ptr<CarcassReader> reader);
 
     virtual ~CarcassModelBuilder() override = default;
 
