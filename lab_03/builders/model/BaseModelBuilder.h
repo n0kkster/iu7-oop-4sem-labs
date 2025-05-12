@@ -17,7 +17,7 @@ class BaseModelBuilder : public BaseBuilder
 {
 public:
     BaseModelBuilder() = delete;
-    explicit BaseModelBuilder(std::shared_ptr<ModelReader> reader) : BaseBuilder(reader) { };
+    explicit BaseModelBuilder(std::shared_ptr<BaseReader> reader) : BaseBuilder(reader) { };
 
     virtual ~BaseModelBuilder() override = default;
 

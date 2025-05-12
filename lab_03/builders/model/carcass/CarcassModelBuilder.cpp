@@ -1,8 +1,18 @@
 #include "CarcassModelBuilder.h"
 
 #include "../../../component/primitive/visible/model/carcass/CarcassModel.h"
+#include <stdexcept>
 
-CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<CarcassReader> reader) : BaseModelBuilder(reader) { }
+
+CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentation repr) :
+    BaseModelBuilder(reader)
+{
+    auto it = m_reprMap.find(repr);
+    if (it == m_reprMap.end())
+        throw std::runtime_error("Error invalid repr!");
+
+    m_structure = it->second(); 
+}
 
 bool CarcassModelBuilder::buildVertices()
 {
