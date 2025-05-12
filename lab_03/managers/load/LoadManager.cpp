@@ -11,14 +11,13 @@
 
 LoadManager::LoadManager()
 {
-    m_directorSolution = std::make_shared<DirectorSolution>();
+    m_directorSolution = std::make_shared<BaseDirectorSolution>();
     m_readerSolution = std::make_shared<ReaderSolution>();
 
-    m_directorSolution->registrate(DirectorIds::CarcassDirectorId,
-                                   DirectorCreatorMaker::createDirectorCreator<CarcassDirector>);
-    // m_directorSolution->registrate(
-    // DirectorIds::CarcassDirectorId,
-    // DirectorCreatorMaker::createDirectorCreator<CameraDirector, std::shared_ptr<CameraReader>>);
+    m_directorSolution
+        ->template registrate<CarcassDirector, std::shared_ptr<CarcassReader>, InternalRepresentation>(
+            DirectorIds::CarcassDirectorId);
+
 
     m_readerSolution->registrate(CarcassTxtReaderId,
                                  ReaderCreatorMaker::createReaderCreator<TxtCarcassReader>);
@@ -28,13 +27,13 @@ LoadManager::LoadManager()
                                  ReaderCreatorMaker::createReaderCreator<CsvCarcassReader>);
 }
 
-std::shared_ptr<BaseObject> LoadManager::load(size_t readerId, size_t directorId, const std::string &filename)
+std::shared_ptr<BaseObject> LoadManager::load(ReaderIds readerId, DirectorIds directorId,
+                                              InternalRepresentation repr, const std::string &filename)
 {
-    std::shared_ptr<BaseDirectorCreator> directorCreator = m_directorSolution->create(directorId);
     std::shared_ptr<BaseReaderCreator> readerCreator = m_readerSolution->create(readerId);
 
-    std::shared_ptr<BaseReader> reader = readerCreator->create(filename);
-    std::shared_ptr<BaseDirector> director = directorCreator->create(reader);
+    auto reader = readerCreator->create(filename);
+    auto director = m_directorSolution->create(directorId, reader, repr);
 
     return director->create();
 }
