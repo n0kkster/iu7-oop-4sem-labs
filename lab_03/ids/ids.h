@@ -19,3 +19,9 @@ enum ReaderIds : size_t
     CompositeTxtReaderId,
     CompositeObjReaderId
 };
+
+enum InternalRepresentation : size_t
+{
+    ListInternalReprsentationId = 0,
+    MatrixInternalReprsentationId
+};
