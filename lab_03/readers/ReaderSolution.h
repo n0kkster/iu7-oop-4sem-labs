@@ -1,29 +1,30 @@
 #pragma once
 
+#include "../../concepts/concepts.h"
 #include "creators/BaseReaderCreator.h"
+#include "creators/ConcreteReaderCreator.h"
 #include <initializer_list>
 
 #include <cstddef>
 #include <map>
 #include <memory>
 
-#include "../../concepts/concepts.h"
-
 class ReaderCreatorMaker
 {
 public:
-    template <Derivative<BaseReaderCreator> ConcreteReaderCreator>
+    template <Derivative<BaseReader> ConcreteReader>
     static std::unique_ptr<BaseReaderCreator> createReaderCreator()
-        requires NotAbstract<ConcreteReaderCreator>
+        requires Derivative<ConcreteReader, BaseReader> && NotAbstract<ConcreteReader>
+              /* && ConstructibleWith<ConcreteReader> */
     {
-        return std::make_unique<ConcreteReaderCreator>();
+        return std::make_unique<ConcreteReaderCreator<BaseReader, ConcreteReader>>();
     }
 };
 
 class ReaderSolution
 {
 public:
-    using ReaderCreator = std::unique_ptr<BaseReaderCreator>(&)();
+    using ReaderCreator = std::unique_ptr<BaseReaderCreator> (&)();
     using CallbackMap = std::map<size_t, ReaderCreator>;
 
 public:
