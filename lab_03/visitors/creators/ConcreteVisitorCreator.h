@@ -6,13 +6,7 @@
 #include "../transform/rotate/RotateVisitor.h"
 #include "../transform/scale/ScaleVisitor.h"
 #include "BaseVisitorCreator.h"
-#include <concepts>
-
-template <typename Derived, typename Base>
-concept Derivative = std::derived_from<Derived, Base>;
-
-template <typename T, typename... Args>
-concept ConstructibleWith = requires(Args &&...args) { T{ std::forward<Args>(args)... }; };
+#include "../../concepts/concepts.h"
 
 template <typename BaseVisitor, typename DerivedVisitor, typename... Args>
     requires Derivative<DerivedVisitor, BaseVisitor> && ConstructibleWith<DerivedVisitor, Args...>

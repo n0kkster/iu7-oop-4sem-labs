@@ -4,9 +4,7 @@
 #include <concepts>
 #include <cstddef>
 #include <memory>
-
-template <typename T>
-concept ConvertibleToDouble = (std::same_as<T, double> || std::convertible_to<T, double>);
+#include "../concepts/concepts.h"
 
 template <ConvertibleToDouble T>
 class Matrix
