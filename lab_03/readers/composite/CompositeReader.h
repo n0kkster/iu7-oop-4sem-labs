@@ -19,7 +19,7 @@ public:
 
     virtual ~CompositeReader() override = default;
 
-    void read(BaseBuilder &builder);
+    virtual void read(BaseBuilder &builder, size_t part) override;
 
     std::shared_ptr<std::vector<std::shared_ptr<BaseObject>>> getObjects() const;
 };

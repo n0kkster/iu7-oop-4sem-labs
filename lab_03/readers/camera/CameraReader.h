@@ -19,7 +19,7 @@ public:
 
     virtual ~CameraReader() override = default;
 
-    void read(BaseBuilder &builder);
+    virtual void read(BaseBuilder &builder, size_t part) override;
     // void accept(BaseReaderVisitor &visitor);
 
     std::shared_ptr<Matrix<double>> getOrientation() const;

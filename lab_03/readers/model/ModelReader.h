@@ -18,9 +18,9 @@ protected:
 
 public:
     ModelReader() = delete;
-    ModelReader(const std::string &filename) : BaseReader(filename) { };
+    explicit ModelReader(const std::string &filename) : BaseReader(filename) { };
 
     virtual ~ModelReader() override = default;
 
-    void read(BaseBuilder &builder, size_t part) override;
+    virtual void read(BaseBuilder &builder, size_t part) override;
 };
