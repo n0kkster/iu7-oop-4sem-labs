@@ -1,14 +1,13 @@
 #pragma once
 
 #include "../BaseDirector.h"
-#include "../../builders/model/BaseModelBuilder.h"
+#include <string>
 
 class ModelDirector : public BaseDirector
 {
 public:
-    ModelDirector() = delete;
-    ModelDirector(std::shared_ptr<BaseModelBuilder> builder);
-    virtual ~ModelDirector() override = default;
+    ModelDirector() = default;
+    virtual ~ModelDirector() = default;
 
-    std::shared_ptr<BaseObject> create() const override;
+    virtual std::shared_ptr<BaseObject> create() const = 0;
 };
