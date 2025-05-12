@@ -1,5 +1,4 @@
-#ifndef BASE_VISITOR_CREATOR
-#define BASE_VISITOR_CREATOR
+#pragma once
 
 #include "../BaseVisitor.h"
 
@@ -15,5 +14,3 @@ public:
     virtual std::shared_ptr<Visitor> create(Args &&...args) = 0;
 
 };
-
-#endif
