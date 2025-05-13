@@ -17,8 +17,8 @@ protected:
     virtual std::shared_ptr<BaseObject> createProduct() = 0;
 
 public:
-    BaseBuilder();
-    explicit BaseBuilder(std::shared_ptr<BaseReader> reader) : m_reader(reader) { };
+    BaseBuilder() = delete;
+    explicit BaseBuilder(std::shared_ptr<BaseReader> reader);
 
     virtual ~BaseBuilder() = default;
 
