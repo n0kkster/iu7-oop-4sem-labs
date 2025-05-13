@@ -2,7 +2,7 @@
 
 #include "../BaseReader.h"
 #include "../../matrix/matrix.h"
-#include "../../component/primitive/visible/model/vertex/vertex.h"
+#include "../../component/primitive/visible/model/vertex/Vertex.h"
 
 class CameraReader : public BaseReader
 {
@@ -20,7 +20,6 @@ public:
     virtual ~CameraReader() override = default;
 
     virtual void read(BaseBuilder &builder, size_t part) override;
-    // void accept(BaseReaderVisitor &visitor);
 
     std::shared_ptr<Matrix<double>> getOrientation() const;
     std::shared_ptr<Vertex> getViewpoint() const;

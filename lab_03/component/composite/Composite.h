@@ -20,6 +20,7 @@ public:
     std::shared_ptr<BaseObject> getObject(const size_t id) const override;
     void add(std::shared_ptr<BaseObject> object) override;
     void remove(const size_t id) noexcept override;
+    void accept(std::shared_ptr<BaseVisitor> visitor) override;
 
     Vertex getCenter() const noexcept override;
 

@@ -1,4 +1,4 @@
-#include "edge.h"
+#include "Edge.h"
 
 Edge::Edge(size_t start, size_t end) : m_start(start), m_end(end) { }
 

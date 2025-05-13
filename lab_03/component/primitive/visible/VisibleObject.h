@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../primitive.h"
+#include "../Primitive.h"
 
 class VisibleObject : public Primitive
 {

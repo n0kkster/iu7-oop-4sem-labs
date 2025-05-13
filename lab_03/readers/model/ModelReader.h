@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../component/primitive/visible/model/edge/edge.h"
-#include "../../component/primitive/visible/model/vertex/vertex.h"
+#include "../../component/primitive/visible/model/edge/Edge.h"
+#include "../../component/primitive/visible/model/vertex/Vertex.h"
 #include "../BaseReader.h"
 
 #include <memory>

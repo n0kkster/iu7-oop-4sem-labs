@@ -1,4 +1,4 @@
-#include "composite.h"
+#include "Composite.h"
 
 #include "../../exceptions/composite/CompositeException.h"
 
@@ -54,4 +54,10 @@ std::shared_ptr<BaseObject> Composite::getObject(const size_t id) const
         throw CompositeOutOfRangeException("Composite index out of range!");
     }
     return obj;
+}
+
+void Composite::accept(std::shared_ptr<BaseVisitor> visitor)
+{
+    for (auto &[id, component] : m_objects)
+        component->accept(visitor);
 }

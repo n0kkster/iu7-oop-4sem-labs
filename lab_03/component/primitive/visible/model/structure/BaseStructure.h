@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../../../../transformations/actions/TransformAction.h"
-#include "../edge/edge.h"
-#include "../vertex/vertex.h"
+#include "../edge/Edge.h"
+#include "../vertex/Vertex.h"
 
 #include <memory>
 #include <vector>
