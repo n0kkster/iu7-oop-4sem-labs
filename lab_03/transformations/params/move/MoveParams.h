@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../component/primitive/visible/model/vertex/vertex.h"
+#include "../../../component/primitive/visible/model/vertex/Vertex.h"
 
 class MoveParams
 {
