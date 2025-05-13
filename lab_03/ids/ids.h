@@ -25,3 +25,8 @@ enum InternalRepresentation : size_t
     ListInternalReprsentationId = 0,
     MatrixInternalReprsentationId
 };
+
+enum CameraIds : size_t
+{
+    DefaultCameraId = 0
+};
