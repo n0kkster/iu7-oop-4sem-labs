@@ -16,16 +16,16 @@ public:
     ConcreteVisitorCreator() = default;
     ~ConcreteVisitorCreator() = default;
 
-    std::shared_ptr<BaseVisitor> create(Args &&...args) override;
+    std::shared_ptr<BaseVisitor> create(const Args &...args) override;
 };
 
 #include "ConcreteVisitorCreator.hpp"
 
-using RotateVisitorCreator = ConcreteVisitorCreator<TransformVisitor, RotateVisitor, RotationParams>;
+using RotateVisitorCreator = ConcreteVisitorCreator<BaseVisitor, RotateVisitor, RotationParams>;
 
-using TransponseVisitorCreator = ConcreteVisitorCreator<TransformVisitor, MoveVisitor, MoveParams>;
+using MoveVisitorCreator = ConcreteVisitorCreator<BaseVisitor, MoveVisitor, MoveParams>;
 
-using ScaleVisitorCreator = ConcreteVisitorCreator<TransformVisitor, ScaleVisitor, ScaleParams>;
+using ScaleVisitorCreator = ConcreteVisitorCreator<BaseVisitor, ScaleVisitor, ScaleParams>;
 
 using DrawVisitorCreator =
     ConcreteVisitorCreator<BaseVisitor, DrawVisitor, std::shared_ptr<BaseProjectionStrategy>,
