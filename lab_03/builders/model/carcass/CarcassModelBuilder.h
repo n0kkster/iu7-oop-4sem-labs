@@ -17,7 +17,7 @@ public:
 
 private:
     std::shared_ptr<BaseStructure> m_structure;
-    RepresentationMap m_reprMap = 
+    const RepresentationMap m_reprMap = 
     {
         {InternalRepresentation::ListInternalReprsentationId, [](){return std::make_shared<ListStructure>();}},
         // {InternalRepresentation::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
