@@ -11,3 +11,8 @@ void QtPainter::drawLine(const double x1, const double y1, const double x2, cons
 {
     m_scene->addLine(x1, y1, x2, y2);
 }
+
+void QtPainter::clear()
+{
+    m_scene->clear();
+}
