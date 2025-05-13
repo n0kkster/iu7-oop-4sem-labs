@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../BaseModel.h"
-#include "../vertex/vertex.h"
+#include "../vertex/Vertex.h"
 #include "../structure/BaseStructure.h"
 
 #include <memory>
@@ -16,7 +16,7 @@ public:
 
     Vertex getCenter() const noexcept override;
 
-    // void accept(/* visitor */) override;
+    void accept(std::shared_ptr<BaseVisitor> visitor) override;
 
     std::shared_ptr<BaseStructure> getStructure() const override;
 };

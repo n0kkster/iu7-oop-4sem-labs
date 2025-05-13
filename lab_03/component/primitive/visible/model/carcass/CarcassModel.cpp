@@ -11,3 +11,8 @@ std::shared_ptr<BaseStructure> CarcassModel::getStructure() const
 {
     return m_structure;
 }
+
+void CarcassModel::accept(std::shared_ptr<BaseVisitor> visitor)
+{
+    visitor->visit(*this);
+}

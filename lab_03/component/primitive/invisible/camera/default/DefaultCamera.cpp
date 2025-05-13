@@ -40,3 +40,8 @@ void DefaultCamera::transform(const std::shared_ptr<const TransformAction> actio
 {
     return;
 }
+
+void DefaultCamera::accept(std::shared_ptr<BaseVisitor> visitor)
+{
+    visitor->visit(*this);
+}

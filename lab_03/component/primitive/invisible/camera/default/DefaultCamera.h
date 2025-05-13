@@ -19,5 +19,5 @@ public:
     void setOrientation(const Matrix<double> &orientation) override;
     void setViewpoint(const Vertex &viewpoint) noexcept override;
     void transform(const std::shared_ptr<const TransformAction> action) override;
-    // void accept(/* visitor */);
+    void accept(std::shared_ptr<BaseVisitor> visitor) override;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "primitive/visible/model/vertex/vertex.h"
+#include "../visitors/BaseVisitor.h"
+#include "primitive/visible/model/vertex/Vertex.h"
 
 #include <cstddef>
 #include <map>
@@ -24,7 +25,7 @@ public:
     virtual void add(std::shared_ptr<BaseObject> object);
     virtual void remove(const size_t id) noexcept;
 
-    // virtual void accept(/* visitor */) = 0;
+    virtual void accept(std::shared_ptr<BaseVisitor> visitor) = 0;
 
     virtual Vertex getCenter() const noexcept;
     virtual bool isComposite() const noexcept = 0;
