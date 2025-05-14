@@ -49,7 +49,7 @@ Vertex ListStructure::getCenter() noexcept
 
 void ListStructure::transform(std::shared_ptr<TransformAction> action)
 {
-    for (auto v : m_vertices)
+    for (auto &v : m_vertices)
         action->transform(v);
 
     action->transform(m_center);
