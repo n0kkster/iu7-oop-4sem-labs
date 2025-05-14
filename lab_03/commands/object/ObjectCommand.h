@@ -39,26 +39,10 @@ public:
     void execute() override;
 };
 
-class ScaleObjectCommand : public ObjectCommand
-{
-private:
-    using Action = void (TransformManager::*)(size_t, ScaleParams &);
-
-    Action m_action;
-    ScaleParams m_params;
-    size_t m_objectId;
-
-public:
-    ScaleObjectCommand(size_t objId, const ScaleParams &params);
-    virtual ~ScaleObjectCommand() override = default;
-
-    void execute() override;
-};
-
 class MoveObjectCommand : public ObjectCommand
 {
 private:
-    using Action = void (TransformManager::*)(size_t, MoveParams &);
+    using Action = void (TransformManager::*)(size_t, const MoveParams &);
 
     Action m_action;
     MoveParams m_params;
@@ -71,10 +55,27 @@ public:
     void execute() override;
 };
 
+
+class ScaleObjectCommand : public ObjectCommand
+{
+private:
+    using Action = void (TransformManager::*)(size_t, const ScaleParams &);
+
+    Action m_action;
+    ScaleParams m_params;
+    size_t m_objectId;
+
+public:
+    ScaleObjectCommand(size_t objId, const ScaleParams &params);
+    virtual ~ScaleObjectCommand() override = default;
+
+    void execute() override;
+};
+
 class RotateObjectCommand : public ObjectCommand
 {
 private:
-    using Action = void (TransformManager::*)(size_t, RotationParams &);
+    using Action = void (TransformManager::*)(size_t, const RotationParams &);
 
     Action m_action;
     RotationParams m_params;

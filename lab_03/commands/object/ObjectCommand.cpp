@@ -31,6 +31,7 @@ MoveObjectCommand::MoveObjectCommand(size_t objId, const MoveParams &params) :
     m_action(&TransformManager::moveObject), m_params(params), m_objectId(objId)
 { }
 
+
 void MoveObjectCommand::execute()
 {
     ((*m_transformManager).*m_action)(m_objectId, m_params);

@@ -11,7 +11,7 @@ public:
     TransformManager() = default;
     virtual ~TransformManager() = default;
 
-    void moveObject(size_t id, MoveParams &params);
-    void scaleObject(size_t id, ScaleParams &params);
-    void rotateObject(size_t id, RotationParams &params);
+    void moveObject(size_t id, const MoveParams &params);
+    void scaleObject(size_t id, const ScaleParams &params);
+    void rotateObject(size_t id, const RotationParams &params);
 };

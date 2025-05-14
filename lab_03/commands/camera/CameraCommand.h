@@ -57,14 +57,14 @@ public:
 class MoveCameraCommand : public CameraCommand
 {
 private:
-    using Action = void (TransformManager::*)(size_t, MoveParams &);
+    using Action = void (TransformManager::*)(size_t, const MoveParams &);
 
     Action m_action;
     size_t m_cameraId;
     MoveParams m_params;
 
 public:
-    MoveCameraCommand(const size_t cameraId, MoveParams &params);
+    MoveCameraCommand(const size_t cameraId, const MoveParams &params);
     virtual ~MoveCameraCommand() override = default;
 
     void execute() override;
@@ -73,14 +73,14 @@ public:
 class RotateCameraCommand : public CameraCommand
 {
 private:
-    using Action = void (TransformManager::*)(size_t, RotationParams &);
+    using Action = void (TransformManager::*)(size_t, const RotationParams &);
 
     Action m_action;
     size_t m_cameraId;
     RotationParams m_params;
 
 public:
-    RotateCameraCommand(const size_t cameraId, RotationParams &params);
+    RotateCameraCommand(const size_t cameraId, const RotationParams &params);
     virtual ~RotateCameraCommand() override = default;
     
     void execute() override;
