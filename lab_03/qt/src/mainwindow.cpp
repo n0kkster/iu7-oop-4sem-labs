@@ -101,7 +101,6 @@ void MainWindow::onShiftBtnClicked()
 
     for (const auto id : m_selected)
     {
-        qDebug() << "moving object" << id;
         std::shared_ptr<BaseCommand> moveCommand = std::make_shared<MoveObjectCommand>(id, params);
         m_facade.execute(moveCommand);
     }
@@ -163,6 +162,19 @@ void MainWindow::onScaleBtnClicked()
                               "Коэффициент масштабирования по оси Z должен быть вещественным числом.");
         return;
     }
+
+    ScaleParams params{kx, ky, kz};
+
+    getSelectedObjects();
+
+    for (const auto id : m_selected)
+    {
+        std::shared_ptr<BaseCommand> scaleCommand = std::make_shared<ScaleObjectCommand>(id, params);
+        m_facade.execute(scaleCommand);
+    }
+
+    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+    m_facade.execute(drawCommand);
 }
 
 void MainWindow::onRotateBtnClicked()
@@ -219,6 +231,19 @@ void MainWindow::onRotateBtnClicked()
     angleX = qDegreesToRadians(angleX);
     angleY = qDegreesToRadians(angleY);
     angleZ = qDegreesToRadians(angleZ);
+
+    RotationParams params{angleX, angleY, angleZ};
+
+    getSelectedObjects();
+
+    for (const auto id : m_selected)
+    {
+        std::shared_ptr<BaseCommand> rotateCommand = std::make_shared<RotateObjectCommand>(id, params);
+        m_facade.execute(rotateCommand);
+    }
+
+    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+    m_facade.execute(drawCommand);
 }
 
 #include <QDebug>
