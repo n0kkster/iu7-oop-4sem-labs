@@ -6,6 +6,7 @@
 #include <memory>
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,5 +37,10 @@ private:
     Facade m_facade;
 
     void createScene(QWidget *parent);
+    void insertRow(size_t id, const std::string &name, const Vertex &center, const std::string &type);
+    void getSelectedObjects();
+
+    size_t m_objects;
+    std::vector<size_t> m_selected;
 };
 #endif /* MAINWINDOW_H */

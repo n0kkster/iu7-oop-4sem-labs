@@ -4,7 +4,6 @@
 #include "../../commands/load/LoadCommand.h"
 #include "../../commands/object/ObjectCommand.h"
 #include "../../commands/scene/SceneCommand.h"
-#include "../../exceptions/BaseException.h"
 #include "../../facade/Facade.h"
 #include "../../factories/draw/DrawSolution.h"
 #include "../../factories/draw/qt/QtDrawFactory.h"
@@ -15,9 +14,15 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <filesystem>
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidget->setFocusPolicy(Qt::NoFocus);
+    ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     connect(ui->applyShiftBtn, &QPushButton::clicked, this, &MainWindow::onShiftBtnClicked);
     connect(ui->applyScaleBtn, &QPushButton::clicked, this, &MainWindow::onScaleBtnClicked);
@@ -26,14 +31,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     createScene(ui->planeWidget);
 
+    m_objects = 0;
+
     CameraId id = CameraId::DefaultCameraId;
     std::shared_ptr<BaseCommand> addCameraCommand = std::make_shared<AddCameraCommand>(id);
     m_facade.execute(addCameraCommand);
 
-    qDebug() << "active cam id:" << id;
-
     std::shared_ptr<BaseCommand> setActiveCameraCommand = std::make_shared<SetActiveCameraCommand>(id);
     m_facade.execute(setActiveCameraCommand);
+
+    insertRow(m_objects++, "Камера", {0, 0, 0}, "Обыкновенная");
 }
 
 void MainWindow::onLoadModelBtnClicked()
@@ -54,6 +61,7 @@ void MainWindow::onLoadModelBtnClicked()
         m_facade.execute(loadCommand);
         std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
         m_facade.execute(drawCommand);
+        insertRow(m_objects++, std::filesystem::path(filename).filename(), {0, 0, 0}, "Каркас");
     }
     catch (const std::exception &ex)
     {
@@ -86,6 +94,20 @@ void MainWindow::onShiftBtnClicked()
         QMessageBox::critical(this, "Ошибка", "Величина сдвига по оси Z должна быть вещественным числом.");
         return;
     }
+
+    MoveParams params{dx, dy, dz};
+
+    getSelectedObjects();
+
+    for (const auto id : m_selected)
+    {
+        qDebug() << "moving object" << id;
+        std::shared_ptr<BaseCommand> moveCommand = std::make_shared<MoveObjectCommand>(id, params);
+        m_facade.execute(moveCommand);
+    }
+
+    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+    m_facade.execute(drawCommand);
 }
 
 void MainWindow::onScaleBtnClicked()
@@ -218,9 +240,34 @@ void MainWindow::createScene(QWidget *parent)
     std::unique_ptr<BasePainter> painter = DrawSolution::createPainter<QtDrawFactory>(m_scene);
     auto drawManager = ManagerSolution::getDrawManager();
 
-    // painter->drawLine(0, 0, 300, 300);
-
     drawManager->setPainter(std::move(painter));
+}
+
+void MainWindow::getSelectedObjects()
+{
+    auto selected = ui->tableWidget->selectedItems();
+
+    m_selected.clear();
+
+    for (const auto el : selected)
+    {
+        if (el->column() == 0)
+        {
+            m_selected.push_back(el->text().toULong());
+        }
+    }
+}
+
+void MainWindow::insertRow(size_t id, const std::string &name, const Vertex &center, const std::string &type)
+{
+    ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 0, new QTableWidgetItem{ QString::number(id) });
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 1, new QTableWidgetItem{ QString(name.c_str()) });
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 2,
+                             new QTableWidgetItem{ "(" + QString::number(center.getX()) + "; "
+                                                   + QString::number(center.getY()) + "; "
+                                                   + QString::number(center.getZ()) + ")" });
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem{ QString(type.c_str()) });
 }
 
 MainWindow::~MainWindow()
