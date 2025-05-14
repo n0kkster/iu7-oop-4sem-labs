@@ -1,6 +1,8 @@
 #include "Vertex.h"
 
+#include <iostream>
 #include <math.h>
+#include <ostream>
 
 #pragma region Constructors
 
@@ -52,19 +54,15 @@ double Vertex::calcDistance(const Vertex &other) const noexcept
                      + std::pow(other.m_z - m_z, 2));
 }
 
-#include <QDebug>
-
 void Vertex::transform(const Matrix<double> &matrix)
 {
-    Matrix<double> curr = {
-        { m_x, m_y, m_z, 1 }
-    };
+    Matrix<double> curr = { { m_x }, { m_y }, { m_z }, { 1 } };
 
-    Matrix<double> new_pos = curr * matrix;
+    Matrix<double> new_pos = matrix * curr;
 
     m_x = new_pos[0][0];
-    m_y = new_pos[0][1];
-    m_z = new_pos[0][2];
+    m_y = new_pos[1][0];
+    m_z = new_pos[2][0];
 }
 
 #pragma region Operators
@@ -72,7 +70,8 @@ void Vertex::transform(const Matrix<double> &matrix)
 bool Vertex::operator==(const Vertex &other) const noexcept
 {
     const double eps = 1e-9;
-    return (std::abs(m_x - other.m_x) <= eps) && (std::abs(m_y - other.m_y) <= eps) && (std::abs(m_z - other.m_z) <= eps);
+    return (std::abs(m_x - other.m_x) <= eps) && (std::abs(m_y - other.m_y) <= eps)
+        && (std::abs(m_z - other.m_z) <= eps);
 }
 
 bool Vertex::equal(const Vertex &other) const noexcept
@@ -145,3 +144,9 @@ Vertex Vertex::operator-(const Vertex &other) const
 }
 
 #pragma endregion
+
+std::ostream &operator<<(std::ostream &os, const Vertex &vertex)
+{
+    os << "(" << vertex.getX() << ", " << vertex.getY() << ", " << vertex.getZ() << ")";
+    return os;
+}
