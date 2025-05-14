@@ -18,5 +18,5 @@ public:
     LoadManager();
     virtual ~LoadManager() override = default;
 
-    std::shared_ptr<BaseObject> load(ReaderIds readerId, DirectorIds directorId, InternalRepresentation repr, const std::string &filename);
+    void load(ReaderId readerId, DirectorId directorId, InternalRepresentationId repr, const std::string &filename);
 };

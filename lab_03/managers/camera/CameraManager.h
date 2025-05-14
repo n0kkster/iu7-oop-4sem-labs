@@ -20,6 +20,6 @@ public:
     void setActiveCamera(size_t id);
     std::shared_ptr<BaseCamera> getActiveCamera() const noexcept;
 
-    void addCamera(const CameraIds &id);
+    void addCamera(const CameraId &id);
     void removeCamera(size_t id);
 };

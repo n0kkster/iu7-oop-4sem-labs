@@ -14,6 +14,9 @@ void CameraManager::setActiveCamera(size_t id)
 
     m_activeCam = camera;
     m_activeCamId = id;
+
+    auto drawManager = ManagerSolution::getDrawManager();
+    drawManager->draw();
 }
 
 std::shared_ptr<BaseCamera> CameraManager::getActiveCamera() const noexcept
@@ -21,7 +24,7 @@ std::shared_ptr<BaseCamera> CameraManager::getActiveCamera() const noexcept
     return m_activeCam;
 }
 
-void CameraManager::addCamera(const CameraIds &id)
+void CameraManager::addCamera(const CameraId &id)
 {
     CameraFactory factory;
     auto camera = factory.create(id);
