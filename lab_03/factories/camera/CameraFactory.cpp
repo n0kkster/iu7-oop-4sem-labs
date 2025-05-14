@@ -1,10 +1,10 @@
 #include "CameraFactory.h"
 #include <stdexcept>
 
-std::shared_ptr<BaseCamera> CameraFactory::create(const CameraIds &id)
+std::shared_ptr<BaseCamera> CameraFactory::create(const CameraId &id)
 {
-    auto it = m_map.find(id);
-    if (it == m_map.end())
-        throw std::runtime_error("Invalid camera id!");
-    return it->second();
+    if (auto it = m_map.find(id); it != m_map.end())
+        return it->second();
+
+    throw std::runtime_error("Invalid camera id!");
 }
