@@ -52,11 +52,14 @@ double Vertex::calcDistance(const Vertex &other) const noexcept
                      + std::pow(other.m_z - m_z, 2));
 }
 
+#include <QDebug>
+
 void Vertex::transform(const Matrix<double> &matrix)
 {
     Matrix<double> curr = {
         { m_x, m_y, m_z, 1 }
     };
+
     Matrix<double> new_pos = curr * matrix;
 
     m_x = new_pos[0][0];

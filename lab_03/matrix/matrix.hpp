@@ -3,6 +3,9 @@
 #include "../exceptions/matrix/MatrixException.h"
 #include "matrix.h"
 
+#include <QDebug>
+#include <iostream>
+
 #pragma region MatrixRow
 
 template <ConvertibleToDouble T>
@@ -263,13 +266,13 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> &other) const
     return make_diff(other);
 }
 
-template <ConvertibleToDouble Type>
-Matrix<Type> Matrix<Type>::make_product(const Matrix<Type> &other) const
+template <ConvertibleToDouble T>
+Matrix<T> Matrix<T>::make_product(const Matrix<T> &other) const
 {
     if (m_cols != other.m_rows)
         throw IncompatibleDimensionsException("Can't multiply two matrices: sizes are incompatible!");
 
-    Matrix<Type> result(m_rows, other.m_cols);
+    Matrix<T> result(m_rows, other.m_cols);
     for (size_t i = 0; i < m_rows; i++)
     {
         for (size_t k = 0; k < other.m_cols; k++)
@@ -337,3 +340,38 @@ Matrix<T> &Matrix<T>::operator*=(const T &elem) noexcept
 }
 
 #pragma endregion
+
+template <ConvertibleToDouble T>
+QDebug &operator<<(QDebug &os, const Matrix<T> &matrix)
+{
+    os << "[";
+    for (size_t i = 0; i < matrix.getRowsCount(); ++i)
+    {
+        for (size_t j = 0; j < matrix.getColsCount() - 1; ++j)
+        {
+            os << matrix[i][j] << ", ";
+        }
+        os << matrix[i][matrix.getColsCount() - 1] << "\n";
+    }
+    os << "]";
+
+    return os;
+}
+
+
+template <ConvertibleToDouble T>
+std::ostream &operator<<(std::ostream &os, const Matrix<T> &matrix)
+{
+    os << "[";
+    for (size_t i = 0; i < matrix.getRowsCount(); ++i)
+    {
+        for (size_t j = 0; j < matrix.getColsCount() - 1; ++j)
+        {
+            os << matrix[i][j] << ", ";
+        }
+        os << matrix[i][matrix.getColsCount() - 1] << "\n";
+    }
+    os << "]";
+
+    return os;
+}

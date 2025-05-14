@@ -1,6 +1,8 @@
 #include "TransformAction.h"
 
-TransformAction::TransformAction() : m_matrix(4, 0)
+#include <iostream>
+
+TransformAction::TransformAction() : m_matrix(4, 4)
 {
     m_matrix[0][0] = 1.;
     m_matrix[1][1] = 1.;
@@ -20,6 +22,7 @@ const Matrix<double> &TransformAction::getMatrix() const noexcept
 
 Vertex &TransformAction::transform(Vertex &vertex) const noexcept
 {
+    std::cout << "Transform action matrix:\n" << m_matrix << std::endl;
     vertex.transform(m_matrix);
     return vertex;
 }
