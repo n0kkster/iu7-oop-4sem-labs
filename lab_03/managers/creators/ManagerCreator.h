@@ -11,7 +11,7 @@
 #include <memory>
 
 template <typename BaseManager, typename DerivedManager, typename... Args>
-    requires(std::is_base_of_v<BaseManager, DerivedManager>) && (ConstructibleWith<DerivedManager, Args...>)
+    requires(Derivative<DerivedManager, BaseManager>) && (ConstructibleWith<DerivedManager, Args...>)
 class ManagerCreator
 {
 

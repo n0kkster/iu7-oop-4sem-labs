@@ -4,5 +4,5 @@ class BaseManager
 {
 public:
     BaseManager() = default;
-    virtual ~BaseManager() = default;
+    virtual ~BaseManager() = 0;
 };

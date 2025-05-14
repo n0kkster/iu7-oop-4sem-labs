@@ -3,7 +3,7 @@
 #include "ManagerCreator.h"
 
 template <typename BaseManager, typename DerivedManager, typename... Args>
-    requires(std::is_base_of_v<BaseManager, DerivedManager>)
+    requires(Derivative<DerivedManager, BaseManager>)
          && (ConstructibleWith<DerivedManager, Args...>)
             template <typename... CallArgs>
                 requires(IsSupportedArg<CallArgs, Args...> && ...)
