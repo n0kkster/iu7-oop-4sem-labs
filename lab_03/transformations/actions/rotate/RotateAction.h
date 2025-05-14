@@ -5,6 +5,11 @@
 
 class RotateAction : public TransformAction
 {
+private:
+    Matrix<double> createRotationX(const double angle);
+    Matrix<double> createRotationY(const double angle);
+    Matrix<double> createRotationZ(const double angle);
+
 public:
     RotateAction() = default;
     virtual ~RotateAction() override = default;
