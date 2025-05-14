@@ -8,7 +8,7 @@ class CarcassDirector : public ModelDirector
 {
 public:
     CarcassDirector() = delete;
-    CarcassDirector(std::shared_ptr<BaseReader> reader, InternalRepresentation repr);
+    CarcassDirector(std::shared_ptr<BaseReader> reader, InternalRepresentationId repr);
 
     virtual ~CarcassDirector() = default;
 
