@@ -8,12 +8,12 @@
 class QtDrawFactory : public BaseDrawFactory
 {
 private:
-    std::unique_ptr<QGraphicsScene> m_scene;
+    std::shared_ptr<QGraphicsScene> m_scene;
 
 public:
     QtDrawFactory() = delete;
-    QtDrawFactory(std::unique_ptr<QGraphicsScene> scene);
+    QtDrawFactory(std::shared_ptr<QGraphicsScene> scene);
     virtual ~QtDrawFactory() override = default;
 
-    std::shared_ptr<BasePainter> createPainter() override;
+    std::unique_ptr<BasePainter> createPainter() override;
 };

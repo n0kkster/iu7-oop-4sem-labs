@@ -7,11 +7,11 @@
 class QtPainter : public BasePainter
 {
 private:
-    std::unique_ptr<QGraphicsScene> m_scene;
+    std::shared_ptr<QGraphicsScene> m_scene;
 
 public:
     QtPainter() = delete;
-    explicit QtPainter(std::unique_ptr<QGraphicsScene> scene);
+    explicit QtPainter(std::shared_ptr<QGraphicsScene> scene);
 
     virtual ~QtPainter() override = default;
 
