@@ -19,6 +19,7 @@ void DefaultProjectionStrategy::prepare(std::shared_ptr<const BaseModel> model,
         projected.setX(projected.getX() + 430);
         projected.setY(-projected.getY() + 430);
         // TEMP TEMP TEMP
+
         m_vertices.push_back(projected);
     }
 
