@@ -6,11 +6,11 @@
 
 #include <memory>
 
-template <typename Tfactory, typename Tscene>
-class DrawerSolution
+class DrawSolution
 {
 public:
-    std::shared_ptr<BasePainter> createPainter(std::unique_ptr<Tscene> scene);
+    template <typename Tfactory, typename Tscene>
+    static std::unique_ptr<BasePainter> createPainter(std::shared_ptr<Tscene> scene);
 };
 
 #include "DrawSolution.hpp"
