@@ -19,4 +19,4 @@ template <typename T>
 concept ConvertibleToDouble = (std::same_as<T, double> || std::convertible_to<T, double>);
 
 template <typename T, typename... Supported>
-concept IsSupportedArg = (std::is_convertible_v<T, Supported> || ...);;
+concept IsSupportedArg = (std::is_convertible_v<T, Supported> || ...);
