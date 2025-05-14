@@ -10,7 +10,7 @@
 class BaseReader
 {
 protected:
-    std::ifstream m_file;
+    std::shared_ptr<std::ifstream> m_file;
     std::string m_filename;
 
 public:

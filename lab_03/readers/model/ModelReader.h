@@ -13,8 +13,8 @@ protected:
     std::vector<Vertex> m_vertices;
     std::vector<Edge> m_edges;
 
-    virtual std::vector<Vertex> readVertices() = 0;
-    virtual std::vector<Edge> readEdges() = 0;
+    virtual std::shared_ptr<std::vector<Vertex>> readVertices() = 0;
+    virtual std::shared_ptr<std::vector<Edge>> readEdges() = 0;
 
 public:
     ModelReader() = delete;

@@ -11,10 +11,10 @@ void ModelReader::read(BaseBuilder &builder, size_t part)
     switch (part)
     {
         case VERTICES:
-            std::ranges::for_each(this->readVertices(),
+            std::ranges::for_each(*this->readVertices(),
                                   [&cv](const auto &v) { cv.m_structure->addVertex(v); });
             break;
         case EDGES:
-            std::ranges::for_each(this->readEdges(), [&cv](const auto &e) { cv.m_structure->addEdge(e); });
+            std::ranges::for_each(*this->readEdges(), [&cv](const auto &e) { cv.m_structure->addEdge(e); });
     }
 }
