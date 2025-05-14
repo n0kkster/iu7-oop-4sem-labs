@@ -13,7 +13,7 @@ protected:
 public:
     TransformVisitor() = delete;
     TransformVisitor(std::shared_ptr<TransformAction> action);
-    virtual ~TransformVisitor() override = default;
+    virtual ~TransformVisitor() = 0;
 
     void visit(BaseCamera &camera) const override;
     void visit(CarcassModel &model) const override;

@@ -16,3 +16,5 @@ void TransformVisitor::visit(CarcassModel &model) const
     if (m_action)
         model.getStructure()->transform(m_action);
 }
+
+TransformVisitor::~TransformVisitor() { }
