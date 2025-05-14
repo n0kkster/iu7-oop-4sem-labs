@@ -1,12 +1,12 @@
 #pragma once
 
+#include "../../concepts/concepts.h"
 #include "../../strategies/projection/BaseProjectionStrategy.h"
 #include "../draw/DrawVisitor.h"
 #include "../transform/move/MoveVisitor.h"
 #include "../transform/rotate/RotateVisitor.h"
 #include "../transform/scale/ScaleVisitor.h"
 #include "BaseVisitorCreator.h"
-#include "../../concepts/concepts.h"
 
 template <typename BaseVisitor, typename DerivedVisitor, typename... Args>
     requires Derivative<DerivedVisitor, BaseVisitor> && ConstructibleWith<DerivedVisitor, Args...>
@@ -16,7 +16,9 @@ public:
     ConcreteVisitorCreator() = default;
     ~ConcreteVisitorCreator() = default;
 
-    std::shared_ptr<BaseVisitor> create(const Args &...args) override;
+    template <typename... CallArgs>
+        requires(IsSupportedArg<CallArgs, Args...> && ...)
+    std::shared_ptr<BaseVisitor> create(CallArgs &&...args);
 };
 
 #include "ConcreteVisitorCreator.hpp"
