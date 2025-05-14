@@ -1,17 +1,18 @@
 #include "CarcassModelBuilder.h"
 
 #include "../../../component/primitive/visible/model/carcass/CarcassModel.h"
+
 #include <stdexcept>
 
-
-CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentation repr) :
+CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentationId repr) :
     BaseModelBuilder(reader)
 {
-    auto it = m_reprMap.find(repr);
-    if (it == m_reprMap.end())
+    m_part = 0;
+    
+    if (auto it = m_reprMap.find(repr); it != m_reprMap.end())
+        m_structure = it->second();
+    else
         throw std::runtime_error("Error invalid repr!");
-
-    m_structure = it->second(); 
 }
 
 bool CarcassModelBuilder::buildVertices()
@@ -53,7 +54,7 @@ std::shared_ptr<BaseObject> CarcassModelBuilder::createProduct()
     if (!this->buildEdges())
         return nullptr;
 
-    if (!buildCenter())
+    if (!this->buildCenter())
         return nullptr;
 
     return std::make_shared<CarcassModel>(m_structure);

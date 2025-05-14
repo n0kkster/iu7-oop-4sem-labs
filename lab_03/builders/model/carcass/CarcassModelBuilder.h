@@ -13,20 +13,20 @@ class CarcassModelBuilder : public BaseModelBuilder
 {
 public:
     using RepresentationMap =
-        std::map<InternalRepresentation, std::function<std::shared_ptr<BaseStructure>()>>;
+        std::map<InternalRepresentationId, std::function<std::shared_ptr<BaseStructure>()>>;
 
 private:
     std::shared_ptr<BaseStructure> m_structure;
     const RepresentationMap m_reprMap = 
     {
-        {InternalRepresentation::ListInternalReprsentationId, [](){return std::make_shared<ListStructure>();}},
-        // {InternalRepresentation::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
+        {InternalRepresentationId::ListInternalReprsentationId, [](){return std::make_shared<ListStructure>();}},
+        // {InternalRepresentationId::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
     };
     friend ModelReader;
 
 public:
     CarcassModelBuilder() = delete;
-    CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentation repr);
+    CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentationId repr);
 
     virtual ~CarcassModelBuilder() override = default;
 

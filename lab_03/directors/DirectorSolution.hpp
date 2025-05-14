@@ -9,7 +9,6 @@ void DirectorSolution<SupportedArgs...>::registrate(size_t id)
 {
     creators[id] = [](const std::tuple<SupportedArgs...> &args)
     {
-        // Распаковываем кортеж и создаем объект
         return std::apply([](auto &&...args)
                           { return std::make_unique<Derived>(std::forward<decltype(args)>(args)...); }, args);
     };
@@ -20,11 +19,8 @@ template <typename... Args>
     requires(IsSupportedArg<Args, SupportedArgs...> && ...)
 std::unique_ptr<BaseDirector> DirectorSolution<SupportedArgs...>::create(size_t id, Args &&...args)
 {
-    auto it = creators.find(id);
-    if (it == creators.end())
-        return nullptr;
+    if (auto it = creators.find(id); it != creators.end())
+        return it->second(std::make_tuple(std::forward<Args>(args)...));
 
-    // Упаковываем аргументы в кортеж
-    auto args_tuple = std::make_tuple(std::forward<Args>(args)...);
-    return it->second(args_tuple);
+    return nullptr; // mb throw?
 }
