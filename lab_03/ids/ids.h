@@ -2,31 +2,23 @@
 
 #include <cstddef>
 
-enum DirectorIds : size_t
+enum DirectorId : size_t
 {
     CarcassDirectorId = 0,
-    CameraDirectorId,
-    CompositeDirectorId
 };
 
-enum ReaderIds : size_t
+enum ReaderId : size_t
 {
-    CarcassTxtReaderId = 0,
-    CarcassObjReaderId,
-    CarcassCsvReaderId,
-    CameraTxtReaderId,
-    CameraObjReaderId,
-    CompositeTxtReaderId,
-    CompositeObjReaderId
+    CarcassReaderId = 0,
 };
 
-enum InternalRepresentation : size_t
+enum InternalRepresentationId : size_t
 {
     ListInternalReprsentationId = 0,
     MatrixInternalReprsentationId
 };
 
-enum CameraIds : size_t
+enum CameraId : size_t
 {
     DefaultCameraId = 0
 };
