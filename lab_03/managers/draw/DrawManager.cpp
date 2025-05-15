@@ -1,7 +1,7 @@
 #include "DrawManager.h"
 
-#include "../../strategies/projection/creators/DefaultProjectionStrategyCreator.h"
-#include "../../visitors/creators/ConcreteVisitorCreator.h"
+#include "../../strategies/projection/creators/ProjectionStrategyCreator.h"
+#include "../../visitors/creators/VisitorCreator.h"
 #include "../ManagerSolution.h"
 
 void DrawManager::setPainter(std::shared_ptr<BasePainter> painter)
@@ -17,8 +17,7 @@ void DrawManager::draw()
 
     auto activeCam = cameraManager->getActiveCamera();
 
-    DefaultProjectionStrategyCreator stratCreator;
-    auto strategy = stratCreator.create();
+    auto strategy = DefaultProjectionStrategyCreator::create();
 
     DrawVisitorCreator creator;
     auto drawVisitor = creator.create(std::move(strategy), m_painter, activeCam);
