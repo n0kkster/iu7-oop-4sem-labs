@@ -18,6 +18,12 @@ void SceneManager::removeObject(size_t id)
     m_scene->removeComponent(id);
 }
 
+void SceneManager::getCenter(size_t id, Vertex &center) const
+{
+    auto object = m_scene->getComponent(id);
+    center = object->getCenter();
+}
+
 void SceneManager::compose(std::vector<size_t> ids)
 {
     auto composite = std::make_shared<Composite>();

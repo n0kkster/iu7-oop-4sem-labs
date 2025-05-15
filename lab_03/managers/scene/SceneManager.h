@@ -18,6 +18,7 @@ public:
     std::shared_ptr<BaseObject> getObject(size_t id);
     void addObject(std::shared_ptr<BaseObject> object);
     void removeObject(size_t id);
+    void getCenter(size_t id, Vertex &center) const;
 
     void compose(std::vector<size_t> ids);
 

@@ -46,11 +46,20 @@ void RotateObjectCommand::execute()
     ((*m_transformManager).*m_action)(m_objectId, m_params);
 }
 
-MakeCompositeCommand::MakeCompositeCommand(std::vector<size_t> objectIds) :
+ComposeCommand::ComposeCommand(std::vector<size_t> objectIds) :
     m_action(&SceneManager::compose), m_objectIds(objectIds)
 { }
 
-void MakeCompositeCommand::execute()
+void ComposeCommand::execute()
 {
     ((*m_sceneManager).*m_action)(m_objectIds);
+}
+
+GetObjectCenterCommand::GetObjectCenterCommand(size_t id, Vertex &center) :
+    m_action(&SceneManager::getCenter), m_id(id), m_center(center)
+{ }
+
+void GetObjectCenterCommand::execute()
+{
+    ((*m_sceneManager).*m_action)(m_id, m_center);
 }

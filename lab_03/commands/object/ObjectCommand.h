@@ -83,12 +83,12 @@ private:
 
 public:
     RotateObjectCommand(size_t objId, const RotationParams &params);
-    virtual ~RotateObjectCommand() = default;
+    virtual ~RotateObjectCommand() override = default;
 
     void execute() override;
 };
 
-class MakeCompositeCommand : public ObjectCommand
+class ComposeCommand : public ObjectCommand
 {
 private:
     using Action = void (SceneManager::*)(std::vector<size_t>);
@@ -97,6 +97,22 @@ private:
     std::vector<size_t> m_objectIds;
 
 public:
-    MakeCompositeCommand(std::vector<size_t> objectIds);
+    ComposeCommand(std::vector<size_t> objectIds);
+    virtual ~ComposeCommand() override = default; 
+    void execute() override;
+};
+
+class GetObjectCenterCommand : public ObjectCommand
+{
+private:
+    using Action = void (SceneManager::*)(size_t, Vertex &) const;
+
+    Action m_action;
+    size_t m_id;
+    Vertex &m_center;
+
+public:
+    GetObjectCenterCommand(size_t id, Vertex &center);
+    virtual ~GetObjectCenterCommand() override = default;
     void execute() override;
 };
