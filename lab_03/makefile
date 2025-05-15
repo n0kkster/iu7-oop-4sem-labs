@@ -16,7 +16,7 @@ OBJS := $(addprefix $(OUT_DIR)/,$(sort $(patsubst %.cpp,def_%.o,$(notdir $(SRCS)
 
 MOC_OBJS := $(addprefix $(MOC_DIR)/,$(sort $(patsubst %.h,moc_%.o,$(notdir $(QT_INCS)))))
 
-CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wno-unused-but-set-variable -Wfloat-equal $(addprefix -I,$(sort $(dir $(INCS)))) -I. $(shell pkgconf --cflags Qt6Widgets)
+CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wno-unused-but-set-variable -Wno-float-equal $(addprefix -I,$(sort $(dir $(INCS)))) -I. $(shell pkgconf --cflags Qt6Widgets)
 LDFLAGS := $(shell pkgconf --libs Qt6Widgets)
 
 all : app.exe
