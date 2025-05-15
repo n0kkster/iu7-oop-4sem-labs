@@ -14,12 +14,16 @@ class BaseObject
 {
 public:
     using iterator = mapObjects::iterator;
+    using const_iterator = mapObjects::const_iterator;
 
     BaseObject() = default;
     virtual ~BaseObject() = default;
 
     virtual iterator begin();
     virtual iterator end();
+
+    virtual const_iterator begin() const;
+    virtual const_iterator end() const;
 
     virtual std::shared_ptr<BaseObject> getObject(const size_t id) const;
     virtual void add(std::shared_ptr<BaseObject> object);

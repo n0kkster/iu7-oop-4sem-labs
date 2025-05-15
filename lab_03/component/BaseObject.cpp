@@ -10,6 +10,16 @@ typename BaseObject::iterator BaseObject::end()
     return iterator();
 }
 
+typename BaseObject::const_iterator BaseObject::begin() const
+{
+    return const_iterator();
+}
+
+typename BaseObject::const_iterator BaseObject::end() const
+{
+    return const_iterator();
+}
+
 void BaseObject::add(std::shared_ptr<BaseObject>) { }
 
 void BaseObject::remove(size_t id) noexcept

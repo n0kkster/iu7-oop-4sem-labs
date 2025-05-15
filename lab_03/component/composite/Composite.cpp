@@ -17,9 +17,28 @@ typename Composite::iterator Composite::end()
     return m_objects.end();
 }
 
+typename Composite::const_iterator Composite::begin() const
+{
+    return m_objects.begin();
+}
+
+typename Composite::const_iterator Composite::end() const
+{
+    return m_objects.end();
+}
+
 Vertex Composite::getCenter() const noexcept
 {
-    return { 0, 0, 0 };
+    Vertex center = {0, 0, 0};
+    size_t count = 0;
+
+    for (auto it = begin(); it != end(); ++it)
+    {
+        center += it->second->getCenter();
+        ++count;
+    }
+
+    return {center.getX() / (double)count, center.getY() / (double)count, center.getZ() / (double)count};
 }
 
 bool Composite::isComposite() const noexcept

@@ -17,6 +17,9 @@ public:
     iterator begin() override;
     iterator end() override;
 
+    const_iterator begin() const override;
+    const_iterator end() const override;
+
     std::shared_ptr<BaseObject> getObject(const size_t id) const override;
     void add(std::shared_ptr<BaseObject> object) override;
     void remove(const size_t id) noexcept override;
