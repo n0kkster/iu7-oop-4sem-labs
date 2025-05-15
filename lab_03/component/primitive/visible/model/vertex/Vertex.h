@@ -1,11 +1,15 @@
 #pragma once
 
-#include "../../../../../matrix/matrix.h"
+#include "../../../../../concepts/concepts.h"
+#include <iostream>
+
+template <ConvertibleToDouble T>
+class Matrix;
 
 class Vertex
 {
 private:
-    double m_x, m_y, m_z;
+    double m_x, m_y, m_z, m_w;
 
 public:
 #pragma region Constructors
@@ -29,12 +33,14 @@ public:
     double getX() const noexcept;
     double getY() const noexcept;
     double getZ() const noexcept;
+    double getW() const noexcept;
 #pragma endregion
 
 #pragma region Setters
     void setX(const double x) noexcept;
     void setY(const double y) noexcept;
     void setZ(const double z) noexcept;
+    void setW(const double w) noexcept;
 #pragma endregion
 
     double calcDistance(const Vertex &other) const noexcept;

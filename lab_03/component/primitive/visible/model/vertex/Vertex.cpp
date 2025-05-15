@@ -1,5 +1,7 @@
 #include "Vertex.h"
 
+#include "../../../../../matrix/matrix.h"
+
 #include <iostream>
 #include <math.h>
 #include <ostream>
@@ -27,6 +29,11 @@ double Vertex::getZ() const noexcept
     return m_z;
 }
 
+double Vertex::getW() const noexcept
+{
+    return m_w;
+}
+
 #pragma endregion
 
 #pragma region Setters
@@ -46,6 +53,11 @@ void Vertex::setZ(const double z) noexcept
     m_z = z;
 }
 
+void Vertex::setW(const double w) noexcept
+{
+    m_w = w;
+}
+
 #pragma endregion
 
 double Vertex::calcDistance(const Vertex &other) const noexcept
@@ -63,6 +75,7 @@ void Vertex::transform(const Matrix<double> &matrix)
     m_x = new_pos[0][0];
     m_y = new_pos[1][0];
     m_z = new_pos[2][0];
+    m_w = new_pos[3][0];
 }
 
 #pragma region Operators
