@@ -7,6 +7,9 @@
 #include "../concepts/concepts.h"
 
 template <ConvertibleToDouble T>
+class Vec3;
+
+template <ConvertibleToDouble T>
 class Matrix
 {
 protected:
@@ -87,6 +90,9 @@ public:
     
     Matrix<T> &multiply(const T &elem) noexcept;
     Matrix<T> &operator*=(const T &elem) noexcept;
+
+    Vec3<T> make_product(const Vec3<T> &other) const noexcept;
+    Vec3<T> operator*(const Vec3<T> &other) const noexcept;
 
     // Matrix<T> negate() const;
     // Matrix<T> operator-() const;

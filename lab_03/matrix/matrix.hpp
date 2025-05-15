@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../exceptions/matrix/MatrixException.h"
+#include "../vector/Vec3.h"
+
 #include "matrix.h"
 
 #include <QDebug>
@@ -338,6 +340,26 @@ Matrix<T> &Matrix<T>::operator*=(const T &elem) noexcept
 {
     return multiply(elem);
 }
+
+template <ConvertibleToDouble T>
+Vec3<T> Matrix<T>::make_product(const Vec3<T> &other) const noexcept
+{
+    Matrix<double> temp(3, 1, 0);
+
+    temp[0][0] = other.getX();
+    temp[1][0] = other.getY();
+    temp[2][0] = other.getZ();
+
+    Matrix<double> res = this->make_product(temp);
+    return Vec3(res[0][0], res[1][0], res[2][0]);
+}
+
+template <ConvertibleToDouble T>
+Vec3<T> Matrix<T>::operator*(const Vec3<T> &other) const noexcept
+{
+    return this->make_product(other);
+}
+
 
 #pragma endregion
 
