@@ -7,22 +7,15 @@
 RotateAction::RotateAction(const RotationParams &params) : TransformAction()
 {
 
+    MoveAction to_center({ params.getCenterX(), params.getCenterY(), params.getCenterZ() });
+    m_matrix *= to_center.getMatrix();
+
     Matrix<double> rotationMatrix = createRotationZ(params.getAngleZ()) * createRotationY(params.getAngleY())
                                   * createRotationX(params.getAngleX());
 
     m_matrix *= rotationMatrix;
-}
 
-RotateAction::RotateAction(const Vertex &vertex, const RotationParams &params) : TransformAction()
-{
-
-    MoveAction to_center({ -vertex.getX(), -vertex.getY(), -vertex.getZ() });
-    m_matrix *= to_center.getMatrix();
-
-    RotateAction rotate(params);
-    m_matrix *= rotate.getMatrix();
-
-    MoveAction from_center({ vertex.getX(), vertex.getY(), vertex.getZ() });
+    MoveAction from_center({ -params.getCenterX(), -params.getCenterY(), -params.getCenterZ() });
     m_matrix *= from_center.getMatrix();
 }
 

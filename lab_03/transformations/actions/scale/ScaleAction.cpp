@@ -4,41 +4,18 @@
 
 ScaleAction::ScaleAction(const ScaleParams &params) : TransformAction()
 {
-    m_matrix[0][0] = params.getKx();
-    m_matrix[1][1] = params.getKy();
-    m_matrix[2][2] = params.getKz();
-}
 
-ScaleAction::ScaleAction(const double k) : TransformAction()
-{
-    m_matrix[0][0] = k;
-    m_matrix[1][1] = k;
-    m_matrix[2][2] = k;
-}
-
-ScaleAction::ScaleAction(const Vertex &vertex, const ScaleParams &params) : TransformAction()
-{
-
-    MoveAction to_center({ -vertex.getX(), -vertex.getY(), -vertex.getZ() });
+    MoveAction to_center({ -params.getCx(), -params.getCy(), -params.getCz() });
     m_matrix *= to_center.getMatrix();
 
-    ScaleAction scale(params);
-    m_matrix *= scale.getMatrix();
+    Matrix<double> scaleMatrix(4, 4, 0);
+    scaleMatrix[0][0] = params.getKx();
+    scaleMatrix[1][1] = params.getKy();
+    scaleMatrix[2][2] = params.getKz();
 
-    MoveAction from_center({ vertex.getX(), vertex.getY(), vertex.getZ() });
-    m_matrix *= from_center.getMatrix();
-}
+    m_matrix *= scaleMatrix;
 
-ScaleAction::ScaleAction(const Vertex &vertex, const double k) : TransformAction()
-{
-
-    MoveAction to_center({ -vertex.getX(), -vertex.getY(), -vertex.getZ() });
-    m_matrix *= to_center.getMatrix();
-
-    ScaleAction scale(k);
-    m_matrix *= scale.getMatrix();
-
-    MoveAction from_center({ vertex.getX(), vertex.getY(), vertex.getZ() });
+    MoveAction from_center({ params.getCx(), params.getCy(), params.getCz() });
     m_matrix *= from_center.getMatrix();
 }
 

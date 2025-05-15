@@ -11,11 +11,7 @@ public:
     virtual ~ScaleAction() override = default;
 
     ScaleAction(const ScaleParams &params);
-    ScaleAction(const double k);
-
-    ScaleAction(const Vertex &vertex, const ScaleParams &params);
-    ScaleAction(const Vertex &vertex, const double k);
-
+    
     bool isMoveAction() const noexcept override;
 };
 

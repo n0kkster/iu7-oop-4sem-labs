@@ -15,7 +15,6 @@ public:
     virtual ~RotateAction() override = default;
 
     RotateAction(const RotationParams &params);
-    RotateAction(const Vertex &vertex, const RotationParams &params);
 
     bool isMoveAction() const noexcept override;
 };
