@@ -22,11 +22,10 @@ private:
         {InternalRepresentationId::ListInternalReprsentationId, [](){return std::make_shared<ListStructure>();}},
         // {InternalRepresentationId::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
     };
-    friend ModelReader;
 
 public:
     CarcassModelBuilder() = delete;
-    CarcassModelBuilder(std::shared_ptr<BaseReader> reader, InternalRepresentationId repr);
+    CarcassModelBuilder(std::shared_ptr<CarcassReader> reader, InternalRepresentationId repr);
 
     virtual ~CarcassModelBuilder() override = default;
 

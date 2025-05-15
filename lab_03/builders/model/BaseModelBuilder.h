@@ -15,9 +15,13 @@ enum part : size_t
 
 class BaseModelBuilder : public BaseBuilder
 {
+protected:
+    std::shared_ptr<ModelReader> m_reader;
+
 public:
     BaseModelBuilder() = delete;
-    explicit BaseModelBuilder(std::shared_ptr<BaseReader> reader) : BaseBuilder(reader) { };
+
+    explicit BaseModelBuilder(std::shared_ptr<ModelReader> reader) : m_reader(reader) { }
 
     virtual ~BaseModelBuilder() override = default;
 
