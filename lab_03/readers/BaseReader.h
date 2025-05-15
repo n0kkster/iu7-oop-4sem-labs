@@ -15,9 +15,7 @@ protected:
 
 public:
     BaseReader() = delete;
-    BaseReader(const std::string &filename) : m_filename(filename) { };
+    BaseReader(const std::string &filename);
 
-    virtual ~BaseReader() = default;
-
-    virtual void read(BaseBuilder &builder, size_t part) = 0;
+    virtual ~BaseReader() = 0;
 };

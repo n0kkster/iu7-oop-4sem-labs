@@ -30,6 +30,6 @@ public:
     std::unique_ptr<BaseDirector> create(size_t id, Args &&...args);
 };
 
-using BaseDirectorSolution = DirectorSolution<std::shared_ptr<BaseReader>, InternalRepresentationId>;
+using BaseDirectorSolution = DirectorSolution<const std::string &, InternalRepresentationId>;
 
 #include "DirectorSolution.hpp"
