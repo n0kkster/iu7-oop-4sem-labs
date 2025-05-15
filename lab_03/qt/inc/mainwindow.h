@@ -30,6 +30,11 @@ private slots:
     void onShiftBtnClicked();
     void onScaleBtnClicked();
     void onRotateBtnClicked();
+    void contextMenuRequested(const QPoint &pos);
+    void deleteObjectRequested();
+    void setActiveCamRequested();
+    void composeRequested();
+    void addCameraBtnClicked();
 
 private:
     Ui::MainWindow *ui;
@@ -38,9 +43,11 @@ private:
 
     void createScene(QWidget *parent);
     void insertRow(size_t id, const std::string &name, const Vertex &center, const std::string &type);
+    void updateCenter(size_t id, const Vertex &center);
     void getSelectedObjects();
 
     size_t m_objects;
+    size_t m_activeCamId;
     std::vector<size_t> m_selected;
 };
 #endif /* MAINWINDOW_H */
