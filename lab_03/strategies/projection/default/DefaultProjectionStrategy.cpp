@@ -1,7 +1,8 @@
 #include "DefaultProjectionStrategy.h"
 
 void DefaultProjectionStrategy::prepare(std::shared_ptr<const BaseModel> model,
-                                        std::shared_ptr<const BaseCamera> camera)
+                                        std::shared_ptr<const BaseCamera> camera, const size_t width,
+                                        const size_t height)
 {
     m_vertices.clear();
     m_edges.clear();
@@ -11,6 +12,9 @@ void DefaultProjectionStrategy::prepare(std::shared_ptr<const BaseModel> model,
     const auto &lookMatrix = camera->getLookMatrix();
     const auto &projectionMatrix = camera->getProjectionMatrix(1.0);
     const auto transformMatrix = projectionMatrix * lookMatrix;
+
+    size_t centerX = static_cast<size_t>(width / 2);
+    size_t centerY = static_cast<size_t>(height / 2);
 
     for (const Vertex &v : vertices)
     {
@@ -25,10 +29,8 @@ void DefaultProjectionStrategy::prepare(std::shared_ptr<const BaseModel> model,
             projected.setZ(projected.getZ() / w);
         }
 
-        // TEMP TEMP TEMP
-        projected.setX(projected.getX() * 430 + 430);
-        projected.setY(-projected.getY() * 430 + 430);
-        // TEMP TEMP TEMP
+        projected.setX(projected.getX() * centerX + centerX);
+        projected.setY(-projected.getY() * centerY + centerY);
 
         m_vertices.push_back(projected);
     }

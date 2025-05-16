@@ -12,7 +12,8 @@ public:
     BaseProjectionStrategy() = default;
     virtual ~BaseProjectionStrategy() = default;
 
-    virtual void prepare(std::shared_ptr<const BaseModel> model, std::shared_ptr<const BaseCamera> camera) = 0;
+    virtual void prepare(std::shared_ptr<const BaseModel> model, std::shared_ptr<const BaseCamera> camera,
+                         const size_t width, const size_t height) = 0;
     virtual const std::vector<Vertex> getVertices() const = 0;
     virtual const std::vector<Edge> getEdges() const = 0;
 };
