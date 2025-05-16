@@ -1363,18 +1363,14 @@ QComboBox QAbstractItemView {
  </widget>
  <tabstops>
   <tabstop>planeWidget</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>loadModelBtn</tabstop>
+  <tabstop>modelReprList</tabstop>
+  <tabstop>tableWidget</tabstop>
   <tabstop>dxOffsetInput</tabstop>
   <tabstop>dyOffsetInput</tabstop>
   <tabstop>dzOffsetInput</tabstop>
   <tabstop>applyShiftBtn</tabstop>
-  <tabstop>centerXScale</tabstop>
-  <tabstop>centerYScale</tabstop>
-  <tabstop>centerZScale</tabstop>
-  <tabstop>kXScale</tabstop>
-  <tabstop>kYScale</tabstop>
-  <tabstop>kZScale</tabstop>
-  <tabstop>applyScaleBtn</tabstop>
   <tabstop>centerXRotate</tabstop>
   <tabstop>centerYRotate</tabstop>
   <tabstop>centerZRotate</tabstop>
@@ -1382,6 +1378,15 @@ QComboBox QAbstractItemView {
   <tabstop>angleYRotate</tabstop>
   <tabstop>angleZRotate</tabstop>
   <tabstop>applyRotateBtn</tabstop>
+  <tabstop>centerXScale</tabstop>
+  <tabstop>centerYScale</tabstop>
+  <tabstop>centerZScale</tabstop>
+  <tabstop>kXScale</tabstop>
+  <tabstop>kYScale</tabstop>
+  <tabstop>kZScale</tabstop>
+  <tabstop>applyScaleBtn</tabstop>
+  <tabstop>cameraTypeList</tabstop>
+  <tabstop>createCameraBtn</tabstop>
  </tabstops>
  <resources/>
  <connections/>
