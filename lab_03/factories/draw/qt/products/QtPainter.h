@@ -4,14 +4,14 @@
 #include <QGraphicsScene>
 #include <memory>
 
-class QtPainter : public BasePainter
+class QtPainter final : public BasePainter
 {
 private:
     std::shared_ptr<QGraphicsScene> m_scene;
 
 public:
     QtPainter() = delete;
-    explicit QtPainter(std::shared_ptr<QGraphicsScene> scene);
+    QtPainter(std::shared_ptr<QGraphicsScene> scene);
 
     virtual ~QtPainter() override = default;
 
@@ -19,4 +19,7 @@ public:
     void drawLine(const double x1, const double y1, const double x2, const double y2) override;
 
     void clear() override;
+
+    size_t getWidth() const noexcept override;
+    size_t getHeight() const noexcept override;
 };
