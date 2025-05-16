@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "../../component/composite/Composite.h"
 
-SceneManager::SceneManager() : m_scene(std::make_unique<Scene>()) { }
+SceneManager::SceneManager() : m_scene(Scene::getInstance()) { }
 
 std::shared_ptr<BaseObject> SceneManager::getObject(size_t id)
 {

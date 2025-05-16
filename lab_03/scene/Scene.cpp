@@ -1,4 +1,5 @@
 #include "Scene.h"
+
 #include "../exceptions/scene/SceneException.h"
 
 size_t Scene::addComponent(std::shared_ptr<BaseObject> object)
@@ -28,4 +29,13 @@ void Scene::accept(std::shared_ptr<BaseVisitor> visitor)
 {
     for (auto &[id, component] : m_objects)
         component->accept(visitor);
+}
+
+std::shared_ptr<Scene> Scene::getInstance()
+{
+    class Proxy : public Scene
+    { };
+
+    static std::shared_ptr<Scene> instance = std::make_shared<Proxy>();
+    return instance;
 }

@@ -9,7 +9,7 @@
 class SceneManager : public BaseManager
 {
 private:
-    std::unique_ptr<Scene> m_scene;
+    std::shared_ptr<Scene> m_scene;
 
 public:
     SceneManager();

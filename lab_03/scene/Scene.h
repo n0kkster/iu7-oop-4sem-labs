@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../component/BaseObject.h"
+#include <memory>
 
 class Scene
 {
@@ -8,11 +9,17 @@ private:
     size_t m_objcount;
     mapObjects m_objects;
 
+    Scene() = default;
+
 public:
     using iterator = mapObjects::iterator;
 
-    Scene() = default;
+    Scene(const Scene &other) = delete;
+    Scene(Scene &&other) = delete;
+
     ~Scene() = default;
+
+    static std::shared_ptr<Scene> getInstance();
 
     iterator begin();
     iterator end();
