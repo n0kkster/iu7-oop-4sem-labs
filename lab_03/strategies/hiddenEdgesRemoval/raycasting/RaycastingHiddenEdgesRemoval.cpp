@@ -21,70 +21,84 @@ void RaycastingHiddenEdgesRemovalStrategy::prepare(const std::vector<Vertex> &ve
                                                    const std::vector<Edge> &edges,
                                                    std::shared_ptr<const BaseCamera> camera)
 {
-    calculateFaces(vertices);
+    findFaces(vertices, edges);
 
-    // for (const auto &face : m_faces)
-    // {
-    //     std::cout << "[ " << face.vertices[0] << " " << face.vertices[1] << " " << face.vertices[2] << " "
-    //               << face.vertices[3] << "]\n";
-    // }
+    std::cout << "\n\n\n";
 
-    double x1, x2;
-    bool visible = true;
+    for (const auto &face : m_faces)
+    {
+        std::cout << "[ " << face.vertices[0] << " " << face.vertices[1] << " " << face.vertices[2] << " "
+                  << face.vertices[3] << "]\n";
+    }
+
+    std::cout << "##\n";
+    double t1, t2;
+    bool startVisible = true, endVisible = true;
+
+    auto viewpoint = camera->getCenter();
+    viewpoint.setX(viewpoint.getX() + 430);
+    viewpoint.setY(-viewpoint.getY() + 415);
+    viewpoint.setZ(viewpoint.getZ() - 1200);
+
+    std::cout << "viewpoint: " << viewpoint << "\n##\n";
 
     for (const auto &edge : edges)
     {
-        auto p1 = vertices[edge.getStart()];
-        auto p2 = vertices[edge.getEnd()];
+        auto start = vertices[edge.getStart()];
+        auto end = vertices[edge.getEnd()];
 
-        p1.setX(((p1.getX() - 430) / 430) * p1.getW() + 430);
-        p1.setY(((p1.getY() - 430) / 430) * p1.getW() + 430);
-        p1.setZ(p1.getZ() * p1.getW());
+        startVisible = true;
+        endVisible = true;
 
-        p2.setX(((p2.getX() - 430) / 430) * p2.getW() + 430);
-        p2.setY(((p2.getY() - 430) / 430) * p2.getW() + 430);
-        p2.setZ(p2.getZ() * p2.getW());
-
-        visible = true;
-
-        std::cout << "checking edge ( " << p1 << ", " << p2 << ")\n";
+        std::cout << "#\nchecking edge [" << start << ", " << end << "]\n";
+        std::cout << "ray 1: " << viewpoint - start << std::endl;
+        std::cout << "ray 2: " << viewpoint - end << std::endl;
 
         for (const auto &face : m_faces)
         {
-            auto i1 = intersectLineWithPlane(camera->getCenter(), p1, face, x1);
-            auto i2 = intersectLineWithPlane(camera->getCenter(), p2, face, x2);
-
-            if (i1 && i2)
+            if (std::ranges::find(face.vertices, start) == face.vertices.end())
             {
-
-                if (isPointInPolygon(i1.value(), face))
+                auto i1 = intersectLineWithPlane(viewpoint, start, face, t1);
+                if (i1 && t1 < 0 && (std::abs(t1) > 0 && std::abs(t1) < 1))
                 {
                     std::cout << "intersection found with: " << "[ " << face.vertices[0] << " "
                               << face.vertices[1] << " " << face.vertices[2] << " " << face.vertices[3]
                               << "]\n";
-                    std::cout << "i1: " << i1.value() << std::endl;
+                    std::cout << "i1: " << i1.value() << " t1: " << t1 << std::endl;
 
-                    visible = false;
-                    break;
+                    if (isPointInPolygon(i1.value(), face))
+                    // if (std::abs(t1) > 0 && std::abs(t1) < 1)
+                    {
+                        // std::cout << "in face, breaking!\n";
+                        startVisible = false;
+                        // break;
+                    }
                 }
             }
-            // if (i2)
-            // {
 
-            //     if (isPointInPolygon(i2.value(), face))
-            //     {
-            //         std::cout << "intersection found with: " << "[ " << face.vertices[0] << " "
-            //                   << face.vertices[1] << " " << face.vertices[2] << " " << face.vertices[3]
-            //                   << "]\n";
-            //         std::cout << "i2: " << i2.value() << std::endl;
+            if (std::ranges::find(face.vertices, end) == face.vertices.end())
+            {
+                auto i2 = intersectLineWithPlane(viewpoint, end, face, t2);
+                if (i2 && t2 < 0 && (std::abs(t2) > 0 && std::abs(t2) < 1))
+                {
 
-            //         visible = false;
-            //         break;
-            //     }
-            // }
+                    std::cout << "intersection found with: " << "[ " << face.vertices[0] << " "
+                              << face.vertices[1] << " " << face.vertices[2] << " " << face.vertices[3]
+                              << "]\n";
+                    std::cout << "i2: " << i2.value() << " t2: " << t2 << std::endl;
+
+                    if (isPointInPolygon(i2.value(), face))
+                    // if (std::abs(t2) > 0 && std::abs(t2) < 1)
+                    {
+                        // std::cout << "in face, breaking!\n";
+                        endVisible = false;
+                        // break;
+                    }
+                }
+            }
         }
-        if (visible)
-            m_visibleEdges.push_back({ p1, p2 });
+        if (startVisible && endVisible)
+            m_visibleEdges.push_back({ start, end });
     }
 }
 
@@ -93,91 +107,72 @@ std::vector<BaseHiddenEdgesRemovalStrategy::Edge2D> RaycastingHiddenEdgesRemoval
     return m_visibleEdges;
 }
 
-bool RaycastingHiddenEdgesRemovalStrategy::arePointsCoplanar(const Vertex &a, const Vertex &b,
-                                                             const Vertex &c, const Vertex &d)
+void RaycastingHiddenEdgesRemovalStrategy::findFaces(const std::vector<Vertex> &vertices,
+                                                     const std::vector<Edge> &edges)
 {
-    Vec3<double> ab = b - a;
-    Vec3<double> ac = c - a;
-    Vec3<double> ad = d - a;
+    m_faces.clear();
 
-    Vec3<double> cross_ab_ac = ab.cross(ac);
-    double volume = cross_ab_ac.dot(ad);
-
-    return abs(volume) < 1e-9;
-}
-
-// Упорядочивает 4 точки в порядке обхода (по часовой стрелке, если смотреть снаружи)
-void RaycastingHiddenEdgesRemovalStrategy::createFace(const Vertex &p1, const Vertex &p2, const Vertex &p3,
-                                                      const Vertex &p4)
-{
-    // Находим нормаль плоскости (через векторное произведение)
-    Vec3<double> v1 = p2 - p1;
-    Vec3<double> v2 = p3 - p1;
-    // Vec3<double> normal = v1.cross(v2);
-
-    // Центр масс (усредняем координаты)
-    Vec3<double> center((p1.getX() + p2.getX() + p3.getX() + p4.getX()) / 4.0,
-                        (p1.getY() + p2.getY() + p3.getY() + p4.getY()) / 4.0,
-                        (p1.getZ() + p2.getZ() + p3.getZ() + p4.getZ()) / 4.0);
-
-    // Угол между вектором (точка - центр) и опорной осью
-    auto getAngle = [&](const Vec3<double> &p) {
-        Vec3<double> dir = p - center;
-        dir = dir.normalized();
-        return atan2(dir.getY(), dir.getX()); // Угол в плоскости XY (можно адаптировать под другие плоскости)
-    };
-
-    std::vector<Vec3<double>> points = { p1, p2, p3, p4 };
-
-    // Сортируем точки по углу относительно центра
-    std::ranges::sort(
-        points, [&](const Vec3<double> &a, const Vec3<double> &b) { return getAngle(a) < getAngle(b); });
-
-    Face f;
-    f.vertices[0] = { points[0].getX(), points[0].getY(), points[0].getZ() };
-    f.vertices[1] = { points[1].getX(), points[1].getY(), points[1].getZ() };
-    f.vertices[2] = { points[2].getX(), points[2].getY(), points[2].getZ() };
-    f.vertices[3] = { points[3].getX(), points[3].getY(), points[3].getZ() };
-    m_faces.push_back(f);
-}
-
-void RaycastingHiddenEdgesRemovalStrategy::calculateFaces(const std::vector<Vertex> &points)
-{
-    size_t n = points.size();
-
-    for (size_t i = 0; i < n; ++i)
+    // Создаем словарь смежности: для каждой вершины храним отсортированный вектор индексов смежных вершин
+    std::map<int, std::vector<int>> adj; // Ключ - индекс вершины, значение - индексы смежных вершин
+    for (const auto &edge : edges)
     {
-        for (size_t j = i + 1; j < n; ++j)
+        adj[edge.getStart()].push_back(edge.getEnd());
+        adj[edge.getEnd()].push_back(edge.getStart());
+    }
+    // Сортируем списки смежности для упрощения поиска
+    for (auto &pair : adj)
+        std::sort(pair.second.begin(), pair.second.end());
+
+    // Вектор для хранения уже обработанных граней
+    std::vector<std::vector<int>> processed_faces;
+
+    // Перебираем все ребра как возможное первое ребро цикла
+    for (const auto &edge : edges)
+    {
+        int v1_idx = edge.getStart();
+        int v2_idx = edge.getEnd();
+
+        // Для каждой вершины v3, смежной с v2
+        for (int v3_idx : adj[v2_idx])
         {
-            for (size_t k = j + 1; k < n; ++k)
+            if (v3_idx == v1_idx)
+                continue; // Пропускаем v1
+
+            // Для каждой вершины v4, смежной с v3
+            for (int v4_idx : adj[v3_idx])
             {
-                for (size_t l = k + 1; l < n; ++l)
+                if (v4_idx == v2_idx || v4_idx == v1_idx)
+                    continue; // Пропускаем v1 и v2
+
+                // Проверяем, есть ли ребро между v4 и v1
+                if (std::binary_search(adj[v4_idx].begin(), adj[v4_idx].end(), v1_idx))
                 {
-                    Vertex p1 = points[i];
-                    Vertex p2 = points[j];
-                    Vertex p3 = points[k];
-                    Vertex p4 = points[l];
+                    // Нашли потенциальный цикл v1-v2-v3-v4-v1
+                    // Сортируем ID вершин для уникальности
+                    std::vector<int> face_ids = { v1_idx, v2_idx, v3_idx, v4_idx };
+                    std::sort(face_ids.begin(), face_ids.end());
 
-                    p1.setX(((p1.getX() - 430) / 430) * p1.getW() + 430);
-                    p1.setY(((p1.getY() - 430) / 430) * p1.getW() + 430);
-                    p1.setZ(p1.getZ() * p1.getW());
+                    // Проверяем, не была ли грань уже обработана
+                    bool is_new = true;
+                    for (const auto &processed : processed_faces)
+                    {
+                        if (processed == face_ids)
+                        {
+                            is_new = false;
+                            break;
+                        }
+                    }
 
-                    p2.setX(((p2.getX() - 430) / 430) * p2.getW() + 430);
-                    p2.setY(((p2.getY() - 430) / 430) * p2.getW() + 430);
-                    p2.setZ(p2.getZ() * p2.getW());
+                    if (is_new)
+                    {
+                        processed_faces.push_back(face_ids);
 
-                    p3.setX(((p3.getX() - 430) / 430) * p3.getW() + 430);
-                    p3.setY(((p3.getY() - 430) / 430) * p3.getW() + 430);
-                    p3.setZ(p3.getZ() * p3.getW());
-
-                    p4.setX(((p4.getX() - 430) / 430) * p4.getW() + 430);
-                    p4.setY(((p4.getY() - 430) / 430) * p4.getW() + 430);
-                    p4.setZ(p4.getZ() * p4.getW());
-
-                    if (!arePointsCoplanar(p1, p2, p3, p4))
-                        continue;
-
-                    createFace(p1, p2, p3, p4);
+                        // Создаем новую грань
+                        Face face;
+                        face.vertices = { vertices[v1_idx], vertices[v2_idx], vertices[v3_idx],
+                                          vertices[v4_idx] };
+                        m_faces.push_back(face);
+                    }
                 }
             }
         }
@@ -283,9 +278,7 @@ bool RaycastingHiddenEdgesRemovalStrategy::isPointInPolygon(const Vertex &point,
             double x_intersection = (p_j_x - p_i_x) * (py - p_i_y) / (p_j_y - p_i_y) + p_i_x;
 
             if (px < x_intersection)
-            {
                 crossings++; // Увеличиваем счетчик пересечений
-            }
         }
     }
     return (crossings % 2) == 1; // Нечетное -> внутри, четное -> снаружи

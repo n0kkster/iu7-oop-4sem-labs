@@ -17,6 +17,8 @@ private:
                                                  double &out_param_t);
     bool isPointInPolygon(const Vertex &point, const Face &f);
 
+    void findFaces(const std::vector<Vertex> &vertices, const std::vector<Edge> &edges);
+
 public:
     RaycastingHiddenEdgesRemovalStrategy() = default;
     virtual ~RaycastingHiddenEdgesRemovalStrategy() override = default;

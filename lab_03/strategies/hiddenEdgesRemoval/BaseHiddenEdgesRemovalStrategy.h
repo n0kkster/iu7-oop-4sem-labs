@@ -17,7 +17,7 @@ protected:
 
     struct Face
     {
-        std::array<Vertex, 4> vertices;
+        std::vector<Vertex> vertices;
     };
 
 public:
