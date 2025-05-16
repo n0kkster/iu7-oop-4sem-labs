@@ -39,19 +39,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     m_objects = 0;
 
-    std::shared_ptr<BaseCommand> addCameraCommand = std::make_shared<AddCameraCommand>(CameraId::DefaultCameraId);
-    m_facade.execute(addCameraCommand);
+    try
+    {
+        std::shared_ptr<BaseCommand> addCameraCommand =
+            std::make_shared<AddCameraCommand>(CameraId::DefaultCameraId);
+        m_facade.execute(addCameraCommand);
 
-    std::shared_ptr<BaseCommand> setActiveCameraCommand = std::make_shared<SetActiveCameraCommand>(m_objects);
-    m_facade.execute(setActiveCameraCommand);
+        std::shared_ptr<BaseCommand> setActiveCameraCommand =
+            std::make_shared<SetActiveCameraCommand>(m_objects);
+        m_facade.execute(setActiveCameraCommand);
 
-    Vertex cameraCenter;
-    std::shared_ptr<BaseCommand> getCenterCommand =
-        std::make_shared<GetObjectCenterCommand>(m_objects, cameraCenter);
-    m_facade.execute(getCenterCommand);
+        Vertex cameraCenter;
+        std::shared_ptr<BaseCommand> getCenterCommand =
+            std::make_shared<GetObjectCenterCommand>(m_objects, cameraCenter);
+        m_facade.execute(getCenterCommand);
 
-    m_activeCamId = m_objects;
-    insertRow(m_objects++, "Камера 1", cameraCenter, "Камера");
+        m_activeCamId = m_objects;
+        insertRow(m_objects++, "Камера 1", cameraCenter, "Камера");
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::contextMenuRequested(const QPoint &pos)
@@ -88,57 +101,102 @@ void MainWindow::contextMenuRequested(const QPoint &pos)
 
 void MainWindow::deleteObjectRequested()
 {
-    for (const auto id : m_selected)
+    try
     {
-        auto type = ui->tableWidget->item(id, 3)->text();
-        if (type == "Камера" && id == m_activeCamId)
+        for (const auto id : m_selected)
         {
-            QMessageBox::warning(this, "Предупреждение",
-                                 "Невозможно удалить активную камеру! Активная камера не будет удалена.");
-            continue;
+            auto type = ui->tableWidget->item(id, 3)->text();
+            if (type == "Камера" && id == m_activeCamId)
+            {
+                QMessageBox::warning(this, "Предупреждение",
+                                     "Невозможно удалить активную камеру! Активная камера не будет удалена.");
+                continue;
+            }
+
+            std::shared_ptr<BaseCommand> removeObjectCommand = std::make_shared<RemoveObjectCommand>(id);
+            m_facade.execute(removeObjectCommand);
+            ui->tableWidget->removeRow(id);
         }
 
-        std::shared_ptr<BaseCommand> removeObjectCommand = std::make_shared<RemoveObjectCommand>(id);
-        m_facade.execute(removeObjectCommand);
-        ui->tableWidget->removeRow(id);
+        std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+        m_facade.execute(drawCommand);
     }
-
-    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
-    m_facade.execute(drawCommand);
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::setActiveCamRequested()
 {
-    const auto id = m_selected[0];
-    std::shared_ptr<BaseCommand> setActiveCamCommand = std::make_shared<SetActiveCameraCommand>(id);
-    m_facade.execute(setActiveCamCommand);
-    m_activeCamId = id;
+    try
+    {
+        const auto id = m_selected[0];
+        std::shared_ptr<BaseCommand> setActiveCamCommand = std::make_shared<SetActiveCameraCommand>(id);
+        m_facade.execute(setActiveCamCommand);
+        m_activeCamId = id;
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::composeRequested()
 {
-    std::shared_ptr<BaseCommand> composeCommand = std::make_shared<ComposeCommand>(m_selected);
-    m_facade.execute(composeCommand);
+    try
+    {
+        std::shared_ptr<BaseCommand> composeCommand = std::make_shared<ComposeCommand>(m_selected);
+        m_facade.execute(composeCommand);
 
-    Vertex compositeCenter;
-    std::shared_ptr<BaseCommand> getCenterCommand =
-        std::make_shared<GetObjectCenterCommand>(m_objects, compositeCenter);
-    m_facade.execute(getCenterCommand);
+        Vertex compositeCenter;
+        std::shared_ptr<BaseCommand> getCenterCommand =
+            std::make_shared<GetObjectCenterCommand>(m_objects, compositeCenter);
+        m_facade.execute(getCenterCommand);
 
-    insertRow(m_objects++, "Чудо-Юдо", compositeCenter, "Композит");
+        insertRow(m_objects++, "Чудо-Юдо", compositeCenter, "Композит");
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::addCameraBtnClicked()
 {
-    std::shared_ptr<BaseCommand> addCameraCommand = std::make_shared<AddCameraCommand>(CameraId::DefaultCameraId);
-    m_facade.execute(addCameraCommand);
+    try
+    {
+        std::shared_ptr<BaseCommand> addCameraCommand =
+            std::make_shared<AddCameraCommand>(CameraId::DefaultCameraId);
+        m_facade.execute(addCameraCommand);
 
-    Vertex cameraCenter;
-    std::shared_ptr<BaseCommand> getCenterCommand =
-        std::make_shared<GetObjectCenterCommand>(m_objects, cameraCenter);
-    m_facade.execute(getCenterCommand);
+        Vertex cameraCenter;
 
-    insertRow(m_objects++, "Камера", cameraCenter, "Камера");
+        std::shared_ptr<BaseCommand> getCenterCommand =
+            std::make_shared<GetObjectCenterCommand>(m_objects, cameraCenter);
+        m_facade.execute(getCenterCommand);
+        insertRow(m_objects++, "Камера", cameraCenter, "Камера");
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::onLoadModelBtnClicked()
@@ -167,9 +225,13 @@ void MainWindow::onLoadModelBtnClicked()
 
         insertRow(m_objects++, std::filesystem::path(filename).filename(), objectCenter, "Каркас");
     }
-    catch (const std::exception &ex)
+    catch (const BaseException &ex)
     {
         QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
     }
 }
 
@@ -204,18 +266,29 @@ void MainWindow::onShiftBtnClicked()
     getSelectedObjects();
     Vertex newCenter;
 
-    for (const auto id : m_selected)
+    try
     {
-        std::shared_ptr<BaseCommand> moveCommand = std::make_shared<MoveObjectCommand>(id, params);
-        m_facade.execute(moveCommand);
-        std::shared_ptr<BaseCommand> getCenterCommand =
-            std::make_shared<GetObjectCenterCommand>(id, newCenter);
-        m_facade.execute(getCenterCommand);
-        updateCenter(id, newCenter);
-    }
+        for (const auto id : m_selected)
+        {
+            std::shared_ptr<BaseCommand> moveCommand = std::make_shared<MoveObjectCommand>(id, params);
+            m_facade.execute(moveCommand);
+            std::shared_ptr<BaseCommand> getCenterCommand =
+                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            m_facade.execute(getCenterCommand);
+            updateCenter(id, newCenter);
+        }
 
-    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
-    m_facade.execute(drawCommand);
+        std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+        m_facade.execute(drawCommand);
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::onScaleBtnClicked()
@@ -277,18 +350,29 @@ void MainWindow::onScaleBtnClicked()
     getSelectedObjects();
     Vertex newCenter;
 
-    for (const auto id : m_selected)
+    try
     {
-        std::shared_ptr<BaseCommand> scaleCommand = std::make_shared<ScaleObjectCommand>(id, params);
-        m_facade.execute(scaleCommand);
-        std::shared_ptr<BaseCommand> getCenterCommand =
-            std::make_shared<GetObjectCenterCommand>(id, newCenter);
-        m_facade.execute(getCenterCommand);
-        updateCenter(id, newCenter);
-    }
+        for (const auto id : m_selected)
+        {
+            std::shared_ptr<BaseCommand> scaleCommand = std::make_shared<ScaleObjectCommand>(id, params);
+            m_facade.execute(scaleCommand);
+            std::shared_ptr<BaseCommand> getCenterCommand =
+                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            m_facade.execute(getCenterCommand);
+            updateCenter(id, newCenter);
+        }
 
-    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
-    m_facade.execute(drawCommand);
+        std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+        m_facade.execute(drawCommand);
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::onRotateBtnClicked()
@@ -351,18 +435,29 @@ void MainWindow::onRotateBtnClicked()
     getSelectedObjects();
     Vertex newCenter;
 
-    for (const auto id : m_selected)
+    try
     {
-        std::shared_ptr<BaseCommand> rotateCommand = std::make_shared<RotateObjectCommand>(id, params);
-        m_facade.execute(rotateCommand);
-        std::shared_ptr<BaseCommand> getCenterCommand =
-            std::make_shared<GetObjectCenterCommand>(id, newCenter);
-        m_facade.execute(getCenterCommand);
-        updateCenter(id, newCenter);
-    }
+        for (const auto id : m_selected)
+        {
+            std::shared_ptr<BaseCommand> rotateCommand = std::make_shared<RotateObjectCommand>(id, params);
+            m_facade.execute(rotateCommand);
+            std::shared_ptr<BaseCommand> getCenterCommand =
+                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            m_facade.execute(getCenterCommand);
+            updateCenter(id, newCenter);
+        }
 
-    std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
-    m_facade.execute(drawCommand);
+        std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
+        m_facade.execute(drawCommand);
+    }
+    catch (const BaseException &ex)
+    {
+        QMessageBox::critical(this, "Error!", ex.what());
+    }
+    catch (const std::exception &ex)
+    {
+        QMessageBox::critical(this, "Unknown error!", ex.what());
+    }
 }
 
 void MainWindow::createScene(QWidget *parent)
@@ -378,6 +473,8 @@ void MainWindow::createScene(QWidget *parent)
     ui->planeWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ui->planeWidget->setScene(m_scene.get());
+
+    qDebug() << "scene width:" << m_scene->width() << "scene height:" << m_scene->height();
 
     std::unique_ptr<BasePainter> painter = DrawSolution::createPainter<QtDrawFactory>(m_scene);
     auto drawManager = ManagerSolution::getDrawManager();
