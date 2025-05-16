@@ -22,7 +22,7 @@ std::shared_ptr<BaseObject> Scene::getComponent(size_t id)
 
 void Scene::removeComponent(size_t id)
 {
-    m_objects.erase(id--);
+    m_objects.erase(id);
 }
 
 void Scene::accept(std::shared_ptr<BaseVisitor> visitor)

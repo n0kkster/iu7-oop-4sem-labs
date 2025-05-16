@@ -113,9 +113,11 @@ void MainWindow::deleteObjectRequested()
                 continue;
             }
 
-            std::shared_ptr<BaseCommand> removeObjectCommand = std::make_shared<RemoveObjectCommand>(id);
+            std::shared_ptr<BaseCommand> removeObjectCommand =
+                std::make_shared<RemoveObjectCommand>(ui->tableWidget->item(id, 0)->text().toULong());
             m_facade.execute(removeObjectCommand);
             ui->tableWidget->removeRow(id);
+            // m_objects--;
         }
 
         std::shared_ptr<BaseCommand> drawCommand = std::make_shared<DrawSceneCommand>();
@@ -270,10 +272,11 @@ void MainWindow::onShiftBtnClicked()
     {
         for (const auto id : m_selected)
         {
-            std::shared_ptr<BaseCommand> moveCommand = std::make_shared<MoveObjectCommand>(id, params);
+            std::shared_ptr<BaseCommand> moveCommand =
+                std::make_shared<MoveObjectCommand>(ui->tableWidget->item(id, 0)->text().toULong(), params);
             m_facade.execute(moveCommand);
-            std::shared_ptr<BaseCommand> getCenterCommand =
-                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            std::shared_ptr<BaseCommand> getCenterCommand = std::make_shared<GetObjectCenterCommand>(
+                ui->tableWidget->item(id, 0)->text().toULong(), newCenter);
             m_facade.execute(getCenterCommand);
             updateCenter(id, newCenter);
         }
@@ -354,10 +357,11 @@ void MainWindow::onScaleBtnClicked()
     {
         for (const auto id : m_selected)
         {
-            std::shared_ptr<BaseCommand> scaleCommand = std::make_shared<ScaleObjectCommand>(id, params);
+            std::shared_ptr<BaseCommand> scaleCommand =
+                std::make_shared<ScaleObjectCommand>(ui->tableWidget->item(id, 0)->text().toULong(), params);
             m_facade.execute(scaleCommand);
-            std::shared_ptr<BaseCommand> getCenterCommand =
-                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            std::shared_ptr<BaseCommand> getCenterCommand = std::make_shared<GetObjectCenterCommand>(
+                ui->tableWidget->item(id, 0)->text().toULong(), newCenter);
             m_facade.execute(getCenterCommand);
             updateCenter(id, newCenter);
         }
@@ -439,10 +443,11 @@ void MainWindow::onRotateBtnClicked()
     {
         for (const auto id : m_selected)
         {
-            std::shared_ptr<BaseCommand> rotateCommand = std::make_shared<RotateObjectCommand>(id, params);
+            std::shared_ptr<BaseCommand> rotateCommand =
+                std::make_shared<RotateObjectCommand>(ui->tableWidget->item(id, 0)->text().toULong(), params);
             m_facade.execute(rotateCommand);
-            std::shared_ptr<BaseCommand> getCenterCommand =
-                std::make_shared<GetObjectCenterCommand>(id, newCenter);
+            std::shared_ptr<BaseCommand> getCenterCommand = std::make_shared<GetObjectCenterCommand>(
+                ui->tableWidget->item(id, 0)->text().toULong(), newCenter);
             m_facade.execute(getCenterCommand);
             updateCenter(id, newCenter);
         }
@@ -474,8 +479,6 @@ void MainWindow::createScene(QWidget *parent)
 
     ui->planeWidget->setScene(m_scene.get());
 
-    qDebug() << "scene width:" << m_scene->width() << "scene height:" << m_scene->height();
-
     std::unique_ptr<BasePainter> painter = DrawSolution::createPainter<QtDrawFactory>(m_scene);
     auto drawManager = ManagerSolution::getDrawManager();
 
@@ -492,7 +495,7 @@ void MainWindow::getSelectedObjects()
     {
         if (el->column() == 0)
         {
-            m_selected.push_back(el->text().toULong());
+            m_selected.push_back(el->row());
         }
     }
 }
