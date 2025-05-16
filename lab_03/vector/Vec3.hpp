@@ -1,9 +1,9 @@
 #pragma once
 
+#include "../exceptions/vector/VectorException.h"
 #include "Vec3.h"
 
 #include <cmath>
-#include <stdexcept>
 
 template <ConvertibleToDouble T>
 Vec3<T>::Vec3() : m_x(0), m_y(0), m_z(0)
@@ -79,7 +79,7 @@ template <ConvertibleToDouble T>
 Vec3<T> Vec3<T>::operator/(const T &scalar) const
 {
     if (scalar == 0)
-        throw std::runtime_error("Division by zero");
+        throw VectorDivisionByZeroException("Division by zero");
     return Vec3(m_x / scalar, m_y / scalar, m_z / scalar);
 }
 
