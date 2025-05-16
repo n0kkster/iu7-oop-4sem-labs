@@ -7,3 +7,4 @@ example
 .vscode
 !lab_01/.vscode
 theory
+*.bkp
