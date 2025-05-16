@@ -1,5 +1,5 @@
 #include "CarcassReadStrategySolution.h"
-
+#include "../../../exceptions/model/carcass/CarcassException.h"
 #include <filesystem>
 
 std::shared_ptr<BaseCarcassReadStrategy> CarcassReadStrategySolution::create(
@@ -9,5 +9,5 @@ std::shared_ptr<BaseCarcassReadStrategy> CarcassReadStrategySolution::create(
     if (auto it = m_map.find(extension); it != m_map.end())
         return it->second(file);
 
-    throw std::runtime_error("Unsupported file extension!");
+    throw CarcassInvalidFileFormat("Unsupported file extension!");
 }
