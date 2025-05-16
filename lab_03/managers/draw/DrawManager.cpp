@@ -19,8 +19,7 @@ void DrawManager::draw()
 
     auto strategy = DefaultProjectionStrategyCreator::create();
 
-    DrawVisitorCreator creator;
-    auto drawVisitor = creator.create(std::move(strategy), m_painter, activeCam);
+    auto drawVisitor = DrawVisitorCreator::create(std::move(strategy), m_painter, activeCam);
 
     auto sceneManager = ManagerSolution::getSceneManager();
     sceneManager->accept(drawVisitor);
