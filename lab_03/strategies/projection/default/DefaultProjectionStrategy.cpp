@@ -26,7 +26,7 @@ void DefaultProjectionStrategy::prepare(std::shared_ptr<const BaseModel> model,
         {
             projected.setX(projected.getX() / w);
             projected.setY(projected.getY() / w);
-            projected.setZ(projected.getZ() / w);
+            // projected.setZ(projected.getZ() / w);
         }
 
         projected.setX(projected.getX() * centerX + centerX);
