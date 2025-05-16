@@ -36,3 +36,18 @@ public:
     CarcassInvalidEdgeException(const char *info,
                                 const std::source_location &loc = std::source_location::current()) noexcept;
 };
+
+class CarcassInvalidRepresentation : public CarcassException
+{
+public:
+    CarcassInvalidRepresentation(const char *info,
+                                const std::source_location &loc = std::source_location::current()) noexcept;
+};
+
+class CarcassInvalidFileFormat : public CarcassException
+{
+public:
+    CarcassInvalidFileFormat(const char *info,
+                                const std::source_location &loc = std::source_location::current()) noexcept;
+};
+

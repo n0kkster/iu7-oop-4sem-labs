@@ -17,3 +17,10 @@ CarcassInvalidStructureException::CarcassInvalidStructureException(const char *i
 CarcassInvalidEdgeException::CarcassInvalidEdgeException(const char *info,
                                                          const std::source_location &loc) noexcept :
     CarcassException(info, loc) { };
+
+CarcassInvalidRepresentation::CarcassInvalidRepresentation(const char *info,
+                                                           const std::source_location &loc) noexcept :
+    CarcassException(info, loc) { };
+
+CarcassInvalidFileFormat::CarcassInvalidFileFormat(const char *info, const std::source_location &loc) noexcept
+    : CarcassException(info, loc) { };
