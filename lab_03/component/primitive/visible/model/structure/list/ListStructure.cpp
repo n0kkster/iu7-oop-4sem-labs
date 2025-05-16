@@ -27,11 +27,6 @@ std::vector<Vertex> ListStructure::getVertices() noexcept
     return m_vertices;
 }
 
-const std::vector<Edge> &ListStructure::getEdges() const noexcept
-{
-    return m_edges;
-}
-
 std::vector<Edge> ListStructure::getEdges() noexcept
 {
     return m_edges;

@@ -21,7 +21,6 @@ public:
     Vertex getCenter() noexcept override;
 
     const std::vector<Vertex> &getVertices() const noexcept override;
-    const std::vector<Edge> &getEdges() const noexcept override;
     const Vertex &getCenter() const noexcept override;
 
     void transform(std::shared_ptr<TransformAction> action) override;

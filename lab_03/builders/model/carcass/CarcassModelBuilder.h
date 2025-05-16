@@ -20,7 +20,7 @@ private:
     const RepresentationMap m_reprMap = 
     {
         {InternalRepresentationId::ListInternalReprsentationId, [](){return std::make_shared<ListStructure>();}},
-        // {InternalRepresentationId::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
+        {InternalRepresentationId::MatrixInternalReprsentationId, [](){return std::make_shared<MatrixStructure>();}}
     };
 
 public:
