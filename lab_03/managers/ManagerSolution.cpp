@@ -12,8 +12,7 @@ std::shared_ptr<SceneManager> ManagerSolution::getSceneManager()
 
 std::shared_ptr<DrawManager> ManagerSolution::getDrawManager()
 {
-    auto inst = DrawManagerCreator().getInstance();
-    return inst;
+    return DrawManagerCreator().getInstance();
 }
 
 std::shared_ptr<LoadManager> ManagerSolution::getLoadManager()
