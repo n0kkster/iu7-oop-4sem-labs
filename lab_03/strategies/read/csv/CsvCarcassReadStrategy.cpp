@@ -20,7 +20,6 @@ std::shared_ptr<std::vector<Vertex>> CsvCarcassReadStrategy::readVertices()
     m_file->clear();
     m_file->seekg(0, std::ios::beg);
 
-    // Пропускаем заголовок, если есть
     std::getline(*m_file, line);
 
     while (std::getline(*m_file, line))

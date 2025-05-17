@@ -22,17 +22,8 @@ void DrawVisitor::visit(CarcassModel &model) const
     strat->prepare(vertices, edges, m_camera);
     auto vis = strat->getVisibleEdges();
 
-    std::cout << "visible edges count: " << vis.size() << std::endl;
-
     for (const auto &e : vis)
-    {
         m_painter->drawLine(e.first, e.second);
-    }
-
-    // for (const auto &edge : edges)
-    // {
-    //     m_painter->drawLine(vertices[edge.getStart()], vertices[edge.getEnd()]);
-    // }
 }
 
 void DrawVisitor::visit(BaseCamera &model) const { }
