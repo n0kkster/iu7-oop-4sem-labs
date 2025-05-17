@@ -22,5 +22,5 @@ std::unique_ptr<BaseDirector> DirectorSolution<SupportedArgs...>::create(size_t 
     if (auto it = creators.find(id); it != creators.end())
         return it->second(std::make_tuple(std::forward<Args>(args)...));
 
-    return nullptr; // mb throw?
+    return nullptr;
 }

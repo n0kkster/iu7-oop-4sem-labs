@@ -25,9 +25,6 @@ void RaycastingHiddenEdgesRemovalStrategy::prepare(const std::vector<Vertex> &ve
     bool startVisible = true, endVisible = true;
 
     auto viewpoint = camera->getCenter();
-    viewpoint.setX(viewpoint.getX() + 430);
-    viewpoint.setY(-viewpoint.getY() + 415);
-    viewpoint.setZ(-(viewpoint.getZ() * 20));
 
     for (const auto &edge : edges)
     {

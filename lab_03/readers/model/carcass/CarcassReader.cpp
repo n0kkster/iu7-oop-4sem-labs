@@ -2,14 +2,12 @@
 
 #include "../../../strategies/read/solution/CarcassReadStrategySolution.h"
 
-#include <iostream>
-
 CarcassReader::CarcassReader(const std::string &filename) : ModelReader(filename)
 {
     CarcassReadStrategySolution solution;
 
     m_file = std::make_shared<std::ifstream>(filename, std::ios::in);
-    m_strategy = solution.create(filename, m_file);    
+    m_strategy = solution.create(filename, m_file);
 }
 
 std::shared_ptr<std::vector<Vertex>> CarcassReader::readVertices()

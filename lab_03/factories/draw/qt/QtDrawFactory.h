@@ -8,7 +8,7 @@
 class QtDrawFactory : public BaseDrawFactory
 {
 private:
-    std::shared_ptr<QGraphicsScene> m_scene;
+    std::weak_ptr<QGraphicsScene> m_scene;
 
 public:
     QtDrawFactory() = delete;

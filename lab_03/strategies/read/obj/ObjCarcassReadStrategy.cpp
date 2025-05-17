@@ -65,7 +65,6 @@ std::shared_ptr<std::vector<Edge>> ObjCarcassReadStrategy::readEdges()
                 iss.ignore();
         }
 
-        // Создаём рёбра между вершинами в полигоне
         for (size_t i = 1; i < vertexIndices.size(); i++)
             edges.emplace_back(vertexIndices[i - 1], vertexIndices[i]);
 

@@ -19,7 +19,7 @@ MOC_OBJS := $(addprefix $(MOC_DIR)/,$(sort $(patsubst %.h,moc_%.o,$(notdir $(QT_
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Wno-unused-but-set-variable -Wno-float-equal $(addprefix -I,$(sort $(dir $(INCS)))) -I. $(shell pkgconf --cflags Qt6Widgets)
 LDFLAGS := $(shell pkgconf --libs Qt6Widgets)
 
-all : app.exe
+all : 
 
 app.exe : $(OBJS) $(MOC_OBJS)
 	$(CXX) $^ $(LDFLAGS) -o ./app.exe

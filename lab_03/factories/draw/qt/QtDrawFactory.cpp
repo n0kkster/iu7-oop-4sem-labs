@@ -6,5 +6,5 @@ QtDrawFactory::QtDrawFactory(std::shared_ptr<QGraphicsScene> scene) : m_scene(sc
 
 std::unique_ptr<BasePainter> QtDrawFactory::createPainter()
 {
-    return std::make_unique<QtPainter>(m_scene);
+    return std::make_unique<QtPainter>(m_scene.lock());
 }
