@@ -1,21 +1,24 @@
 #include "LoadManager.h"
 
-#include "../../directors/model/carcass/CarcassDirector.h"
 #include "../../ids/ids.h"
 #include "../ManagerSolution.h"
 
-#include <memory>
-
 LoadManager::LoadManager()
 {
-    m_directorSolution = std::make_shared<BaseDirectorSolution>();
-    m_directorSolution->registrate<CarcassDirector, const std::string &, InternalRepresentationId>(DirectorId::CarcassDirectorId);
+    m_dsol = std::make_shared<BaseDirectorSolution>();
+    m_dsol->registrate<CarcassDirector, std::shared_ptr<BaseBuilder>>(
+        DirectorId::CarcassDirectorId);
 }
 
-void LoadManager::load(DirectorId directorId, InternalRepresentationId repr,
-                       const std::string &filename)
+void LoadManager::load(InternalRepresentationId repr, const std::string &filename)
 {
-    auto director = m_directorSolution->create(directorId, filename, repr);
+    ReaderSolution rsol;
+    auto reader = rsol.create(filename);
+
+    BuilderSolution bsol;
+    auto builder = bsol.create(reader, repr);
+
+    auto director = m_dsol->create(DirectorId::CarcassDirectorId, builder);
 
     auto object = director->create();
 
