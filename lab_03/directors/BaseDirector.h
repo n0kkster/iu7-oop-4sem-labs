@@ -2,7 +2,6 @@
 
 #include "../builders/BaseBuilder.h"
 #include "../component/BaseObject.h"
-#include "../readers/BaseReader.h"
 
 #include <memory>
 

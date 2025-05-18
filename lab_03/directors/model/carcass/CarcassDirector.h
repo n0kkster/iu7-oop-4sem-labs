@@ -1,14 +1,13 @@
 #pragma once
 
-#include "../ModelDirector.h"
-#include "../../../readers/model/carcass/CarcassReader.h"
 #include "../../../ids/ids.h"
+#include "../ModelDirector.h"
 
 class CarcassDirector : public ModelDirector
 {
 public:
     CarcassDirector() = delete;
-    CarcassDirector(const std::string &filename, InternalRepresentationId repr);
+    CarcassDirector(std::shared_ptr<BaseBuilder> builder);
 
     virtual ~CarcassDirector() = default;
 

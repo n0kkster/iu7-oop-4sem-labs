@@ -2,7 +2,6 @@
 
 #include "../concepts/concepts.h"
 #include "../ids/ids.h"
-#include "../readers/model/carcass/CarcassReader.h"
 #include "BaseDirector.h"
 
 #include <cstddef>
@@ -30,6 +29,6 @@ public:
     std::unique_ptr<BaseDirector> create(size_t id, Args &&...args);
 };
 
-using BaseDirectorSolution = DirectorSolution<const std::string &, InternalRepresentationId>;
+using BaseDirectorSolution = DirectorSolution<std::shared_ptr<BaseBuilder>>;
 
 #include "DirectorSolution.hpp"
