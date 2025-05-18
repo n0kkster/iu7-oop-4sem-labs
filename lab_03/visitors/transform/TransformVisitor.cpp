@@ -1,7 +1,7 @@
 #include "TransformVisitor.h"
 
 #include "../../component/primitive/invisible/camera/BaseCamera.h"
-#include "../../component/primitive/visible/model/carcass/CarcassModel.h"
+#include "../../component/primitive/visible/model/structure/BaseStructure.h"
 
 TransformVisitor::TransformVisitor(std::shared_ptr<TransformAction> action) : m_action(action) { }
 
@@ -11,10 +11,10 @@ void TransformVisitor::visit(BaseCamera &camera) const
         camera.transform(m_action);
 }
 
-void TransformVisitor::visit(CarcassModel &model) const
+void TransformVisitor::visit(std::shared_ptr<BaseStructure> structure) const
 {
     if (m_action)
-        model.getStructure()->transform(m_action);
+        structure->transform(m_action);
 }
 
 TransformVisitor::~TransformVisitor() { }

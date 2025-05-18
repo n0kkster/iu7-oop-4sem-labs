@@ -16,5 +16,5 @@ public:
     virtual ~TransformVisitor() = 0;
 
     void visit(BaseCamera &camera) const override;
-    void visit(CarcassModel &model) const override;
+    void visit(std::shared_ptr<BaseStructure> structure) const override;
 };

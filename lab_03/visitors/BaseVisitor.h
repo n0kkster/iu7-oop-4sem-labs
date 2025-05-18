@@ -1,7 +1,9 @@
 #pragma once
 
+#include <memory>
+
 class BaseCamera;
-class CarcassModel;
+class BaseStructure;
 
 class BaseVisitor
 {
@@ -10,5 +12,5 @@ public:
     virtual ~BaseVisitor() = default;
 
     virtual void visit(BaseCamera &camera) const = 0;
-    virtual void visit(CarcassModel &model) const = 0;
+    virtual void visit(std::shared_ptr<BaseStructure> structure) const = 0;
 };

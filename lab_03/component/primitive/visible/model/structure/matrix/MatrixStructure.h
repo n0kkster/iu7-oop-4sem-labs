@@ -23,7 +23,7 @@ public:
     void setCenter(const Vertex &vertex) noexcept override;
 
     std::vector<Vertex> getVertices() noexcept override;
-    std::vector<Edge> getEdges() noexcept override;
+    std::vector<Edge> getEdges() const noexcept override;
     Vertex getCenter() noexcept override;
 
     const std::vector<Vertex> &getVertices() const noexcept override;

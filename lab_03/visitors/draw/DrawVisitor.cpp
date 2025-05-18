@@ -1,29 +1,27 @@
 #include "DrawVisitor.h"
 
-#include "../../component/primitive/visible/model/carcass/CarcassModel.h"
-#include "../../strategies/hiddenEdgesRemoval/creator/HiddenEdgeRemovalStrategyCreator.h"
-
 #include <memory>
 
-DrawVisitor::DrawVisitor(std::shared_ptr<BaseProjectionStrategy> strategy,
+DrawVisitor::DrawVisitor(std::shared_ptr<BaseProjectionStrategy> projStrat,
+                         std::shared_ptr<BaseHiddenEdgesRemovalStrategy> removalStrat,
+                         std::shared_ptr<BaseCoordinateConvertStrategy> convertStrat,
                          std::shared_ptr<BasePainter> painter, std::shared_ptr<BaseCamera> camera) :
-    m_painter(painter), m_camera(camera), m_strategy(strategy)
+    m_painter(painter), m_camera(camera), m_projStrategy(projStrat), m_removalStrategy(removalStrat),
+    m_convertStrat(convertStrat)
 { }
 
-void DrawVisitor::visit(CarcassModel &model) const
+void DrawVisitor::visit(std::shared_ptr<BaseStructure> structure) const
 {
-    m_strategy->prepare(std::make_shared<CarcassModel>(model), m_camera, m_painter->getWidth(),
-                        m_painter->getHeight());
+    std::vector<Vertex> projected;
+    m_projStrategy->project(structure, m_camera, projected);
 
-    const auto &vertices = m_strategy->getVertices();
-    const auto &edges = m_strategy->getEdges();
+    m_convertStrat->convertPoint(projected, m_painter->getWidth(), m_painter->getHeight());
 
-    auto strat = RaycastingHiddenEdgeRemovalStrategyCreator::create();
-    strat->prepare(vertices, edges, m_camera);
-    auto vis = strat->getVisibleEdges();
+    std::vector<BaseHiddenEdgesRemovalStrategy::Edge2D> visibleEdges;
+    m_removalStrategy->prepare(projected, structure->getEdges(), m_camera, visibleEdges);
 
-    for (const auto &e : vis)
+    for (const auto &e : visibleEdges)
         m_painter->drawLine(e.first, e.second);
 }
 
-void DrawVisitor::visit(BaseCamera &model) const { }
+void DrawVisitor::visit(BaseCamera &camera) const { (void)camera; }

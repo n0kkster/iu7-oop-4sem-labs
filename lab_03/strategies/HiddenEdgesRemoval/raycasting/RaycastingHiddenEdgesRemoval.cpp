@@ -1,23 +1,9 @@
 #include "RaycastingHiddenEdgesRemoval.h"
 
-struct Plane
-{
-    Vec3<double> normal;
-    double d_coeff;
-
-    Plane(const Vertex &pA, const Vertex &pB, const Vertex &pC)
-    {
-        Vec3<double> vec1 = pA - pB;
-        Vec3<double> vec2 = pA - pC;
-        normal = vec1.cross(vec2);
-        normal = normal.normalized();
-        d_coeff = -normal.dot(pA);
-    }
-};
-
 void RaycastingHiddenEdgesRemovalStrategy::prepare(const std::vector<Vertex> &vertices,
                                                    const std::vector<Edge> &edges,
-                                                   std::shared_ptr<const BaseCamera> camera)
+                                                   std::shared_ptr<const BaseCamera> camera,
+                                                   std::vector<Edge2D> &visibleEdges)
 {
     findFaces(vertices, edges);
 
@@ -60,13 +46,8 @@ void RaycastingHiddenEdgesRemovalStrategy::prepare(const std::vector<Vertex> &ve
             }
         }
         if (startVisible && endVisible)
-            m_visibleEdges.push_back({ start, end });
+            visibleEdges.push_back({ start, end });
     }
-}
-
-std::vector<BaseHiddenEdgesRemovalStrategy::Edge2D> RaycastingHiddenEdgesRemovalStrategy::getVisibleEdges()
-{
-    return m_visibleEdges;
 }
 
 void RaycastingHiddenEdgesRemovalStrategy::findFaces(const std::vector<Vertex> &vertices,

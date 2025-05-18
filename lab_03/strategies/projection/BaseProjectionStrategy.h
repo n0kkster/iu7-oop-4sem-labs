@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../component/primitive/invisible/camera/BaseCamera.h"
-#include "../../component/primitive/visible/model/BaseModel.h"
+#include "../../component/primitive/visible/model/structure/BaseStructure.h"
 
 #include <memory>
 #include <vector>
@@ -12,8 +12,6 @@ public:
     BaseProjectionStrategy() = default;
     virtual ~BaseProjectionStrategy() = default;
 
-    virtual void prepare(std::shared_ptr<const BaseModel> model, std::shared_ptr<const BaseCamera> camera,
-                         const size_t width, const size_t height) = 0;
-    virtual const std::vector<Vertex> getVertices() const = 0;
-    virtual const std::vector<Edge> getEdges() const = 0;
+    virtual void project(std::shared_ptr<const BaseStructure> structure,
+                         std::shared_ptr<const BaseCamera> camera, std::vector<Vertex> &projected) = 0;
 };

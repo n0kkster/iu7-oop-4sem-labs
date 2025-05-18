@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../concepts/concepts.h"
+#include "../../strategies/ConvertCoordinates/BaseCoordinateConvertStrategy.h"
+#include "../../strategies/HiddenEdgesRemoval/BaseHiddenEdgesRemovalStrategy.h"
 #include "../../strategies/projection/BaseProjectionStrategy.h"
 #include "../draw/DrawVisitor.h"
 #include "../transform/move/MoveVisitor.h"
@@ -28,6 +30,7 @@ using MoveVisitorCreator = VisitorCreator<BaseVisitor, MoveVisitor, MoveParams>;
 
 using ScaleVisitorCreator = VisitorCreator<BaseVisitor, ScaleVisitor, ScaleParams>;
 
-using DrawVisitorCreator =
-    VisitorCreator<BaseVisitor, DrawVisitor, std::shared_ptr<BaseProjectionStrategy>,
-                           std::shared_ptr<BasePainter>, std::shared_ptr<BaseCamera>>;
+using DrawVisitorCreator = VisitorCreator<BaseVisitor, DrawVisitor, std::shared_ptr<BaseProjectionStrategy>,
+                                          std::shared_ptr<BaseHiddenEdgesRemovalStrategy>,
+                                          std::shared_ptr<BaseCoordinateConvertStrategy>,
+                                          std::shared_ptr<BasePainter>, std::shared_ptr<BaseCamera>>;

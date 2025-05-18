@@ -23,7 +23,7 @@ public:
     virtual void transform(std::shared_ptr<TransformAction> action) = 0;
 
     virtual std::vector<Vertex> getVertices() noexcept = 0;
-    virtual std::vector<Edge> getEdges() noexcept = 0;
+    virtual std::vector<Edge> getEdges() const noexcept = 0;
     virtual Vertex getCenter() noexcept = 0;
 
     virtual const std::vector<Vertex> &getVertices() const noexcept = 0;

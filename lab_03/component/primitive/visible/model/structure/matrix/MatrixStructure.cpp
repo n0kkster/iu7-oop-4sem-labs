@@ -38,7 +38,7 @@ std::vector<Vertex> MatrixStructure::getVertices() noexcept
     return m_vertices;
 }
 
-std::vector<Edge> MatrixStructure::getEdges() noexcept
+std::vector<Edge> MatrixStructure::getEdges() const noexcept
 {
     std::vector<Edge> edges;
 

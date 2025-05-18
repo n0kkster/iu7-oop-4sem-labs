@@ -24,6 +24,5 @@ public:
     virtual ~RaycastingHiddenEdgesRemovalStrategy() override = default;
 
     void prepare(const std::vector<Vertex> &vertices, const std::vector<Edge> &edges,
-                 std::shared_ptr<const BaseCamera> camera) override;
-    std::vector<Edge2D> getVisibleEdges() override;
+                 std::shared_ptr<const BaseCamera> camera, std::vector<Edge2D> &visibleEdges) override;
 };
