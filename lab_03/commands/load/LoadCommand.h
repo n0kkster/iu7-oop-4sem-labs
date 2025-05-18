@@ -13,7 +13,7 @@ public:
 class CarcassLoadCommand : public LoadCommand
 {
 private:
-    using Action = void (LoadManager::*)(DirectorId, InternalRepresentationId, const std::string &);
+    using Action = void (LoadManager::*)(InternalRepresentationId, const std::string &);
 
     Action m_action;
     InternalRepresentationId m_repr;
