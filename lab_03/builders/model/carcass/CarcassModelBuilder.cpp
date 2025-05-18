@@ -1,17 +1,12 @@
 #include "CarcassModelBuilder.h"
 
 #include "../../../component/primitive/visible/model/carcass/CarcassModel.h"
-#include "../../../exceptions/model/carcass/CarcassException.h"
 
-CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<CarcassReader> reader,
-                                         InternalRepresentationId repr) : BaseModelBuilder(reader)
+CarcassModelBuilder::CarcassModelBuilder(std::shared_ptr<ModelReader> reader,
+                                         std::shared_ptr<BaseStructure> structure) :
+    BaseModelBuilder(reader), m_structure(structure)
 {
     m_part = 0;
-
-    if (auto it = m_reprMap.find(repr); it != m_reprMap.end())
-        m_structure = it->second();
-    else
-        throw CarcassInvalidRepresentation("Invalid representation chosen!");
 }
 
 bool CarcassModelBuilder::buildVertices()

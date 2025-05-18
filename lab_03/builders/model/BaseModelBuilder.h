@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../component/primitive/visible/model/BaseModel.h"
-#include "../../readers/model/ModelReader.h"
+#include "../../reader/ModelReader.h"
 #include "../BaseBuilder.h"
 
 #include <memory>
