@@ -1,6 +1,6 @@
 #include "MatrixStructure.h"
 
-#include "../../../../../../exceptions/model/carcass/CarcassException.h"
+#include "../../../../../../exceptions/model/ModelException.h"
 
 MatrixStructure::MatrixStructure() : m_vertices(), m_adjacencyMatrix(), m_vertexCount(0) { }
 
@@ -17,7 +17,7 @@ void MatrixStructure::addEdge(const Edge &edge)
     size_t id2 = edge.getEnd();
 
     if (id1 >= m_vertexCount || id2 >= m_vertexCount)
-        throw CarcassInvalidEdgeException("Edge vertex index out of range!");
+        throw ModelInvalidEdgeException("Edge vertex index out of range!");
 
     m_adjacencyMatrix[id1][id2] = true;
     m_adjacencyMatrix[id2][id1] = true;
