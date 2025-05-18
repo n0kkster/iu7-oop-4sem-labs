@@ -7,15 +7,15 @@
 #include <fstream>
 #include <memory>
 
-class BaseCarcassReadStrategy
+class BaseModelReaderImpl
 {
 protected:
-    std::shared_ptr<std::ifstream> m_file;    
+    std::ifstream m_file;    
 
 public:
-    BaseCarcassReadStrategy() = delete;
-    BaseCarcassReadStrategy(std::shared_ptr<std::ifstream> file);
-    virtual ~BaseCarcassReadStrategy() = default;
+    BaseModelReaderImpl() = delete;
+    BaseModelReaderImpl(const std::string &filename);
+    virtual ~BaseModelReaderImpl() = default;
 
     virtual std::shared_ptr<std::vector<Vertex>> readVertices() = 0;
     virtual std::shared_ptr<std::vector<Edge>> readEdges() = 0;

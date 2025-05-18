@@ -1,28 +1,25 @@
-// CsvCarcassReadStrategy.cpp
-#include "CsvCarcassReadStrategy.h"
+#include "CsvModelReaderImpl.h"
 
-#include "../../../exceptions/model/carcass/CarcassException.h"
+#include "../../../exceptions/model/ModelException.h"
 
 #include <sstream>
 #include <string>
 
-CsvCarcassReadStrategy::CsvCarcassReadStrategy(std::shared_ptr<std::ifstream> file) :
-    BaseCarcassReadStrategy(file)
-{ }
+CsvModelReaderImpl::CsvModelReaderImpl(const std::string &filename) : BaseModelReaderImpl(filename) { }
 
-std::shared_ptr<std::vector<Vertex>> CsvCarcassReadStrategy::readVertices()
+std::shared_ptr<std::vector<Vertex>> CsvModelReaderImpl::readVertices()
 {
     std::vector<Vertex> vertices;
     std::string line;
     double x, y, z;
     char comma;
 
-    m_file->clear();
-    m_file->seekg(0, std::ios::beg);
+    m_file.clear();
+    m_file.seekg(0, std::ios::beg);
 
-    std::getline(*m_file, line);
+    std::getline(m_file, line);
 
-    while (std::getline(*m_file, line))
+    while (std::getline(m_file, line))
     {
         if (line.empty())
             continue;
@@ -35,22 +32,22 @@ std::shared_ptr<std::vector<Vertex>> CsvCarcassReadStrategy::readVertices()
     }
 
     if (vertices.empty())
-        throw CarcassInvalidVerticesCountException("No vertices found in CSV file!");
+        throw ModelInvalidVerticesCountException("No vertices found in CSV file!");
 
     return std::make_shared<std::vector<Vertex>>(vertices);
 }
 
-std::shared_ptr<std::vector<Edge>> CsvCarcassReadStrategy::readEdges()
+std::shared_ptr<std::vector<Edge>> CsvModelReaderImpl::readEdges()
 {
     std::vector<Edge> edges;
     std::string line;
     size_t id1, id2;
     char comma;
 
-    m_file->clear();
-    m_file->seekg(0, std::ios::beg);
+    m_file.clear();
+    m_file.seekg(0, std::ios::beg);
 
-    while (std::getline(*m_file, line))
+    while (std::getline(m_file, line))
     {
         std::istringstream iss(line);
         double x, y, z;
@@ -66,7 +63,7 @@ std::shared_ptr<std::vector<Edge>> CsvCarcassReadStrategy::readEdges()
         std::istringstream iss(line);
         if (iss >> id1 >> comma >> id2)
             edges.emplace_back(id1, id2);
-    } while (std::getline(*m_file, line));
+    } while (std::getline(m_file, line));
 
     return std::make_shared<std::vector<Edge>>(edges);
 }

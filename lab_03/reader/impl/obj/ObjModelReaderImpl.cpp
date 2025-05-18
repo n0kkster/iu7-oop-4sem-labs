@@ -1,24 +1,21 @@
-// ObjCarcassReadStrategy.cpp
-#include "ObjCarcassReadStrategy.h"
+#include "ObjModelReaderImpl.h"
 
-#include "../../../exceptions/model/carcass/CarcassException.h"
+#include "../../../exceptions/model/ModelException.h"
 
 #include <sstream>
 #include <string>
 
-ObjCarcassReadStrategy::ObjCarcassReadStrategy(std::shared_ptr<std::ifstream> file) :
-    BaseCarcassReadStrategy(file)
-{ }
+ObjModelReaderImpl::ObjModelReaderImpl(const std::string &filename) : BaseModelReaderImpl(filename) { }
 
-std::shared_ptr<std::vector<Vertex>> ObjCarcassReadStrategy::readVertices()
+std::shared_ptr<std::vector<Vertex>> ObjModelReaderImpl::readVertices()
 {
     std::vector<Vertex> vertices;
     std::string line;
 
-    m_file->clear();
-    m_file->seekg(0, std::ios::beg);
+    m_file.clear();
+    m_file.seekg(0, std::ios::beg);
 
-    while (std::getline(*m_file, line))
+    while (std::getline(m_file, line))
     {
         if (line.empty() || line[0] != 'v')
             continue;
@@ -32,20 +29,20 @@ std::shared_ptr<std::vector<Vertex>> ObjCarcassReadStrategy::readVertices()
     }
 
     if (vertices.empty())
-        throw CarcassInvalidVerticesCountException("No vertices found in OBJ file!");
+        throw ModelInvalidVerticesCountException("No vertices found in OBJ file!");
 
     return std::make_shared<std::vector<Vertex>>(vertices);
 }
 
-std::shared_ptr<std::vector<Edge>> ObjCarcassReadStrategy::readEdges()
+std::shared_ptr<std::vector<Edge>> ObjModelReaderImpl::readEdges()
 {
     std::vector<Edge> edges;
     std::string line;
 
-    m_file->clear();
-    m_file->seekg(0, std::ios::beg);
+    m_file.clear();
+    m_file.seekg(0, std::ios::beg);
 
-    while (std::getline(*m_file, line))
+    while (std::getline(m_file, line))
     {
         if (line.empty() || line[0] != 'f')
             continue;
