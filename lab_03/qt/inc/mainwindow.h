@@ -1,12 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "../../component/primitive/visible/model/vertex/Vertex.h"
 #include "../../facade/Facade.h"
 
 #include <memory>
 #include <QGraphicsScene>
 #include <QMainWindow>
 #include <vector>
+
 
 QT_BEGIN_NAMESPACE
 

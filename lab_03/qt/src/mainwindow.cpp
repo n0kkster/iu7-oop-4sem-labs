@@ -11,7 +11,6 @@
 #include "../../managers/ManagerSolution.h"
 #include "../../out/ui_mainwindow.h"
 
-#include <filesystem>
 #include <QAction>
 #include <QDebug>
 #include <QFileDialog>
@@ -38,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     createScene(ui->planeWidget);
 
     m_objects = 0;
+
+    ui->planeWidget->setFacade(m_facade);
 
     try
     {

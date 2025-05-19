@@ -22,7 +22,6 @@ public:
 
     virtual ~DefaultCamera() override = default;
 
-    // убрать расширение интерфейса
     const Matrix<double> getLookMatrix() const noexcept override;
     const Matrix<double> getProjectionMatrix(double aspectRatio) const override;
 
