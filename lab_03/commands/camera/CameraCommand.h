@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../BaseCommand.h"
+#include "../../managers/camera/CameraManager.h"
+#include "../../managers/transform/TransformManager.h"
 
 class CameraCommand : public BaseCommand
 {
@@ -17,6 +19,8 @@ private:
     Action m_action;
     CameraId m_id;
 
+    std::shared_ptr<CameraManager> m_cameraManager;
+
 public:
     AddCameraCommand(const CameraId &id);
     virtual ~AddCameraCommand() override = default;
@@ -32,6 +36,8 @@ private:
     Action m_action;
     size_t m_cameraId;
 
+    std::shared_ptr<CameraManager> m_cameraManager;
+
 public:
     DeleteCameraCommand(const size_t cameraId);
     virtual ~DeleteCameraCommand() override = default;
@@ -46,6 +52,8 @@ private:
 
     Action m_action;
     size_t m_cameraId;
+
+    std::shared_ptr<CameraManager> m_cameraManager;
 
 public:
     SetActiveCameraCommand(const size_t cameraId);
@@ -63,6 +71,8 @@ private:
     size_t m_cameraId;
     MoveParams m_params;
 
+    std::shared_ptr<TransformManager> m_transformManager;
+
 public:
     MoveCameraCommand(const size_t cameraId, const MoveParams &params);
     virtual ~MoveCameraCommand() override = default;
@@ -78,6 +88,8 @@ private:
     Action m_action;
     size_t m_cameraId;
     RotationParams m_params;
+
+    std::shared_ptr<TransformManager> m_transformManager;
 
 public:
     RotateCameraCommand(const size_t cameraId, const RotationParams &params);

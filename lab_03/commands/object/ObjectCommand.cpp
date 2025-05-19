@@ -1,7 +1,9 @@
 #include "ObjectCommand.h"
 
+#include "../../managers/ManagerSolution.h"
+
 AddObjectCommand::AddObjectCommand(std::shared_ptr<BaseObject> obj) :
-    m_action(&SceneManager::addObject), m_object(obj)
+    m_action(&SceneManager::addObject), m_object(obj), m_sceneManager(ManagerSolution::getSceneManager())
 { }
 
 void AddObjectCommand::execute()
@@ -10,7 +12,8 @@ void AddObjectCommand::execute()
 }
 
 RemoveObjectCommand::RemoveObjectCommand(size_t objId) :
-    m_action(&SceneManager::removeObject), m_objectid(objId)
+    m_action(&SceneManager::removeObject), m_objectid(objId),
+    m_sceneManager(ManagerSolution::getSceneManager())
 { }
 
 void RemoveObjectCommand::execute()
@@ -19,7 +22,8 @@ void RemoveObjectCommand::execute()
 }
 
 ScaleObjectCommand::ScaleObjectCommand(size_t objId, const ScaleParams &params) :
-    m_action(&TransformManager::scaleObject), m_params(params), m_objectId(objId)
+    m_action(&TransformManager::scaleObject), m_params(params), m_objectId(objId),
+    m_transformManager(ManagerSolution::getTransformManager())
 { }
 
 void ScaleObjectCommand::execute()
@@ -28,9 +32,9 @@ void ScaleObjectCommand::execute()
 }
 
 MoveObjectCommand::MoveObjectCommand(size_t objId, const MoveParams &params) :
-    m_action(&TransformManager::moveObject), m_params(params), m_objectId(objId)
+    m_action(&TransformManager::moveObject), m_params(params), m_objectId(objId),
+    m_transformManager(ManagerSolution::getTransformManager())
 { }
-
 
 void MoveObjectCommand::execute()
 {
@@ -38,7 +42,8 @@ void MoveObjectCommand::execute()
 }
 
 RotateObjectCommand::RotateObjectCommand(size_t objId, const RotationParams &params) :
-    m_action(&TransformManager::rotateObject), m_params(params), m_objectId(objId)
+    m_action(&TransformManager::rotateObject), m_params(params), m_objectId(objId),
+    m_transformManager(ManagerSolution::getTransformManager())
 { }
 
 void RotateObjectCommand::execute()
@@ -47,7 +52,8 @@ void RotateObjectCommand::execute()
 }
 
 ComposeCommand::ComposeCommand(std::vector<size_t> objectIds) :
-    m_action(&SceneManager::compose), m_objectIds(objectIds)
+    m_action(&SceneManager::compose), m_objectIds(objectIds),
+    m_sceneManager(ManagerSolution::getSceneManager())
 { }
 
 void ComposeCommand::execute()
@@ -56,7 +62,8 @@ void ComposeCommand::execute()
 }
 
 GetObjectCenterCommand::GetObjectCenterCommand(size_t id, Vertex &center) :
-    m_action(&SceneManager::getCenter), m_id(id), m_center(center)
+    m_action(&SceneManager::getCenter), m_id(id), m_center(center),
+    m_sceneManager(ManagerSolution::getSceneManager())
 { }
 
 void GetObjectCenterCommand::execute()

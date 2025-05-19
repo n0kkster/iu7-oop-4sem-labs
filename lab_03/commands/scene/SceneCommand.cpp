@@ -1,6 +1,10 @@
 #include "SceneCommand.h"
 
-DrawSceneCommand::DrawSceneCommand() : m_method(&DrawManager::draw) { }
+#include "../../managers/ManagerSolution.h"
+
+DrawSceneCommand::DrawSceneCommand() :
+    m_method(&DrawManager::draw), m_drawManager(ManagerSolution::getDrawManager())
+{ }
 
 void DrawSceneCommand::execute()
 {

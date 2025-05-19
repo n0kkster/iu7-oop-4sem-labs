@@ -1,6 +1,10 @@
 #include "CameraCommand.h"
 
-AddCameraCommand::AddCameraCommand(const CameraId &id) : m_action(&CameraManager::addCamera), m_id(id) { }
+#include "../../managers/ManagerSolution.h"
+
+AddCameraCommand::AddCameraCommand(const CameraId &id) :
+    m_action(&CameraManager::addCamera), m_id(id), m_cameraManager(ManagerSolution::getCameraManager())
+{ }
 
 void AddCameraCommand::execute()
 {
@@ -8,7 +12,8 @@ void AddCameraCommand::execute()
 }
 
 DeleteCameraCommand::DeleteCameraCommand(const size_t cameraId) :
-    m_action(&CameraManager::removeCamera), m_cameraId(cameraId)
+    m_action(&CameraManager::removeCamera), m_cameraId(cameraId),
+    m_cameraManager(ManagerSolution::getCameraManager())
 { }
 
 void DeleteCameraCommand::execute()
@@ -17,7 +22,8 @@ void DeleteCameraCommand::execute()
 }
 
 SetActiveCameraCommand::SetActiveCameraCommand(size_t cameraId) :
-    m_action(&CameraManager::setActiveCamera), m_cameraId(cameraId)
+    m_action(&CameraManager::setActiveCamera), m_cameraId(cameraId),
+    m_cameraManager(ManagerSolution::getCameraManager())
 { }
 
 void SetActiveCameraCommand::execute()
@@ -26,7 +32,8 @@ void SetActiveCameraCommand::execute()
 }
 
 MoveCameraCommand::MoveCameraCommand(const size_t cameraId, const MoveParams &params) :
-    m_action(&TransformManager::moveObject), m_cameraId(cameraId), m_params(params)
+    m_action(&TransformManager::moveObject), m_cameraId(cameraId), m_params(params),
+    m_transformManager(ManagerSolution::getTransformManager())
 { }
 
 void MoveCameraCommand::execute()
@@ -35,7 +42,8 @@ void MoveCameraCommand::execute()
 }
 
 RotateCameraCommand::RotateCameraCommand(const size_t cameraId, const RotationParams &params) :
-    m_action(&TransformManager::rotateObject), m_cameraId(cameraId), m_params(params)
+    m_action(&TransformManager::rotateObject), m_cameraId(cameraId), m_params(params),
+    m_transformManager(ManagerSolution::getTransformManager())
 { }
 
 void RotateCameraCommand::execute()

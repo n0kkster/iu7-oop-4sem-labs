@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../ids/ids.h"
+#include "../../managers/load/LoadManager.h"
 #include "../BaseCommand.h"
 
 class LoadCommand : public BaseCommand
@@ -19,9 +20,11 @@ private:
     InternalRepresentationId m_repr;
     std::string m_filename;
 
+    std::shared_ptr<LoadManager> m_loadManager;
+
 public:
     CarcassLoadCommand(InternalRepresentationId repr, const std::string &filename);
     virtual ~CarcassLoadCommand() override = default;
-     
+
     void execute() override;
 };

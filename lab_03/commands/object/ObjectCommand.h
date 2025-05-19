@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../BaseCommand.h"
+#include "../../managers/scene/SceneManager.h"
+#include "../../managers/transform/TransformManager.h"
 
 class ObjectCommand : public BaseCommand
 {
@@ -17,6 +19,8 @@ private:
     Action m_action;
     std::shared_ptr<BaseObject> m_object;
 
+    std::shared_ptr<SceneManager> m_sceneManager;
+
 public:
     AddObjectCommand(std::shared_ptr<BaseObject> obj);
     virtual ~AddObjectCommand() override = default;
@@ -31,6 +35,8 @@ private:
 
     Action m_action;
     size_t m_objectid;
+
+    std::shared_ptr<SceneManager> m_sceneManager;
 
 public:
     RemoveObjectCommand(const size_t objId);
@@ -47,6 +53,8 @@ private:
     Action m_action;
     MoveParams m_params;
     size_t m_objectId;
+
+    std::shared_ptr<TransformManager> m_transformManager;
 
 public:
     MoveObjectCommand(size_t objId, const MoveParams &params);
@@ -65,6 +73,8 @@ private:
     ScaleParams m_params;
     size_t m_objectId;
 
+    std::shared_ptr<TransformManager> m_transformManager;
+
 public:
     ScaleObjectCommand(size_t objId, const ScaleParams &params);
     virtual ~ScaleObjectCommand() override = default;
@@ -81,6 +91,8 @@ private:
     RotationParams m_params;
     size_t m_objectId;
 
+    std::shared_ptr<TransformManager> m_transformManager;
+
 public:
     RotateObjectCommand(size_t objId, const RotationParams &params);
     virtual ~RotateObjectCommand() override = default;
@@ -96,6 +108,8 @@ private:
     Action m_action;
     std::vector<size_t> m_objectIds;
 
+    std::shared_ptr<SceneManager> m_sceneManager;
+
 public:
     ComposeCommand(std::vector<size_t> objectIds);
     virtual ~ComposeCommand() override = default; 
@@ -110,6 +124,8 @@ private:
     Action m_action;
     size_t m_id;
     Vertex &m_center;
+
+    std::shared_ptr<SceneManager> m_sceneManager;
 
 public:
     GetObjectCenterCommand(size_t id, Vertex &center);
