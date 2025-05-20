@@ -14,7 +14,7 @@ void RaycastingHiddenEdgesRemovalStrategy::prepare(const std::vector<Vertex> &ve
 
     viewpoint.setX(viewpoint.getX() + 430);
     viewpoint.setY(-viewpoint.getY() + 415);
-    viewpoint.setZ(-(viewpoint.getY() * 20));
+    viewpoint.setZ(-(viewpoint.getY() * 20)); // <---- дичайший костыль
 
     for (const auto &edge : edges)
     {
