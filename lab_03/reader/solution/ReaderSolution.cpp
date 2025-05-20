@@ -8,11 +8,12 @@
 std::shared_ptr<ModelReader> ReaderSolution::create(const std::string &filename)
 {
     std::string extension = std::filesystem::path(filename).extension().string();
-    auto it = m_map.find(extension);
 
-    if (it == m_map.end())
-        ModelInvalidFileFormat("Unsupported file extension!");
+    if (auto it = m_map.find(extension); it != m_map.end())
+    {
+        auto impl = it->second(filename);
+        return ModelReaderCreator::create(impl);
+    }
 
-    auto impl = it->second(filename);
-    return ModelReaderCreator::create(impl);
+    throw ModelInvalidFileFormat("Unsupported file extension!");
 }
