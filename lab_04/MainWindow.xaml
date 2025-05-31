@@ -1,0 +1,153 @@
+﻿<Window x:Class="OOP_LAB_04.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OOP_LAB_04"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="650" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="MyFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Control}">
+                        <Grid Margin="8">
+                            <Ellipse
+                Name="r1"
+                Stroke="Black"
+                StrokeDashArray="2 2"
+                StrokeThickness="1"/>
+                            <Border
+                Name="border"
+                Width="{TemplateBinding ActualWidth}"
+                Height="{TemplateBinding ActualHeight}"
+                BorderThickness="1"
+                CornerRadius="2"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CircleButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}"/>
+            <Setter Property="Background" Value="#FF6DB4EF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Fill="{TemplateBinding Background}"/>
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0" Color="#00000000"/>
+                                        <GradientStop Offset="0.88" Color="#00000000"/>
+                                        <GradientStop Offset="1" Color="#80000000"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="10" x:Name="highlightCircle" >
+                                <Ellipse.Fill >
+                                    <LinearGradientBrush >
+                                        <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                        <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                        <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="highlightCircle" Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                            <GradientStop Offset="0" Color="#50FFFFFF"/>
+                                            <GradientStop Offset="0.5" Color="#00FFFFFF"/>
+                                            <GradientStop Offset="1" Color="#50FFFFFF"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="0.5" X="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="CabinFloor1Btn" Width="75" Height="75" Grid.Column="0" Grid.Row="7" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor1Btn_Click">1</Button>
+        <Button x:Name="CabinFloor2Btn" Width="75" Height="75" Grid.Column="1" Grid.Row="7" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor2Btn_Click">2</Button>
+        <Button x:Name="CabinFloor3Btn" Width="75" Height="75" Grid.Column="2" Grid.Row="7" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor3Btn_Click">3</Button>
+        <Button x:Name="CabinFloor4Btn" Width="75" Height="75" Grid.Column="0" Grid.Row="5" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor4Btn_Click">4</Button>
+        <Button x:Name="CabinFloor5Btn" Width="75" Height="75" Grid.Column="1" Grid.Row="5" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor5Btn_Click">5</Button>
+        <Button x:Name="CabinFloor6Btn" Width="75" Height="75" Grid.Column="2" Grid.Row="5" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor6Btn_Click">6</Button>
+        <Button x:Name="CabinFloor7Btn" Width="75" Height="75" Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor7Btn_Click">7</Button>
+        <Button x:Name="CabinFloor8Btn" Width="75" Height="75" Grid.Column="1" Grid.Row="3" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor8Btn_Click">8</Button>
+        <Button x:Name="CabinFloor9Btn" Width="75" Height="75" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Click="CabinFloor9Btn_Click">9</Button>
+
+        <Button x:Name="Floor1UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="8" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor1UpBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 1" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor2UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="7" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor2UpBtn_Click"/>
+        <Button x:Name="Floor2DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="7" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor2DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 2" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor3UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="6" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor3UpBtn_Click"/>
+        <Button x:Name="Floor3DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="6" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor3DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 3" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor4UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="5" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor4UpBtn_Click"/>
+        <Button x:Name="Floor4DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="5" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor4DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 4" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor5UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="4" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor5UpBtn_Click"/>
+        <Button x:Name="Floor5DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="4" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor5DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 5" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor6UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="3" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor6UpBtn_Click"/>
+        <Button x:Name="Floor6DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="3" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor6DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 6" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor7UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="2" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor7UpBtn_Click"/>
+        <Button x:Name="Floor7DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="2" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor7DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 7" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor8UpBtn" Width="40" Height="40" Grid.Column="5" Grid.Row="1" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↑" Click="Floor8UpBtn_Click"/>
+        <Button x:Name="Floor8DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor8DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 8" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Button x:Name="Floor9DownBtn" Width="40" Height="40" Grid.Column="4" Grid.Row="0" Grid.RowSpan="1" Style="{StaticResource CircleButton}" Background="#FF7C7C7C" FontSize="18" Content="↓" Click="Floor9DownBtn_Click"/>
+        <Label Grid.Column="3" Content="Этаж 9" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+        <Label Content="Этаж:" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Grid.Row="1" Grid.Column="0" Height="40" Width="80"/>
+        <Label x:Name="FloorDisplay" Content="1" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" Grid.Row="1" Grid.Column="1" Height="40" Width="80"/>
+    </Grid>
+</Window>
