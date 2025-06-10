@@ -4,6 +4,9 @@
 
 class Edge
 {
+private:
+    size_t m_start, m_end;
+
 public:
 #pragma region Constructor
     Edge() = default;
@@ -23,7 +26,4 @@ public:
 
     void setStart(size_t start);
     void setEnd(size_t end);
-
-private:
-    size_t m_start, m_end;
 };
