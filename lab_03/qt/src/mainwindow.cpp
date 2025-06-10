@@ -471,7 +471,8 @@ void MainWindow::createScene(QWidget *parent)
     const int w = ui->planeWidget->width();
     const int h = ui->planeWidget->height();
 
-    auto m_scene = std::make_shared<QGraphicsScene>(0, 0, w, h, parent);
+    auto m_scene = std::shared_ptr<QGraphicsScene>(new QGraphicsScene{ 0, 0, (qreal)w, (qreal)h, parent },
+                                                   [](QGraphicsScene *) { });
     m_scene->setSceneRect(QRect{ 0, 0, w, h });
     m_scene->setBackgroundBrush(QColor::fromRgb(39, 40, 41));
 
