@@ -81,3 +81,13 @@
 ### [Четвертая лаба](https://github.com/n0kkster/iu7-oop-4sem-labs/tree/master/lab_04)
 
 ### [Пятая лаба](https://github.com/n0kkster/iu7-oop-4sem-labs/tree/master/lab_05)
+
+---
+
+## Материалы
+[Облако Тассова с примерами к лекциям](https://cloud.mail.ru/public/92Nu/yr4TWjZDJ). Примеры стоит знать. \
+[Видеозаписи лекций](https://www.youtube.com/playlist?list=PLZ8Sl-GV4E_X7SAhECZDR8mH9g_iCYcE1). \
+[Сайт Тассова (вроде как) с описанием паттерном, идиом и примерами к ним](https://y2kot.gitbook.io/untitled). \
+[Сторонний сайт подробным описанием паттерном и примерами](https://refactoring.guru/ru/). Хороший сайт, много полезной,
+понятной и интересной инфы, но Тассову, говорят, не нравятся примеры с него. Мне лично помог в изучении паттернов. 
+Без ВПН не открывается.
